@@ -1,0 +1,2 @@
+/Users/wangzhangchuan/Library/Developer/Xcode/DerivedData/MStar-abahmucbgypwukhiehlrwhdaexna/Build/Products/Debug-iphonesimulator/MStar.app
+iPhone Developer

@@ -1,0 +1,10 @@
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/JiMu" "${PODS_ROOT}/MOBFoundation" "${PODS_ROOT}/mob_paysdk/SDK/PaySDK" "${PODS_ROOT}/mob_sharesdk/ShareSDK" "${PODS_ROOT}/mob_sharesdk/ShareSDK/Support/Required" "${PODS_ROOT}/mob_smssdk/SDK/SMSSDK" "${PODS_ROOT}/mob_umssdk/SDK/UMSSDK"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/MJRefresh" "${PODS_ROOT}/Headers/Public/Masonry" "${PODS_ROOT}/Headers/Public/YPTabBarController"
+LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/MJRefresh" "${PODS_CONFIGURATION_BUILD_DIR}/Masonry" "${PODS_CONFIGURATION_BUILD_DIR}/YPTabBarController"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/MJRefresh" -isystem "${PODS_ROOT}/Headers/Public/Masonry" -isystem "${PODS_ROOT}/Headers/Public/YPTabBarController"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"MJRefresh" -l"Masonry" -l"YPTabBarController" -l"c++" -l"icucore" -l"sqlite3" -l"stdc++" -l"z" -framework "CoreLocation" -framework "Foundation" -framework "JavaScriptCore" -framework "JiMu" -framework "MOBFoundation" -framework "MOBFoundationEx" -framework "MOBPaySDK" -framework "SMS_SDK" -framework "ShareSDK" -framework "ShareSDKConnector" -framework "UIKit" -framework "UMSSDK" -framework "UMSSDKUI"
+PODS_BUILD_DIR = ${BUILD_DIR}
+PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
+PODS_ROOT = ${SRCROOT}/Pods
