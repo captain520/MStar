@@ -9,11 +9,18 @@
 #import "CPPlayerVC.h"
 #import <AVFoundation/AVFoundation.h>
 #import <Masonry.h>
+#import <MobileVLCKit/MobileVLCKit.h>
+#import "VLCConstants.h"
 
-@interface CPPlayerVC ()
+@interface CPPlayerVC () <VLCMediaDelegate,VLCMediaPlayerDelegate>{
+    VLCMediaPlayer *mediaPlayer ;
+}
 
-@property (nonatomic, strong) AVPlayer *player;
-@property (strong, nonatomic)AVPlayerLayer *playerLayer;//播放界面（layer）
+//@property (nonatomic, strong) AVPlayer *player;
+//@property (strong, nonatomic)AVPlayerLayer *playerLayer;//播放界面（layer）
+
+@property (nonatomic, strong) UIImageView *playImageView;
+
 @property (nonatomic, strong)  UIView *playerView;
 
 @property (nonatomic, strong) UIButton *backBt;
@@ -52,19 +59,15 @@
     [super viewDidAppear:animated];
     
     [self setupUI];
-    
-    self.playerLayer.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.height, UIScreen.mainScreen.bounds.size.width);
-    
+
     [self autoDimiss];
     
-    [self.player play];
     [self flickRecodeLight];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
-    [self.player pause];
+    [mediaPlayer stop];
     
     if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
         SEL selector = NSSelectorFromString(@"setOrientation:");
@@ -85,8 +88,23 @@
     
     self.view.backgroundColor = UIColor.grayColor;
     
+    if ( nil == self.playImageView ) {
+        self.playImageView = [UIImageView new];
+        self.playImageView.backgroundColor = UIColor.redColor;
+        self.playImageView.contentMode = UIViewContentModeScaleToFill;
+
+        [self.view addSubview:self.playImageView];
+        [self.playImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+            make.top.mas_equalTo(0);
+            make.bottom.mas_equalTo(0);
+        }];
+    }
+    
+
     self.playerView = [UIView new];
-    self.playerView.backgroundColor = UIColor.blackColor;
+    self.playerView.backgroundColor = [UIColor clearColor];
     
     [self.view addSubview:self.playerView];
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -96,10 +114,22 @@
         make.top.mas_equalTo(0);
     }];
     
+    VLCMedia *media = [VLCMedia mediaWithURL:[NSURL URLWithString:self.liveurl]];
     
-    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
-    self.playerLayer.frame = self.playerView.bounds;
-    [self.playerView.layer addSublayer:self.playerLayer];
+    mediaPlayer = [[VLCMediaPlayer alloc] initWithOptions:@[
+                                                            [NSString stringWithFormat:@"--%@=%@", kVLCSettingNetworkCaching,self.networkcache == nil ? kVLCSettingNetworkCachingDefaultValue : self.networkcache],
+                                                            [NSString stringWithFormat:@"--%@=%@", kVLCSettingClockJitter, kVLCSettingClockJitterDefaultValue],
+                                                            ]];
+    mediaPlayer.videoAspectRatio = "16:9";
+    [mediaPlayer setDelegate:self];
+    [mediaPlayer setDrawable:self.playImageView];
+    
+    [mediaPlayer setMedia:media];
+    [mediaPlayer play];
+    
+//    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
+//    self.playerLayer.frame = self.playerView.bounds;
+//    [self.playerView.layer addSublayer:self.playerLayer];
     
     {
         self.backBt = [UIButton new];
@@ -178,24 +208,16 @@
 #pragma mark - private method imeplement
 
 - (void)playAction:(id)sender {
-    [self.player play];
-    
-//    NSURL *url = [[NSBundle mainBundle] URLForResource:@"FILE171122-141954-0001F.MOV" withExtension:@""];
-//    [self thumbnailImageForVideo:url atTime:2];
+    if ([mediaPlayer isPlaying]) {
+        [mediaPlayer pause];
+    } else {
+        [mediaPlayer play];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (AVPlayer *)player {
-    if (nil == _player) {
-        NSURL *url = [[NSBundle mainBundle] URLForResource:@"FILE171122-141954-0001F.MOV" withExtension:nil];
-//        NSURL *url = nil;
-        _player = [AVPlayer playerWithURL:url];
-    }
-    return _player;
 }
 
 - (UIImage *)thumbnailImageForVideo:(NSURL *)videoURL atTime:(NSTimeInterval)time {

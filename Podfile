@@ -10,5 +10,7 @@ target 'MStar' do
   pod 'mob_umssdk/UMSSDKUI'
   pod 'Masonry'
   pod 'YPTabBarController'
+  pod 'SCLAlertView-Objective-C'
+  pod 'AFNetworking'
 
 end

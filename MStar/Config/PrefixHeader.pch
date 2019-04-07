@@ -1,0 +1,41 @@
+//
+//  PrefixHeader.pch
+//  MStar
+//
+//  Created by 王璋传 on 2019/4/5.
+//  Copyright © 2019 王璋传. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+#import <UIKit/UIKit.h>
+
+#import "UIView+Toast.h"
+#import <SCLAlertView.h>
+#import <AFNetworking.h>
+
+#import "MSFunction.h"
+#import "MSCamMenuManager.h"
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+/******************************************* Color *********************************************************/
+#define MAIN_COLOR            ([UIColor colorWithRed:68. / 255 green:206. / 255 blue:246. / 255 alpha:1])
+#define C33                   ([UIColor colorWithRed:51. / 255 green:51. / 255 blue:51. / 255 alpha:1])
+#define C66                   ([UIColor colorWithRed:102. / 255 green:102. / 255 blue:102. / 255 alpha:1])
+#define C99                   ([UIColor colorWithRed:153. / 255 green:153. / 255 blue:153. / 255 alpha:1])
+#define Ccc                   ([UIColor colorWithRed:204. / 255 green:204. / 255 blue:204. / 255 alpha:1])
+#define C00                   ([UIColor colorWithRed:0. / 255 green:0. / 255 blue:0. / 255 alpha:1])
+#define Cff                   ([UIColor colorWithRed:255. / 255 green:255. / 255 blue:255. / 255 alpha:1])
+
+/******************************************* Text *********************************************************/
+#define SNAPSSHOT_PATH_STRING @"SnapsShot"
+
+/******************************************* bounds *********************************************************/
+#define SCREENHEIGHT          [UIScreen mainScreen].bounds.size.height
+#define SCREENWIDTH           [UIScreen mainScreen].bounds.size.width
+#define StatusHeight          [UIApplication sharedApplication].statusBarFrame.size.height//20
+#define NAV_HEIGHT            (44.0f + StatusHeight)
+
+#endif /* PrefixHeader_pch */

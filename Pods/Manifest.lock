@@ -1,4 +1,19 @@
 PODS:
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
   - JiMu (1.0.5):
     - MOBFoundation
   - Masonry (1.1.0)
@@ -37,16 +52,20 @@ PODS:
     - mob_umssdk/Core
     - MOBFoundation
   - MOBFoundation (3.2.1)
+  - SCLAlertView-Objective-C (1.1.6)
   - YPTabBarController (2.6.0)
 
 DEPENDENCIES:
+  - AFNetworking
   - Masonry
   - mob_umssdk
   - mob_umssdk/UMSSDKUI
+  - SCLAlertView-Objective-C
   - YPTabBarController
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AFNetworking
     - JiMu
     - Masonry
     - MJRefresh
@@ -55,9 +74,11 @@ SPEC REPOS:
     - mob_smssdk
     - mob_umssdk
     - MOBFoundation
+    - SCLAlertView-Objective-C
     - YPTabBarController
 
 SPEC CHECKSUMS:
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   JiMu: a4acc97530f5c74c8f48884fbc808332e890a90d
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
@@ -66,8 +87,9 @@ SPEC CHECKSUMS:
   mob_smssdk: cdb6a31d4fd4667ed928e2eca03f21ad89ebc05c
   mob_umssdk: 1db25907745ac1821d1d0dfebdcf187520324403
   MOBFoundation: ce2ba976fd435b0cb06897466b2746e639895b7d
+  SCLAlertView-Objective-C: 2bb9be204bffaf24762a0e33fe6ca9645819b3b7
   YPTabBarController: 8591a577e74dc9331929c9a0bb960ce2f1bf953f
 
-PODFILE CHECKSUM: 5892784cb8a92c4a51d938c44ea13aea91f881ae
+PODFILE CHECKSUM: 9a11fea807e8aee59b976d44c002dfcc20cc0118
 
 COCOAPODS: 1.6.0.beta.1

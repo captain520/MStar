@@ -10,4 +10,7 @@
 
 @interface CPPlayerVC : UIViewController
 
+@property (nonatomic, copy) NSString * networkcache;
+@property (nonatomic, copy) NSString * liveurl;
+
 @end

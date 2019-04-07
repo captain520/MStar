@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  MStar
+
+  Created by 王璋传 on 2019/4/7.
+  Copyright © 2019 王璋传. All rights reserved.
+*/
+"ConnectWiFiHint" = "ConnectWiFiHint";
+"No rear camera found" = "No rear camera found";

@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  MStar
+
+  Created by 王璋传 on 2019/4/7.
+  Copyright © 2019 王璋传. All rights reserved.
+*/
+
+"ConnectWiFiHint" = "在使用之前请确保连接了设备WIFI";
+"No rear camera found" = "没有发现后置摄像头";
+

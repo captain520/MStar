@@ -7,32 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
-//#define XCODE_COLORS_ESCSPE @"\033["
-//
-//#define XCODE_COLORS_RESET_FG   XCODE_COLORS_ESCSPE @"fg;"
-//#define XCODE_COLORS_RESET_BG   XCODE_COLORS_ESCSPE @"bg;"
-//#define XCODE_COLORS_RESET      XCODE_COLORS_ESCSPE @";"
-
-#define XCODE_COLORS_ESCAPE @"\033["
-#define XCODE_COLORS_RESET_FG  XCODE_COLORS_ESCAPE @"fg;"
-#define XCODE_COLORS_RESET_BG  XCODE_COLORS_ESCAPE @"bg;"
-#define XCODE_COLORS_RESET     XCODE_COLORS_ESCAPE @";"
-
-#define ms_consolecodes_none          "\e[0m"
-#define ms_consolecodes_brightred     "\e[1;31m"
-#define ms_consolecodes_green         "\e[0;32m"
-#define ms_consolecodes_brightyellow  "\e[1;33m"
-#define ms_consolecodes_brightblue    "\e[1;34m"
-#define ms_consolecodes_brightcyan    "\e[1;36m"
-
-static const char *ms_col[64]={
-    ms_consolecodes_brightblue,        //assert
-    ms_consolecodes_brightred,         //error
-    ms_consolecodes_brightyellow,      //waring
-    ms_consolecodes_brightcyan,        //info
-    ms_consolecodes_none,              //debug
-    ms_consolecodes_green};            //verbose
+#import "AppDelegate+Category.h"
 
 @interface AppDelegate ()
 
@@ -43,21 +18,8 @@ static const char *ms_col[64]={
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
-//    NSLog(XCODE_COLORS_ESCSPE @"fg0,0,255;"
-//          XCODE_COLORS_ESCSPE @"bg220,0,0;"
-//          @"lsdfklsdf"
-//          XCODE_COLORS_RESET
-//          );
-//    NSLog(XCODE_COLORS_ESCAPE @"fg0,0,255;" @"Blue text" XCODE_COLORS_RESET); NSLog(XCODE_COLORS_ESCAPE @"bg220,0,0;" @"Red background" XCODE_COLORS_RESET);
-//    NSLog(XCODE_COLORS_ESCAPE @"fg0,0,255;"
-//          XCODE_COLORS_ESCAPE @"bg220,0,0;"
-//          @"Blue text on red background"
-//          XCODE_COLORS_RESET);
-//    NSLog(XCODE_COLORS_ESCAPE @"fg209,57,168;" @"You can supply your own RGB values!" XCODE_COLORS_RESET);
-    
-    printf("\033[0;35;46m 字体有色，且有背景色 \033[0m");
-    
+
+    [self setUINavigatinoBarProperities];
 
     return YES;
 }
