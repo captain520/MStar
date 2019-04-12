@@ -10,8 +10,11 @@
 #import "MSPreviewVC.h"
 
 #import <UMSSDKUI/UMSProfileViewController.h>
+#import "MSPreviewVC.h"
 #import "MSSDFileLIstVC.h"
 #import "MSFileListContentVC.h"
+#import "MSProfileVC.h"
+#import "MSLocalFileContentVC.h"
 
 @interface MSTabBarVC ()
 
@@ -43,16 +46,16 @@
     vc1.view.backgroundColor = UIColor.whiteColor;
     vc1.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"SD卡" image:[UIImage imageNamed:@"SD卡"] tag:0];
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:vc1];
+    nav1.navigationBar.backgroundColor = UIColor.whiteColor;
     
-    MSFileListContentVC *vc2 = [[MSFileListContentVC alloc] init];
+    MSLocalFileContentVC *vc2 = [[MSLocalFileContentVC alloc] init];
     vc2.title = @"本地文件";
-    vc2.isLocalFileList = YES;
-    vc2.view.backgroundColor = UIColor.whiteColor;
+    vc2.view.backgroundColor  = UIColor.whiteColor;
     vc2.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"本地" image:[UIImage imageNamed:@"本地"] tag:0];
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:vc2];
-    
-    UMSProfileViewController *vc3 = [[UMSProfileViewController alloc] init];
-    vc3.view.backgroundColor = UIColor.whiteColor;
+    nav2.navigationBar.backgroundColor = UIColor.whiteColor;
+
+    MSProfileVC *vc3 = [[MSProfileVC alloc] initWithStyle:UITableViewStyleGrouped];
     vc3.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"我的" image:[UIImage imageNamed:@"个人中心"] tag:0];
     UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:vc3];
     

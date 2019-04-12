@@ -14,8 +14,17 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
+  - BATabBarController (0.1.5):
+    - Masonry
+  - DACircularProgress (2.3.1)
+  - DZNEmptyDataSet (1.8.1)
+  - IDMPhotoBrowser (1.10.2):
+    - DACircularProgress
+    - pop
+    - SDWebImage
   - JiMu (1.0.5):
     - MOBFoundation
+  - M13ProgressSuite (1.2.9)
   - Masonry (1.1.0)
   - MJRefresh (3.1.15.7)
   - mob_paysdk (1.2.0):
@@ -52,21 +61,37 @@ PODS:
     - mob_umssdk/Core
     - MOBFoundation
   - MOBFoundation (3.2.1)
+  - pop (1.0.12)
   - SCLAlertView-Objective-C (1.1.6)
+  - SDWebImage (5.0.0):
+    - SDWebImage/Core (= 5.0.0)
+  - SDWebImage/Core (5.0.0)
+  - XMLReader (0.0.2)
   - YPTabBarController (2.6.0)
 
 DEPENDENCIES:
   - AFNetworking
+  - BATabBarController
+  - DZNEmptyDataSet
+  - IDMPhotoBrowser
+  - M13ProgressSuite
   - Masonry
   - mob_umssdk
   - mob_umssdk/UMSSDKUI
   - SCLAlertView-Objective-C
+  - SDWebImage
+  - XMLReader
   - YPTabBarController
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AFNetworking
+    - BATabBarController
+    - DACircularProgress
+    - DZNEmptyDataSet
+    - IDMPhotoBrowser
     - JiMu
+    - M13ProgressSuite
     - Masonry
     - MJRefresh
     - mob_paysdk
@@ -74,12 +99,20 @@ SPEC REPOS:
     - mob_smssdk
     - mob_umssdk
     - MOBFoundation
+    - pop
     - SCLAlertView-Objective-C
+    - SDWebImage
+    - XMLReader
     - YPTabBarController
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  BATabBarController: 5613abe7e9e840e4d47deecef6f5082187b24ecf
+  DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
+  DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
+  IDMPhotoBrowser: 4bb459b1faffc228e92bccdf7c54ad6d6b7e8c37
   JiMu: a4acc97530f5c74c8f48884fbc808332e890a90d
+  M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
   mob_paysdk: d28d26d9eb201a6183e38552d178e04be24bea5f
@@ -87,9 +120,12 @@ SPEC CHECKSUMS:
   mob_smssdk: cdb6a31d4fd4667ed928e2eca03f21ad89ebc05c
   mob_umssdk: 1db25907745ac1821d1d0dfebdcf187520324403
   MOBFoundation: ce2ba976fd435b0cb06897466b2746e639895b7d
+  pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SCLAlertView-Objective-C: 2bb9be204bffaf24762a0e33fe6ca9645819b3b7
+  SDWebImage: 5de80a0302de9e377e62f47d2fa1304efff0e55f
+  XMLReader: c7e54b707c368e2fa545d8313276b4de13a36ff5
   YPTabBarController: 8591a577e74dc9331929c9a0bb960ce2f1bf953f
 
-PODFILE CHECKSUM: 9a11fea807e8aee59b976d44c002dfcc20cc0118
+PODFILE CHECKSUM: 1312a7c9a2976516eb1c5c2e4717c3b9bf24c02c
 
 COCOAPODS: 1.6.0.beta.1

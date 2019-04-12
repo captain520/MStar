@@ -25,6 +25,7 @@ static NSString *ACTION_SET = @"set" ;
 static NSString *ACTION_GET = @"get" ;
 static NSString *ACTION_DEL = @"del" ;
 static NSString *ACTION_LS = @"dir" ;
+static NSString *ACTION_REARLS = @"reardir" ;
 static NSString *ACTION_SETCAMID = @"setcamid" ;
 
 
@@ -34,7 +35,11 @@ static NSString *PROPERTY_SSID = @"Net.WIFI_AP.SSID" ;
 static NSString *PROPERTY_CAMERA_RTSP = @"Camera.Preview.RTSP.av" ;
 static NSString *PROPERTY_ENCRYPTION_KEY = @"Net.WIFI_AP.CryptoKey" ;
 static NSString *PROPERTY_DCIM = @"DCIM" ;
+static NSString *PROPERTY_NORMAL = @"Normal" ;
+static NSString *PROPERTY_EVENT = @"Event" ;
 static NSString *PROPERTY_VIDEO = @"Video" ;
+static NSString *PROPERTY_PHOTO = @"Photo" ;
+//static NSString *PROPERTY_EVENT= @"EVT" ;
 static NSString *PROPERTY_QUERY_RECORD = @"Camera.Preview.MJPEG.status.record" ;
 static NSString *PROPERTY_QUERY_PREVIEW_STATUS = @"Camera.Preview.*" ;
 static NSString *PROPERTY_DATETIME = @"TimeSettings";
@@ -297,6 +302,44 @@ static NSString *CAMERA_SetTIME = @"Camera.Preview.MJPEG.TimeStamp";
     [arguments addObject: [AITCameraCommand buildKeyValuePair:FROM Value:[NSString stringWithFormat:@"%d", from]]] ;
 
     return [AITCameraCommand buildRequestUrl:CGI_PATH Action: ACTION_LS ArgumentList: [AITCameraCommand buildArgumentList:arguments]] ;
+}
+
++ (NSURL*) commandListFileUrl: (int) count From: (int) from isRear:(BOOL)isRear fileType:(W1MFileType)fileType
+{
+    NSString *property = @"DCIM";
+    
+    switch (fileType) {
+        case W1MFileTypeDcim:
+            property = @"DCIM";
+            break;
+        case W1MFileTypeNormal:
+            property = @"Normal";
+            break;
+        case W1MFileTypePhoto:
+            property = @"Photo";
+            break;
+        case W1MFileTypeEvent:
+            //            property = @"Event";
+//            property = @"EVT";
+            property = @"Event";
+            break;
+            
+        default:
+            break;
+    }
+    
+    NSMutableArray * arguments = [[NSMutableArray alloc] init] ;
+    
+    [arguments addObject: [AITCameraCommand buildProperty:property]] ;
+    [arguments addObject: [AITCameraCommand buildKeyValuePair:FORMAT Value:FORMAT_ALL]] ;
+    
+    count = count > COUNT_MAX ? COUNT_MAX : count ;
+    count = count < COUNT_MIN ? COUNT_MIN : count ;
+    
+    [arguments addObject: [AITCameraCommand buildKeyValuePair:COUNT Value:[NSString stringWithFormat:@"%d", count]]] ;
+    [arguments addObject: [AITCameraCommand buildKeyValuePair:FROM Value:[NSString stringWithFormat:@"%d", from]]] ;
+    
+    return [AITCameraCommand buildRequestUrl:CGI_PATH Action:isRear ? ACTION_REARLS : ACTION_LS ArgumentList: [AITCameraCommand buildArgumentList:arguments]] ;
 }
 
 + (NSURL*) commandListFirstFileUrl: (int) count

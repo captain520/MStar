@@ -12,5 +12,11 @@ target 'MStar' do
   pod 'YPTabBarController'
   pod 'SCLAlertView-Objective-C'
   pod 'AFNetworking'
-
+  pod 'BATabBarController'
+  pod 'SDWebImage'
+  pod 'XMLReader'
+  pod 'DZNEmptyDataSet'
+  pod 'M13ProgressSuite'
+  pod 'IDMPhotoBrowser'
+  
 end

@@ -20,9 +20,9 @@
 {
     NSString *filePath;
     NSURL    *srcURL;
-    NSFileHandle *handle;
     
 @public
+    NSFileHandle *handle;
     NSURLConnection *connection;
     bool downloading;
     bool abort;

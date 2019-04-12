@@ -9,6 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "AITCameraRequest.h"
 
+/**
+ W1M 文件类型
+ */
+typedef enum {
+    W1MFileTypeDcim ,       // 视频录制文件
+    W1MFileTypeNormal,      // 视频录制文件,暂时没有用到
+    W1MFileTypePhoto ,      // 截图
+    W1MFileTypeEvent ,      // 锁存视频
+    W1MFileTypeParking ,    // 预留
+    W1MFileTypeOther
+} W1MFileType;
+
 @interface AITCameraCommand : NSObject <AITCameraRequestDelegate>
 
 // Set property
@@ -25,6 +37,17 @@
 + (NSURL*) commandReactivateUrl ;
 + (NSURL*) commandWifiInfoUrl ;
 + (NSURL*) commandListFileUrl: (int) count  From: (int) from;
+
+/**
+ 获取文件URL
+
+ @param count 数量
+ @param from 下标
+ @param isRear 是否为后置摄像头
+ @param fileType 文件类型
+ @return URL
+ */
++ (NSURL*) commandListFileUrl: (int) count From: (int) from isRear:(BOOL)isRear fileType:(W1MFileType)fileType;
 + (NSURL*) commandListFirstFileUrl: (int) count ;
 + (NSURL*) commandDelFileUrl: (NSString *) fileName;
 + (NSURL*) commandQuerySettings;
