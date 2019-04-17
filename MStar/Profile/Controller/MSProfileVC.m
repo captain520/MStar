@@ -10,6 +10,7 @@
 #import "MSLocalFileVC.h"
 #import "JYEqualCellSpaceFlowLayout.h"
 #import "NYWaterWaveView.h"
+#import "CPWebVC.h"
 
 @interface MSProfileVC () {
 }
@@ -32,7 +33,7 @@
     self.extendedLayoutIncludesOpaqueBars = YES;
     _titles = @[
         @[@"Wi-Fi设置", @"格式化SD卡"],
-        @[@"最近浏览的视频", @"最近浏览的图片"],
+//        @[@"最近浏览的视频", @"最近浏览的图片"],
         @[@"清理缓存", ],
         @[@"关于我们", ],
     ];
@@ -67,7 +68,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
+    return 3;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -96,12 +97,9 @@
             return 2;
             break;
         case 1:
-            return 2;
-            break;
-        case 2:
             return 1;
             break;
-        case 3:
+        case 2:
             return 1;
             break;
         default:
@@ -187,19 +185,24 @@
             }
         }
         case 1:
-            break;
-        case 2: {
+        {
+//            break;
+//        case 2: {
             [self cleanCach];
         }
         break;
-        case 3: {
-            UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-
-            MSLocalFileVC *vc = [[MSLocalFileVC alloc] initWithCollectionViewLayout:layout];
-            vc.hidesBottomBarWhenPushed = YES;
-            vc.view.backgroundColor = UIColor.whiteColor;
-
-            [self.navigationController pushViewController:vc animated:YES];
+        case 2: {
+//            UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+//
+//            MSLocalFileVC *vc = [[MSLocalFileVC alloc] initWithCollectionViewLayout:layout];
+//            vc.hidesBottomBarWhenPushed = YES;
+//            vc.view.backgroundColor = UIColor.whiteColor;
+//
+//            [self.navigationController pushViewController:vc animated:YES];
+            CPWebVC *webVC = [[CPWebVC alloc] init];
+            webVC.urlStr = @"https://www.baidu.com";
+            
+            [self.navigationController pushViewController:webVC animated:YES];
         }
         break;
 

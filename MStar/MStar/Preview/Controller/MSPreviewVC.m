@@ -18,8 +18,7 @@
 #import "AITUtil.h"
 #import "AITCameraListen.h"
 
-typedef enum
-{
+typedef enum {
     CAMERA_CMD_SNAPSHOT,
     CAMERA_CMD_RECORD,
     CAMERA_QUERY_RECORDING,
@@ -30,12 +29,12 @@ typedef enum
     CAMERA_CMD_CAMMENU
 } Camera_cmd_t;
 
-static NSString *DEFAULT_RTSP_URL_AV1   = @"/liveRTSP/av1" ;
-static NSString *DEFAULT_RTSP_URL_V1    = @"/liveRTSP/v1" ;
-static NSString *DEFAULT_RTSP_URL_AV2    = @"/liveRTSP/av2" ;
-static NSString *DEFAULT_RTSP_URL_AV4    = @"/liveRTSP/av4" ;
-static NSString *DEFAULT_MJPEG_PUSH_URL = @"/cgi-bin/liveMJPEG" ;
-static NSString *CAMEAR_PREVIEW_MJPEG_STATUS_RECORD = @"Camera.Preview.MJPEG.status.record" ;
+static NSString *DEFAULT_RTSP_URL_AV1 = @"/liveRTSP/av1";
+static NSString *DEFAULT_RTSP_URL_V1 = @"/liveRTSP/v1";
+static NSString *DEFAULT_RTSP_URL_AV2 = @"/liveRTSP/av2";
+static NSString *DEFAULT_RTSP_URL_AV4 = @"/liveRTSP/av4";
+static NSString *DEFAULT_MJPEG_PUSH_URL = @"/cgi-bin/liveMJPEG";
+static NSString *CAMEAR_PREVIEW_MJPEG_STATUS_RECORD = @"Camera.Preview.MJPEG.status.record";
 
 static NSString *NETWORK_CACHE_H264 = @"400";
 static NSString *NETWORK_CACHE_MJPG = @"400";
@@ -44,81 +43,86 @@ static NSString *CAMERAID_CMD_FRONT = @"front";
 static NSString *CAMERAID_CMD_REAR = @"rear";
 static bool cam_front = YES;
 
-@interface MSPreviewVC ()<VLCMediaDelegate,VLCMediaPlayerDelegate>
+@interface MSPreviewVC ()<VLCMediaDelegate, VLCMediaPlayerDelegate>
 
 @property (nonatomic, strong) UIButton *recordBT, *shotBT, *previewBT;
 
 @property (nonatomic, strong) UIButton *fullScreenBT;
 
-@property (nonatomic,strong) UIButton *redRecrodLight;
+@property (nonatomic, strong) UIButton *redRecrodLight;
 @property (nonatomic, strong) UIImageView *playImageView;
 
 @end
 
-@implementation MSPreviewVC {
-    VLCMediaPlayer *mediaPlayer ;
-    BOOL appRecording ;
-    BOOL cameraRecording ;
+@implementation MSPreviewVC
+{
+    VLCMediaPlayer *mediaPlayer;
+    BOOL appRecording;
+    BOOL cameraRecording;
     Camera_cmd_t camera_cmd;
-    NSString        *liveurl;
-    NSString        *camera_mode;
-    NSString        *networkcache;
+    NSString *liveurl;
+    NSString *camera_mode;
+    NSString *networkcache;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+
     [self initailizeBaseProperties];
     [self setupUI];
     [self flickRecodeLight];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-- (void)dealloc {
-    
+
+- (void)dealloc
+{
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
-    
+
     [self sendRecordCommand];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    NSLog(@"viewWillDisappear");
 
-    [super viewWillDisappear:animated] ;
-    NSLog(@"viewWillDisappear") ;
-    
     [mediaPlayer stop];
-    
-    if ( YES == cameraRecording ) {
+
+    if (YES == cameraRecording) {
         [self sendRecordCommand];
     } else {
-        
     }
-    
+
     [AITCameraListen setFilterRecvDataBlock:nil];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated
+{
     [super viewDidDisappear:animated];
 }
 
-
 #pragma mark - Initialized properties
-- (void)initailizeBaseProperties {
+- (void)initailizeBaseProperties
+{
 //    mediaPlayer = [VLCMediaPlayer alloc];
-    
-    GCDAsyncUdpSocketReceiveFilterBlock filter = ^BOOL (NSData* data, NSData* address, id *context) {
+
+    GCDAsyncUdpSocketReceiveFilterBlock filter = ^BOOL (NSData *data, NSData *address, id *context) {
         NSString *status = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_main_queue(), ^{
             /*
@@ -130,18 +134,17 @@ static bool cam_front = YES;
         });
         return NO;
     };
-    
+
     [AITCameraListen setFilterRecvDataBlock:filter];
     //
-    NSString *cameraIp = [AITUtil getCameraAddress] ;
-    NSLog(@"Camera IP = %@", cameraIp) ;
-    
+    NSString *cameraIp = [AITUtil getCameraAddress];
+    NSLog(@"Camera IP = %@", cameraIp);
+
     [self addObservers];
 }
 
-
-- (void)addObservers {
-    
+- (void)addObservers
+{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
@@ -157,8 +160,8 @@ static bool cam_front = YES;
 
 #pragma mark - setter && getter method
 #pragma mark - Setup UI
-- (void)setupUI {
-    
+- (void)setupUI
+{
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SwitchCameral"] style:UIBarButtonItemStylePlain target:self action:@selector(switchCameralAction:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"setting"] style:UIBarButtonItemStylePlain target:self action:@selector(settingAction:)];
 
@@ -170,7 +173,7 @@ static bool cam_front = YES;
             make.top.mas_equalTo(NAV_HEIGHT);
             make.left.mas_equalTo(0);
             make.right.mas_equalTo(0);
-            make.height.mas_equalTo(SCREENWIDTH * 480./720);
+            make.height.mas_equalTo(SCREENWIDTH * 480. / 720);
         }];
     }
 
@@ -178,7 +181,7 @@ static bool cam_front = YES;
         self.recordBT = [UIButton new];
         self.recordBT.backgroundColor = UIColor.groupTableViewBackgroundColor;
         self.recordBT.layer.cornerRadius = 30.0f;
-        
+
         [self.view addSubview:self.recordBT];
         [self.recordBT setImage:[UIImage imageNamed:@"录像"] forState:UIControlStateSelected];
         [self.recordBT setImage:[UIImage imageNamed:@"已停止"] forState:UIControlStateNormal];
@@ -188,12 +191,11 @@ static bool cam_front = YES;
             make.left.mas_equalTo(32);
             make.size.mas_equalTo(CGSizeMake(60, 60));
         }];
-        
-        
+
         self.previewBT = [UIButton new];
         self.previewBT.backgroundColor = UIColor.groupTableViewBackgroundColor;
         self.previewBT.layer.cornerRadius = 50.0f;
-        
+
         [self.view addSubview:self.previewBT];
         [self.previewBT setImage:[UIImage imageNamed:@"视频"] forState:UIControlStateNormal];
         [self.previewBT setImage:[UIImage imageNamed:@"停止"] forState:UIControlStateSelected];
@@ -204,12 +206,11 @@ static bool cam_front = YES;
             make.centerX.mas_equalTo(0);
             make.centerY.mas_equalTo(self.recordBT.mas_centerY);
         }];
-        
-        
+
         self.shotBT = [UIButton new];
         self.shotBT.backgroundColor = UIColor.groupTableViewBackgroundColor;
         self.shotBT.layer.cornerRadius = 30.0f;
-        
+
         [self.view addSubview:self.shotBT];
         [self.shotBT setImage:[UIImage imageNamed:@"拍照"] forState:UIControlStateNormal];
         [self.shotBT addTarget:self action:@selector(shotAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -219,7 +220,7 @@ static bool cam_front = YES;
             make.size.mas_equalTo(CGSizeMake(60, 60));
         }];
     }
-    
+
     {
         self.fullScreenBT = [UIButton new];
         self.fullScreenBT.hidden = YES;
@@ -233,10 +234,10 @@ static bool cam_front = YES;
             make.size.mas_equalTo(CGSizeMake(40, 40));
         }];
     }
-    
+
     {
         self.redRecrodLight = [UIButton new];
-        
+
         [self.redRecrodLight setTitleColor:UIColor.redColor forState:UIControlStateNormal];
         [self.redRecrodLight setTitle:@" REC" forState:UIControlStateNormal];
         [self.redRecrodLight setImage:[UIImage imageNamed:@"record"] forState:UIControlStateNormal];
@@ -249,61 +250,58 @@ static bool cam_front = YES;
         }];
     }
 
-
-    
 //    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"在使用之前请确保连接了设备WIFI" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
 //    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:NSLocalizedString(@"ConnectWiFiHint", @"ConnectWiFiHint") delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
 //
 //    [alertView show];
-
 }
+
 #pragma mark - Delegate && dataSource method implement
 
-- (void)mediaPlayerStateChanged:(NSNotification *)aNotification {
+- (void)mediaPlayerStateChanged:(NSNotification *)aNotification
+{
     switch (mediaPlayer.state) {
         case VLCMediaPlayerStatePaused:
             break;
-        case VLCMediaPlayerStateStopped:
-        {
+        case VLCMediaPlayerStateStopped: {
             self.previewBT.selected = NO;
         }
-            break;
+        break;
         case VLCMediaPlayerStateEnded:
             break;
-        case VLCMediaPlayerStatePlaying:
-        {
+        case VLCMediaPlayerStatePlaying: {
             NSLog(@"playing");
             self.previewBT.selected = YES;
         }
-            break;
-        case VLCMediaPlayerStateError:
-        {
+        break;
+        case VLCMediaPlayerStateError: {
             NSLog(@"");
         }
-            break;
+        break;
         default:
             break;
     }
 }
 
-- (void)mediaDidFinishParsing:(VLCMedia *)aMedia {
+- (void)mediaDidFinishParsing:(VLCMedia *)aMedia
+{
     NSLog(@"%s", __FUNCTION__);
 }
 
-- (void)mediaPlayerSnapshot:(NSNotification *)aNotification {
+- (void)mediaPlayerSnapshot:(NSNotification *)aNotification
+{
     [[[SCLAlertView alloc] initWithNewWindow] showSuccess:@"拍照成功" subTitle:nil closeButtonTitle:nil duration:2];
 }
 
--(void) requestFinished:(NSString*) result
+- (void)requestFinished:(NSString *)result
 {
-    int             rtsp;
-    NSString        *recording;
-    NSDictionary    *dict;
-    NSLog(@"Result = %@", result) ;
-    
+    int rtsp;
+    NSString *recording;
+    NSDictionary *dict;
+    NSLog(@"Result = %@", result);
+
     switch (camera_cmd) {
-        case CAMERA_CMD_CAMMENU:
-        {
+        case CAMERA_CMD_CAMMENU: {
             if ([result isKindOfClass:[NSString class]] && result.length > 0) {
                 [[MSCamMenuManager manager] LoadCamMenuXMLDoc:result];
                 [self performSelector:@selector(queryPreStreamCommd) withObject:nil afterDelay:1];
@@ -311,7 +309,7 @@ static bool cam_front = YES;
                 [[[SCLAlertView alloc] init] showWarning:self title:@"提示" subTitle:@"请先连接设备WIFI" closeButtonTitle:@"好的" duration:0.0f];
             }
         }
-            break;
+        break;
         case CAMERA_PRE_STREAMING: {
             dict = [AITCameraCommand buildResultDictionary:result];
             if (dict == nil) {
@@ -319,14 +317,14 @@ static bool cam_front = YES;
                 //VLCMediaPlayer * mp =
                 (void)
                 [mediaPlayer initWithOptions:@[
-                                               [NSString stringWithFormat:@"--%@=%@", kVLCSettingNetworkCaching,kVLCSettingNetworkCachingDefaultValue],
-                                               [NSString stringWithFormat:@"--%@=%@", kVLCSettingClockJitter, kVLCSettingClockJitterDefaultValue],
-                                               ]];
+                     [NSString stringWithFormat:@"--%@=%@", kVLCSettingNetworkCaching, kVLCSettingNetworkCachingDefaultValue],
+                     [NSString stringWithFormat:@"--%@=%@", kVLCSettingClockJitter, kVLCSettingClockJitterDefaultValue],
+                ]];
                 //mp = NULL;
                 break;
             }
-            rtsp        = [[dict objectForKey:[AITCameraCommand PROPERTY_CAMERA_RTSP]] intValue];
-            recording   = [dict objectForKey:[AITCameraCommand PROPERTY_QUERY_RECORD]];
+            rtsp = [[dict objectForKey:[AITCameraCommand PROPERTY_CAMERA_RTSP]] intValue];
+            recording = [dict objectForKey:[AITCameraCommand PROPERTY_QUERY_RECORD]];
             camera_mode = [dict objectForKey:@"Camera.Preview.MJPEG.status.mode"];
             //networkcache =[dict objectForKey:@"Camera.Preview.MJPEG.w"];
             // Check Support rtsp v1, av1 ? or MJPEG
@@ -334,29 +332,25 @@ static bool cam_front = YES;
             if (rtsp == 1) {
                 networkcache = NETWORK_CACHE_MJPG;
                 liveurl = [NSString stringWithFormat:@"rtsp://%@%@", [AITUtil getCameraAddress], DEFAULT_RTSP_URL_AV1];
-            }
-            else if (rtsp == 2) {
+            } else if (rtsp == 2) {
                 networkcache = NETWORK_CACHE_H264;
                 liveurl = [NSString stringWithFormat:@"rtsp://%@%@", [AITUtil getCameraAddress], DEFAULT_RTSP_URL_V1];
-            }else if (rtsp == 3) {
+            } else if (rtsp == 3) {
                 networkcache = NETWORK_CACHE_H264;
                 liveurl = [NSString stringWithFormat:@"rtsp://%@%@", [AITUtil getCameraAddress], DEFAULT_RTSP_URL_AV2];
-            }else if (rtsp == 4) {
+            } else if (rtsp == 4) {
                 networkcache = NETWORK_CACHE_H264;
                 liveurl = [NSString stringWithFormat:@"rtsp://%@%@", [AITUtil getCameraAddress], DEFAULT_RTSP_URL_AV4];
-            }
-            else {
+            } else {
                 networkcache = NETWORK_CACHE_MJPG;
                 liveurl = [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], DEFAULT_MJPEG_PUSH_URL];
             }
             // Check is recording or idle
-            if (![recording caseInsensitiveCompare:@"Recording"])
-                cameraRecording = YES;
-            else
-                cameraRecording = NO;
+            if (![recording caseInsensitiveCompare:@"Recording"]) cameraRecording = YES;
+            else cameraRecording = NO;
             //
 //            [self SetRecordButtonTitle:cameraRecording];
-            
+
             liveurl = [NSString stringWithFormat:@"rtsp://%@%@", [AITUtil getCameraAddress], DEFAULT_RTSP_URL_AV1];
             self.fullScreenBT.hidden = NO;
 
@@ -364,50 +358,48 @@ static bool cam_front = YES;
             VLCMedia *media = [VLCMedia mediaWithURL:[NSURL URLWithString:liveurl]];
             media.delegate = self;
 //            [media parseWithOptions:VLCMediaParseNetwork timeout:3];
-            
+
             NSLog(@"Network cache = %@", networkcache);
             //instancetype p;
-            
+
             if (nil == mediaPlayer) {
                 mediaPlayer = [[VLCMediaPlayer alloc] init];
-
             }
-            
+
             (void)[mediaPlayer initWithOptions:@[
-                                                 [NSString stringWithFormat:@"--%@=%@", kVLCSettingNetworkCaching,/*kVLCSettingNetworkCachingDefaultValue*/networkcache],
-                                                 [NSString stringWithFormat:@"--%@=%@", kVLCSettingClockJitter, kVLCSettingClockJitterDefaultValue],
-                                                 ]];
+                       [NSString stringWithFormat:@"--%@=%@", kVLCSettingNetworkCaching, /*kVLCSettingNetworkCachingDefaultValue*/ networkcache],
+                       [NSString stringWithFormat:@"--%@=%@", kVLCSettingClockJitter, kVLCSettingClockJitterDefaultValue],
+            ]];
             [mediaPlayer setDelegate:self];
             [mediaPlayer setDrawable:self.playImageView];
-            
+
             [mediaPlayer setMedia:media];
             [mediaPlayer play];
-            
+
             //mediaPlayer.videoAspectRatio =  NULL;
             //mediaPlayer.videoCropGeometry = NULL;
             break;
         }
         case CAMERA_QUERY_CAMID:
-            NSLog(@"CAMERA_QUERY_CAMID") ;
-            if([result rangeOfString:@"rear"].location != NSNotFound) {
-                NSLog(@"CAMERA_QUERY_CAMID REAR") ;
-                cam_front=NO;
+            NSLog(@"CAMERA_QUERY_CAMID");
+            if ([result rangeOfString:@"rear"].location != NSNotFound) {
+                NSLog(@"CAMERA_QUERY_CAMID REAR");
+                cam_front = NO;
 //                [self SetCamSwitchButtonTitle:NO];
-            }else {//if([result rangeOfString:@"front"].location != NSNotFound) {
-                
+            } else {//if([result rangeOfString:@"front"].location != NSNotFound) {
                 if (YES == cam_front) {
                     SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
                     alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-                    [alert showError:NSLocalizedString(@"No rear camera found",nil) subTitle:nil closeButtonTitle:nil duration:2];
+                    [alert showError:NSLocalizedString(@"No rear camera found", nil) subTitle:nil closeButtonTitle:nil duration:2];
                 }
-                cam_front=YES;
+                cam_front = YES;
             }
 
             break;
         case CAMERA_CMD_CAMID:
-            NSLog(@"CAMERA_CMD_CAMID") ;
-            camera_cmd= CAMERA_QUERY_CAMID;
-            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandGetCameraidUrl] Delegate:self] ;
+            NSLog(@"CAMERA_CMD_CAMID");
+            camera_cmd = CAMERA_QUERY_CAMID;
+            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandGetCameraidUrl] Delegate:self];
             [mediaPlayer play];
 //            self.cameraSwitchButton.enabled   = YES;
             break;
@@ -416,13 +408,12 @@ static bool cam_front = YES;
                 [self.view makeToast:@"命令发送失败" duration:2.0 position:CSToastPositionCenter];
                 return;
             }
-            
+
             if ([result containsString:@"OK"]) {
-                cameraRecording = !cameraRecording ;
+                cameraRecording = !cameraRecording;
             }
             break;
-        case CAMERA_CMD_SNAPSHOT:
-        {
+        case CAMERA_CMD_SNAPSHOT: {
             if (result == nil || result.length == 0) {
                 [self.view makeToast:@"命令发送失败" duration:2.0 position:CSToastPositionCenter];
                 return;
@@ -433,48 +424,48 @@ static bool cam_front = YES;
             NSLog(@"");
         }
 //            self.cameraSnapshotButton.enabled = YES;
-            break;
+break;
         default:
             break;
     }
 }
+
 #pragma mark - load data
-- (void)loadData {
-    
+- (void)loadData
+{
 }
 
 #pragma mark - Private method implement
-- (void)switchCameralAction:(id)sender {
-    
+- (void)switchCameralAction:(id)sender
+{
     if ([mediaPlayer isPlaying]) {
         [mediaPlayer stop];
         usleep(800000);
-        NSLog(@"cameraSwitchClick") ;
-        
+        NSLog(@"cameraSwitchClick");
+
         camera_cmd = CAMERA_CMD_CAMID;
-        
+
         if (cam_front) {
             //  前置转后置
-            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand   commandSetCameraidUrl:CAMERAID_CMD_REAR] Delegate:self] ;
-        }else {
+            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetCameraidUrl:CAMERAID_CMD_REAR] Delegate:self];
+        } else {
             //  后置转前置
-            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetCameraidUrl:CAMERAID_CMD_FRONT] Delegate:self] ;
+            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetCameraidUrl:CAMERAID_CMD_FRONT] Delegate:self];
         }
     }
 }
 
-- (void)settingAction:(id)sender {
-    
+- (void)settingAction:(id)sender
+{
     MSSettingVC *vc = [[MSSettingVC alloc] initWithStyle:UITableViewStyleGrouped];
     vc.hidesBottomBarWhenPushed = YES;
-    
-    [self.navigationController pushViewController:vc animated:YES];
 
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)previewAction:(UIButton *)sender {
-
-    if ( NO == [mediaPlayer isPlaying]) {
+- (void)previewAction:(UIButton *)sender
+{
+    if (NO == [mediaPlayer isPlaying]) {
         [mediaPlayer stop];
         [mediaPlayer play];
     } else {
@@ -482,15 +473,15 @@ static bool cam_front = YES;
     }
 }
 
-- (void)shotAction:(id)sender {
-    
+- (void)shotAction:(id)sender
+{
     //    if ([mediaPlayer isPlaying]) {
-    
+
 //        [self photosound];
-    
-        camera_cmd = CAMERA_CMD_SNAPSHOT;
-        (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraSnapshotUrl] Delegate:self] ;
-        
+
+    camera_cmd = CAMERA_CMD_SNAPSHOT;
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraSnapshotUrl] Delegate:self];
+
 //        NSDate *date = [NSDate date];
 //        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 //        NSTimeZone *zone = [NSTimeZone localTimeZone];
@@ -511,37 +502,37 @@ static bool cam_front = YES;
 //    }
 }
 
--(void)photosound
+- (void)photosound
 {
     NSString *soundName = @"photoShutter";
     NSString *soundType = @"caf";
-    NSString *path = [NSString stringWithFormat:@"/System/Library/Audio/UISounds/%@.%@",soundName,soundType];
+    NSString *path = [NSString stringWithFormat:@"/System/Library/Audio/UISounds/%@.%@", soundName, soundType];
     SystemSoundID soundID;
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:path], &soundID);
-    AudioServicesPlaySystemSound (soundID);
+    AudioServicesPlaySystemSound(soundID);
 }
 
-- (void)recorderAction:(UIButton *)sender {
+- (void)recorderAction:(UIButton *)sender
+{
     sender.selected = !sender.selected;
-    
+
     camera_cmd = CAMERA_CMD_RECORD;
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self] ;
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self];
 }
 
-- (void)fullScreenAction:(id)sender {
-
+- (void)fullScreenAction:(id)sender
+{
     CPPlayerVC *playerVC = [[CPPlayerVC alloc] init];
     playerVC.hidesBottomBarWhenPushed = YES;
     playerVC.liveurl = liveurl;
     playerVC.networkcache = networkcache;
-    
+
     [self.navigationController presentViewController:playerVC animated:YES completion:^{
-        
     }];
 }
 
-- (void)flickRecodeLight {
-    
+- (void)flickRecodeLight
+{
     if (cameraRecording == NO) {
         self.redRecrodLight.hidden = YES;
         self.recordBT.selected = YES;
@@ -549,19 +540,18 @@ static bool cam_front = YES;
         self.redRecrodLight.hidden = !self.redRecrodLight.hidden;
         self.recordBT.selected = NO;
     }
-    
+
     [self performSelector:@selector(flickRecodeLight) withObject:nil afterDelay:1];
 }
 
-- (void) CameraStatusArrived:(NSString*)status
+- (void)CameraStatusArrived:(NSString *)status
 {
     NSDictionary *dict_status;
-    
+
     // Check format of the status and is flesh one,
     // if return nil, it is not flesh or wrong format!
     dict_status = [AITCameraListen buildStatusDictionary:status];
-    if (dict_status == nil)
-        return;
+    if (dict_status == nil) return;
     NSString *rec = [dict_status objectForKey:@"Recording"];
     if ([rec isEqualToString:@"YES"] != cameraRecording) {
         cameraRecording = !cameraRecording;
@@ -570,35 +560,42 @@ static bool cam_front = YES;
     //NSString *uim = [dict_status objectForKey:@"UIMode"];
 }
 
-- (void)queryPreStreamCommd {
+- (void)queryPreStreamCommd
+{
     cameraRecording = NO;
     camera_cmd = CAMERA_PRE_STREAMING;
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQueryPreviewStatusUrl] Delegate:self] ;
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQueryPreviewStatusUrl] Delegate:self];
 }
 
-- (void)queryCamMenu {
+- (void)queryCamMenu
+{
     camera_cmd = CAMERA_CMD_CAMMENU;
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandGetCamMenu] Delegate:self];
 }
 
-- (void)queryCamIDUrl {
-    camera_cmd= CAMERA_QUERY_CAMID;
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandGetCameraidUrl] Delegate:self] ;
+- (void)queryCamIDUrl
+{
+    camera_cmd = CAMERA_QUERY_CAMID;
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandGetCameraidUrl] Delegate:self];
 }
 
-- (void)sendRecordCommand {
+- (void)sendRecordCommand
+{
     camera_cmd = CAMERA_CMD_RECORD;
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self] ;
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self];
 }
 
-- (void)applicationWillResignActive:(NSNotification *)application {
+- (void)applicationWillResignActive:(NSNotification *)application
+{
 }
 
-- (void)applicationDidBecomeActive:(NSNotification *)application {
+- (void)applicationDidBecomeActive:(NSNotification *)application
+{
     [self performSelector:@selector(queryCamMenu) withObject:nil afterDelay:1];
 }
 
-- (void)applicationDidEnterBackground:(NSNotification *)application {
+- (void)applicationDidEnterBackground:(NSNotification *)application
+{
 }
 
 @end

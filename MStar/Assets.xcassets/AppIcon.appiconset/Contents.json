@@ -52,11 +52,6 @@
       "idiom" : "ios-marketing",
       "size" : "1024x1024",
       "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "logostore_1024pt.png",
-      "scale" : "1x"
     }
   ],
   "info" : {

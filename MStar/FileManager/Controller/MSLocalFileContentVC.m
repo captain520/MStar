@@ -23,6 +23,29 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStyleDone target:self action:@selector(editAction:)];
     
+    self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight | UIRectEdgeBottom;
+    self.navigationController.navigationBar.backgroundColor = UIColor.redColor;
+    
+    [self setTabBarFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 44) contentViewFrame:CGRectMake(0, 44, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height - 44 - UIApplication.sharedApplication.statusBarFrame.size.height - 44)];
+
+    self.tabBar.itemTitleColor = UIColor.blackColor;
+    self.tabBar.itemTitleSelectedColor = MAIN_COLOR;
+    self.tabBar.itemTitleFont = [UIFont systemFontOfSize:14];
+    self.tabBar.itemTitleSelectedFont = [UIFont systemFontOfSize:16];
+    self.tabBar.leadingSpace = 20;
+    self.tabBar.trailingSpace = 20;
+    
+    self.tabBar.itemFontChangeFollowContentScroll = YES;
+    self.tabBar.indicatorScrollFollowContent = YES;
+    self.tabBar.indicatorColor = MAIN_COLOR;
+    
+    [self.tabBar setIndicatorWidth:80 marginTop:42 marginBottom:0 tapSwitchAnimated:YES];
+    
+    
+    [self.tabContentView setContentScrollEnabled:YES tapSwitchAnimated:YES];
+    self.tabContentView.loadViewOfChildContollerWhileAppear = YES;
+    
+
     [self initViewControllers];
 }
 
@@ -44,7 +67,26 @@
     self.eventVideoVC.fileType = W1MFileTypeEvent;
     
     self.viewControllers = @[self.normalVideoVC, self.imageVc, self.eventVideoVC];
-    self.tabBar.delegate = self;
+}
+
+- (void)dealloc {
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 }
 
 - (void)editAction:(UIBarButtonItem *)sender {

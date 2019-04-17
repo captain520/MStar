@@ -21,6 +21,7 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        self.contentView.backgroundColor = UIColor.groupTableViewBackgroundColor;
         [self setupUI];
     }
     
@@ -34,6 +35,7 @@
         self.iconImageView.layer.borderWidth = 0.1f;
         self.iconImageView.layer.borderColor = MAIN_COLOR.CGColor;
         self.iconImageView.clipsToBounds = YES;
+        self.iconImageView.contentMode = UIViewContentModeScaleAspectFit;
 
         [self.contentView addSubview:self.iconImageView];
         [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -61,6 +63,7 @@
 @end
 
 /*************************************************** MSLocalFileVC ***************************************************/
+#import "CPActionButton.h"
 
 @interface MSLocalFileVC ()
 
@@ -68,7 +71,8 @@
 
 @property (nonatomic, strong) NSMutableArray * dataArray;
 
-@property (nonatomic, strong) NSMutableArray * selectedIndexPaths;
+@property (nonatomic, strong) NSMutableArray <NSIndexPath *> * selectedIndexPaths;
+
 
 @end
 
@@ -84,6 +88,7 @@ static NSString * const reuseIdentifier = @"Cell";
     
     [self initailizeBaseProperties];
     
+    
     // Register cell classes
     [self.collectionView registerClass:[MSLocalFileCell class] forCellWithReuseIdentifier:reuseIdentifier];
     
@@ -91,6 +96,28 @@ static NSString * const reuseIdentifier = @"Cell";
     self.collectionView.backgroundColor = UIColor.whiteColor;
     
     [self loadData];
+}
+
+- (void)dealloc {
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.collectionView.frame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - NAV_HEIGHT - 44 - self.tabBarController.tabBar.frame.size.height);
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - Initialized properties
@@ -102,11 +129,30 @@ static NSString * const reuseIdentifier = @"Cell";
     self.collectionView.emptyDataSetDelegate = self;
 }
 #pragma mark - setter && getter method
-//- (void)setIsInEdit:(BOOL)isInEdit {
-//    _isInEdit = isInEdit;
-//
-//    [self.collectionView reloadData];
-//}
+- (void)setIsInEdit:(BOOL)isInEdit {
+    _isInEdit = isInEdit;
+
+    
+    if (NO == isInEdit && self.selectedIndexPaths.count > 0) {
+        
+         __weak typeof(self) weakSelf = self;
+        
+        SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
+        alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
+        
+        SCLButton *button = [alert addButton:@"Delete" actionBlock:^{
+            [weakSelf deleteSelectLocalFiles];
+        }];
+        
+        button.buttonFormatBlock = ^NSDictionary *{
+            return @{@"backgroundColor" : UIColor.redColor};
+        };
+        
+        [alert showWarning:nil subTitle:@"您确定要删除选中文件吗" closeButtonTitle:@"cancel" duration:0];
+    }
+    
+    [self.collectionView reloadData];
+}
 - (NSFileManager *)fileManager {
     
     if (nil == _fileManager) {
@@ -115,6 +161,7 @@ static NSString * const reuseIdentifier = @"Cell";
     
     return _fileManager;
 }
+
 #pragma mark - Setup UI
 - (void)setupUI {
     
@@ -136,7 +183,7 @@ static NSString * const reuseIdentifier = @"Cell";
     NSString *directory = [self filePathOf:self.fileType];
     NSError *error = nil;
     NSArray *fileNames = [self.fileManager contentsOfDirectoryAtPath:directory error:&error];
-    
+
     if (nil == error && fileNames.count > 0) {
         self.dataArray = fileNames.mutableCopy;
     }
@@ -195,23 +242,30 @@ static NSString * const reuseIdentifier = @"Cell";
     NSString *path = [self filePathOf:self.fileType];
     path = [path stringByAppendingPathComponent:fileName];
     
+#if 1
     if (self.fileType == W1MFileTypePhoto) {
         [cell.iconImageView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"tupian"]];
-
+        
     } else {
         UIImage *image = [[SDImageCache sharedImageCache] imageFromCacheForKey:fileName];
         cell.iconImageView.image = image;
     }
+#endif
+    
+//    cell.iconImageView.image = [UIImage imageNamed:self.dataArray[indexPath.row]];
     
     if (YES == self.isInEdit) {
         cell.checkImageView.hidden = NO;
-        cell.checkImageView.image = [UIImage imageNamed:[self.selectedIndexPaths containsObject:indexPath] ? @"checked" : @"unchecked"];
+        if (YES == [self.selectedIndexPaths containsObject:indexPath]) {
+            cell.checkImageView.image = [UIImage imageNamed:@"checked"];
+        } else {
+            cell.checkImageView.image = [UIImage imageNamed:@"unchecked"];
+        }
     } else {
         cell.checkImageView.hidden = YES;
     }
 
-    // Configure the cell
-    
+
     return cell;
 }
 
@@ -242,6 +296,23 @@ static NSString * const reuseIdentifier = @"Cell";
     
     if (self.isInEdit == YES) {
         [self.selectedIndexPaths containsObject:indexPath] ? [self.selectedIndexPaths removeObject:indexPath] : [self.selectedIndexPaths addObject:indexPath];
+        
+        [collectionView reloadData];
+        
+//        [UIView animateWithDuration:1.0f animations:^{
+//            [self.deleteActionButton mas_updateConstraints:^(MASConstraintMaker *make) {
+//                make.left.mas_equalTo(0);
+//                make.right.mas_equalTo(0);
+//                make.bottom.mas_equalTo(0);
+//                make.height.mas_equalTo(60);
+//            }];
+//
+//            [self.view layoutIfNeeded];
+//
+//        } completion:^(BOOL finished) {
+//
+//        }];
+
     } else {
         if (W1MFileTypePhoto == self.fileType) {
             [self previewImagesAt:indexPath];
@@ -280,6 +351,18 @@ static NSString * const reuseIdentifier = @"Cell";
     self.navigationController.navigationBarHidden=YES;
     
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)deleteSelectLocalFiles {
+    [self.selectedIndexPaths enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *filePath = [self.dataArray objectAtIndex:obj.row];
+        
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+        
+        [self.dataArray removeObjectAtIndex:obj.row];
+    }];
+    
+    [self.collectionView reloadData];
 }
 
 @end

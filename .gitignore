@@ -1,0 +1,17 @@
+
+MobileVLCKit.framework/Headers/MobileVLCKit.h
+MobileVLCKit.framework/Headers/VLCAudio.h
+MobileVLCKit.framework/Headers/VLCDialogProvider.h
+MobileVLCKit.framework/Headers/VLCLibrary.h
+MobileVLCKit.framework/Headers/VLCMedia.h
+MobileVLCKit.framework/Headers/VLCMediaDiscoverer.h
+MobileVLCKit.framework/Headers/VLCMediaList.h
+MobileVLCKit.framework/Headers/VLCMediaListPlayer.h
+MobileVLCKit.framework/Headers/VLCMediaPlayer.h
+MobileVLCKit.framework/Headers/VLCMediaThumbnailer.h
+MobileVLCKit.framework/Headers/VLCRendererDiscoverer.h
+MobileVLCKit.framework/Headers/VLCRendererItem.h
+MobileVLCKit.framework/Headers/VLCTime.h
+MobileVLCKit.framework/Headers/VLCTranscoder.h
+MobileVLCKit.framework/MobileVLCKit
+MobileVLCKit.framework/Modules/module.modulemap
