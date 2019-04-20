@@ -140,7 +140,7 @@ static NSString * const reuseIdentifier = @"Cell";
         SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
         alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
         
-        SCLButton *button = [alert addButton:@"Delete" actionBlock:^{
+        SCLButton *button = [alert addButton:NSLocalizedString(@"Delete",nil) actionBlock:^{
             [weakSelf deleteSelectLocalFiles];
         }];
         
@@ -148,7 +148,7 @@ static NSString * const reuseIdentifier = @"Cell";
             return @{@"backgroundColor" : UIColor.redColor};
         };
         
-        [alert showWarning:nil subTitle:@"您确定要删除选中文件吗" closeButtonTitle:@"cancel" duration:0];
+        [alert showWarning:nil subTitle:NSLocalizedString(@"DeleteCorfirm", nil) closeButtonTitle:NSLocalizedString(@"Cancel", nil) duration:0];
     }
     
     [self.collectionView reloadData];

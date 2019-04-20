@@ -21,7 +21,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStyleDone target:self action:@selector(editAction:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit", nil) style:UIBarButtonItemStyleDone target:self action:@selector(editAction:)];
     
     self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight | UIRectEdgeBottom;
     self.navigationController.navigationBar.backgroundColor = UIColor.redColor;
@@ -53,17 +53,17 @@
     
     UICollectionViewFlowLayout *normalLayout = [[UICollectionViewFlowLayout alloc] init];
     self.normalVideoVC = [[MSLocalFileVC alloc] initWithCollectionViewLayout:normalLayout];;
-    self.normalVideoVC.yp_tabItemTitle = @"视频";
+    self.normalVideoVC.yp_tabItemTitle = NSLocalizedString(@"NormalVideo", nil);
     self.normalVideoVC.fileType = W1MFileTypeNormal;
     
     UICollectionViewFlowLayout *imageLayout = [[UICollectionViewFlowLayout alloc] init];
     self.imageVc = [[MSLocalFileVC alloc] initWithCollectionViewLayout:imageLayout];
-    self.imageVc.yp_tabItemTitle = @"图片";
+    self.imageVc.yp_tabItemTitle = NSLocalizedString(@"Photo", nil);
     self.imageVc.fileType = W1MFileTypePhoto;
     
     UICollectionViewFlowLayout *eventLayout = [[UICollectionViewFlowLayout alloc] init];
     self.eventVideoVC = [[MSLocalFileVC alloc] initWithCollectionViewLayout:eventLayout];
-    self.eventVideoVC.yp_tabItemTitle = @"锁存视频";
+    self.eventVideoVC.yp_tabItemTitle = NSLocalizedString(@"EventVideo", nil);
     self.eventVideoVC.fileType = W1MFileTypeEvent;
     
     self.viewControllers = @[self.normalVideoVC, self.imageVc, self.eventVideoVC];
@@ -97,19 +97,19 @@
         case 0:
         {
             self.normalVideoVC.isInEdit = !self.normalVideoVC.isInEdit;
-            self.navigationItem.rightBarButtonItem.title = self.normalVideoVC.isInEdit ? @"完成" : @"编辑";
+            self.navigationItem.rightBarButtonItem.title = self.normalVideoVC.isInEdit ? NSLocalizedString(@"Done", nil) : NSLocalizedString(@"Edit", nil);
         }
             break;
         case 1:
         {
             self.imageVc.isInEdit = !self.imageVc.isInEdit;
-            self.navigationItem.rightBarButtonItem.title = self.imageVc.isInEdit ? @"完成" : @"编辑";
+            self.navigationItem.rightBarButtonItem.title = self.imageVc.isInEdit ? NSLocalizedString(@"Done", nil) : NSLocalizedString(@"Edit", nil);
         }
             break;
         case 2:
         {
             self.eventVideoVC.isInEdit = !self.eventVideoVC.isInEdit;
-            self.navigationItem.rightBarButtonItem.title = self.eventVideoVC.isInEdit ? @"完成" : @"编辑";
+            self.navigationItem.rightBarButtonItem.title = self.eventVideoVC.isInEdit ? NSLocalizedString(@"Done", nil) : NSLocalizedString(@"Edit", nil);
         }
             break;
             
@@ -123,17 +123,17 @@
     switch (index) {
         case 0:
         {
-            self.navigationItem.rightBarButtonItem.title = self.normalVideoVC.isInEdit ? @"完成" : @"编辑";
+            self.navigationItem.rightBarButtonItem.title = self.normalVideoVC.isInEdit ? NSLocalizedString(@"Done", nil) : NSLocalizedString(@"Edit", nil);
         }
             break;
         case 1:
         {
-            self.navigationItem.rightBarButtonItem.title = self.imageVc.isInEdit ? @"完成" : @"编辑";
+            self.navigationItem.rightBarButtonItem.title = self.imageVc.isInEdit ? NSLocalizedString(@"Done", nil) : NSLocalizedString(@"Edit", nil);
         }
             break;
         case 2:
         {
-            self.navigationItem.rightBarButtonItem.title = self.eventVideoVC.isInEdit ? @"完成" : @"编辑";
+            self.navigationItem.rightBarButtonItem.title = self.eventVideoVC.isInEdit ? NSLocalizedString(@"Done", nil) : NSLocalizedString(@"Edit", nil);
         }
             break;
 

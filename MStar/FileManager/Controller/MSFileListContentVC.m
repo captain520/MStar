@@ -64,17 +64,17 @@
     }
     
     self.normalVideoVC = [[MSSDFileLIstVC alloc] initWithStyle:UITableViewStyleGrouped];;
-    self.normalVideoVC.yp_tabItemTitle = @"视频";
+    self.normalVideoVC.yp_tabItemTitle = NSLocalizedString(@"NormalVideo", nil);
     self.normalVideoVC.isLocalFileList = self.isLocalFileList;
     self.normalVideoVC.fileType = W1MFileTypeNormal;
 
     self.imageVc = [[MSSDFileLIstVC alloc] initWithStyle:UITableViewStyleGrouped];
-    self.imageVc.yp_tabItemTitle = @"图片";
+    self.imageVc.yp_tabItemTitle = NSLocalizedString(@"Photo", nil);
     self.imageVc.isLocalFileList = self.isLocalFileList;
     self.imageVc.fileType = W1MFileTypePhoto;
     
     self.eventVideoVC = [[MSSDFileLIstVC alloc] initWithStyle:UITableViewStyleGrouped];
-    self.eventVideoVC.yp_tabItemTitle = @"锁存视频";
+    self.eventVideoVC.yp_tabItemTitle = NSLocalizedString(@"EventVideo", nil);
     self.eventVideoVC.isLocalFileList = self.isLocalFileList;
     self.eventVideoVC.fileType = W1MFileTypeEvent;
 

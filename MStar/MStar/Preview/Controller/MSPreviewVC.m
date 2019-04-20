@@ -89,6 +89,7 @@ static bool cam_front = YES;
 {
     [super viewWillAppear:animated];
 
+    [self syncDate];
     [self sendRecordCommand];
 }
 
@@ -290,7 +291,7 @@ static bool cam_front = YES;
 
 - (void)mediaPlayerSnapshot:(NSNotification *)aNotification
 {
-    [[[SCLAlertView alloc] initWithNewWindow] showSuccess:@"拍照成功" subTitle:nil closeButtonTitle:nil duration:2];
+    [[[SCLAlertView alloc] initWithNewWindow] showSuccess:NSLocalizedString(@"PhotographSuccess", nil) subTitle:nil closeButtonTitle:nil duration:2];
 }
 
 - (void)requestFinished:(NSString *)result
@@ -306,7 +307,7 @@ static bool cam_front = YES;
                 [[MSCamMenuManager manager] LoadCamMenuXMLDoc:result];
                 [self performSelector:@selector(queryPreStreamCommd) withObject:nil afterDelay:1];
             } else {
-                [[[SCLAlertView alloc] init] showWarning:self title:@"提示" subTitle:@"请先连接设备WIFI" closeButtonTitle:@"好的" duration:0.0f];
+                [[[SCLAlertView alloc] init] showWarning:self title:NSLocalizedString(@"Hint", nil) subTitle:NSLocalizedString(@"ConnectTheDeviceWIFI", nil) closeButtonTitle:NSLocalizedString(@"OK", nil) duration:0.0f];
             }
         }
         break;
@@ -405,7 +406,7 @@ static bool cam_front = YES;
             break;
         case CAMERA_CMD_RECORD:
             if (result == nil || result.length == 0) {
-                [self.view makeToast:@"命令发送失败" duration:2.0 position:CSToastPositionCenter];
+                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
                 return;
             }
 
@@ -415,10 +416,10 @@ static bool cam_front = YES;
             break;
         case CAMERA_CMD_SNAPSHOT: {
             if (result == nil || result.length == 0) {
-                [self.view makeToast:@"命令发送失败" duration:2.0 position:CSToastPositionCenter];
+                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
                 return;
             } else {
-                [self.view makeToast:@"命令发送成功" duration:2.0 position:CSToastPositionCenter];
+                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
                 [self photosound];
             }
             NSLog(@"");
@@ -583,6 +584,16 @@ break;
 {
     camera_cmd = CAMERA_CMD_RECORD;
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self];
+}
+
+- (void)syncDate {
+    
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy$MM$dd$HH$mm$ss"];
+    NSString *dateStr = [formatter stringFromDate:date];
+
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetDateTime:dateStr] Delegate:self];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)application

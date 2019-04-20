@@ -34,11 +34,11 @@
 }
 
 - (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView {
-    return [[NSAttributedString alloc] initWithString:@"暂无数据" attributes:nil];
+    return [[NSAttributedString alloc] initWithString:NSLocalizedString(@"DataIsEmpty", nil) attributes:nil];
 }
 
 - (NSAttributedString *)buttonTitleForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state {
-    return [[NSAttributedString alloc] initWithString:@"点击刷新" attributes:@{NSForegroundColorAttributeName : C99}];
+    return [[NSAttributedString alloc] initWithString:NSLocalizedString(@"ClickToRefreshData", nil) attributes:@{NSForegroundColorAttributeName : C99}];
 }
 
 #pragma mark - Private method implement

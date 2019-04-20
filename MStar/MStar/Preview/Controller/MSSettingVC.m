@@ -34,7 +34,7 @@
 
 #pragma mark - Initialized properties
 - (void)initailizeBaseProperties {
-    self.title = @"设置";
+    self.title = NSLocalizedString(@"Setting", nil);
 }
 #pragma mark - setter && getter method
 #pragma mark - Setup UI
@@ -48,10 +48,10 @@
     if ([result hasPrefix:@"0\nOK"]) {
         if (self.currentMenu.parent) {
             self.currentMenu.parent.focus = self.currentMenu.menuid;
-            [[[SCLAlertView alloc] initWithNewWindow] showSuccess:self.currentMenu.parent.title subTitle:@"设置成功" closeButtonTitle:nil duration:2];
+            [[[SCLAlertView alloc] initWithNewWindow] showSuccess:self.currentMenu.parent.title subTitle:NSLocalizedString(@"SetSuccess", nil) closeButtonTitle:nil duration:2];
             [self.tableView reloadData];
         } else {
-            [[[SCLAlertView alloc] initWithNewWindow] showSuccess:self.currentMenu.title subTitle:@"设置成功" closeButtonTitle:nil duration:2];
+            [[[SCLAlertView alloc] initWithNewWindow] showSuccess:self.currentMenu.title subTitle:NSLocalizedString(@"SetSuccess", nil) closeButtonTitle:nil duration:2];
         }
         
         

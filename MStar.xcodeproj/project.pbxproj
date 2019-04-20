@@ -29,7 +29,6 @@
 		9C8B29A22259A0B4002992B9 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C8B29A12259A0B3002992B9 /* libxml2.tbd */; };
 		9C987874225D754A009E4C8B /* CPRefreshVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C987873225D754A009E4C8B /* CPRefreshVC.m */; };
 		9C98787E225DB252009E4C8B /* ZZError.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C98787C225DB252009E4C8B /* ZZError.m */; };
-		9C994657225711C200AD863F /* DemoVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 9C9946562257115B00AD863F /* DemoVideo.mp4 */; };
 		9C994661225713F000AD863F /* MSTestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C99465F225713F000AD863F /* MSTestVC.m */; };
 		9C994662225713F000AD863F /* MSTestVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C994660225713F000AD863F /* MSTestVC.xib */; };
 		9C99466A225714EE00AD863F /* AppDelegate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C994669225714EE00AD863F /* AppDelegate+Category.m */; };
@@ -133,6 +132,7 @@
 		9C4D7BB8223112AA00B6273E /* MSFileListContentVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSFileListContentVC.m; sourceTree = "<group>"; };
 		9C51CCF7225E6C030087CCF8 /* UIButton+block.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+block.h"; sourceTree = "<group>"; };
 		9C51CCF8225E6C030087CCF8 /* UIButton+block.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+block.m"; sourceTree = "<group>"; };
+		9C5A5029226ABAF1002CA21A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9C5B241B225B9EBF000DE8D1 /* MSProfileVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSProfileVC.h; sourceTree = "<group>"; };
 		9C5B241C225B9EBF000DE8D1 /* MSProfileVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSProfileVC.m; sourceTree = "<group>"; };
 		9C8B29A12259A0B3002992B9 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
@@ -140,7 +140,6 @@
 		9C987873225D754A009E4C8B /* CPRefreshVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPRefreshVC.m; sourceTree = "<group>"; };
 		9C98787C225DB252009E4C8B /* ZZError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZError.m; sourceTree = "<group>"; };
 		9C98787D225DB252009E4C8B /* ZZError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZError.h; sourceTree = "<group>"; };
-		9C9946562257115B00AD863F /* DemoVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = DemoVideo.mp4; sourceTree = "<group>"; };
 		9C9946592257123500AD863F /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		9C99465E225713F000AD863F /* MSTestVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSTestVC.h; sourceTree = "<group>"; };
 		9C99465F225713F000AD863F /* MSTestVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSTestVC.m; sourceTree = "<group>"; };
@@ -189,7 +188,6 @@
 		9CA6568A225989F300AB124F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		9CA6568B225989F300AB124F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		9CA6568F22598A4E00AB124F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		9CA6569122598A5000AB124F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9CA656922259999800AB124F /* MobileVLCKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MobileVLCKit.framework; sourceTree = "<group>"; };
 		9CA65694225999EA00AB124F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9CA65696225999F500AB124F /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
@@ -340,7 +338,6 @@
 				9C9946582257120400AD863F /* Config */,
 				9C4D7BAE2230C80600B6273E /* CPPlayerVC.h */,
 				9C4D7BAF2230C80700B6273E /* CPPlayerVC.m */,
-				9C9946562257115B00AD863F /* DemoVideo.mp4 */,
 				9C4D7B902230A08500B6273E /* Info.plist */,
 				9C4D7B8D2230A08500B6273E /* LaunchScreen.storyboard */,
 				9C4D7B912230A08500B6273E /* main.m */,
@@ -832,7 +829,6 @@
 			files = (
 				9C994662225713F000AD863F /* MSTestVC.xib in Resources */,
 				9CDCC764225F38B200162D9A /* ic_sp_bf@2x.png in Resources */,
-				9C994657225711C200AD863F /* DemoVideo.mp4 in Resources */,
 				9C4D7B8F2230A08500B6273E /* LaunchScreen.storyboard in Resources */,
 				9CDCC761225F38B200162D9A /* ic_bf_ks.png in Resources */,
 				9CA6568E22598A4E00AB124F /* Localizable.strings in Resources */,
@@ -993,7 +989,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				9CA6568F22598A4E00AB124F /* zh-Hans */,
-				9CA6569122598A5000AB124F /* en */,
+				9C5A5029226ABAF1002CA21A /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

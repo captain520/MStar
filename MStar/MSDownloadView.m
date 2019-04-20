@@ -64,7 +64,7 @@
     {
         self.comepelteHintLB = [UILabel new];
         self.comepelteHintLB.font = [UIFont systemFontOfSize:13];
-        self.comepelteHintLB.text = @"已下载50.01%";
+//        self.comepelteHintLB.text = @"已下载50.01%";
         self.comepelteHintLB.textColor = UIColor.blueColor;
         self.comepelteHintLB.textAlignment = NSTextAlignmentCenter;
         
@@ -95,7 +95,7 @@
         self.cancelBt.layer.cornerRadius = 5.0f;
 
         [self.downloadView addSubview:self.cancelBt];
-        [self.cancelBt setTitle:@"取 消" forState:UIControlStateNormal];
+        [self.cancelBt setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
         [self.cancelBt setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
         [self.cancelBt addTarget:self action:@selector(dimiss) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelBt mas_makeConstraints:^(MASConstraintMaker *make) {

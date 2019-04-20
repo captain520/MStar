@@ -275,19 +275,19 @@ typedef enum
     
      __weak typeof(self) weakSelf = self;
     
-    [alert addButton:@"删除" actionBlock:^{
+    [alert addButton:NSLocalizedString(@"Delete", nil) actionBlock:^{
         [weakSelf handleDeleteActionBlock:indexPath];
     }];
     
-    [alert addButton:@"下载" actionBlock:^{
+    [alert addButton:NSLocalizedString(@"Downlaod", nil) actionBlock:^{
         [weakSelf handleDownloadAction:indexPath];
     }];
     
-    [alert addButton:@"播放" actionBlock:^{
+    [alert addButton:NSLocalizedString(@"Play", nil) actionBlock:^{
         [weakSelf handlePlayAction:indexPath];
     }];
     
-    SCLButton *button = [alert addButton:@"Cancel" actionBlock:^{
+    SCLButton *button = [alert addButton:NSLocalizedString(@"Cancel", nil) actionBlock:^{
         
     }];
     
@@ -295,7 +295,7 @@ typedef enum
         return @{@"backgroundColor" : C99};
     };
 
-    [alert showCustom:self image:[UIImage imageNamed:@"logo"] color:MAIN_COLOR title:@"请选择您要的操作" subTitle:nil closeButtonTitle:nil duration:0.0f];
+    [alert showCustom:self image:[UIImage imageNamed:@"logo"] color:MAIN_COLOR title:@"" subTitle:nil closeButtonTitle:nil duration:0.0f];
 
 //    if (self.isLocalFileList == NO) {
 //        return;
@@ -445,7 +445,7 @@ typedef enum
             dispatch_async(dispatch_get_main_queue(), ^{
                 SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
                 alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-                [alert showError:@"下载失败" subTitle:nil closeButtonTitle:nil duration:2];
+                [alert showError:NSLocalizedString(@"DownlaodFail", nil) subTitle:nil closeButtonTitle:nil duration:2];
             });
         }
         
@@ -467,7 +467,7 @@ typedef enum
         dispatch_async(dispatch_get_main_queue(), ^{
             SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
             alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-            [alert showSuccess:@"下载完成" subTitle:nil closeButtonTitle:nil duration:2];
+            [alert showSuccess:NSLocalizedString(@"DownlaodSuccess", nil) subTitle:nil closeButtonTitle:nil duration:2];
         });
         
         [dlTimer invalidate];
@@ -490,7 +490,7 @@ typedef enum
         
         SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
         alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-        [alert showError:@"网络错误" subTitle:nil closeButtonTitle:nil duration:2];
+        [alert showError:NSLocalizedString(@"UnknowErorr", nil) subTitle:nil closeButtonTitle:nil duration:2];
         
     }
 }

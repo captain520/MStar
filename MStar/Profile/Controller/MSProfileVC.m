@@ -11,11 +11,15 @@
 #import "JYEqualCellSpaceFlowLayout.h"
 #import "NYWaterWaveView.h"
 #import "CPWebVC.h"
+#import "AITCameraRequest.h"
 
-@interface MSProfileVC () {
+@interface MSProfileVC ()<AITCameraRequestDelegate> {
 }
 
 @property (nonatomic, strong) NSArray *titles;
+
+@property (nonatomic, copy) NSString * ssid;
+@property (nonatomic, copy) NSString * ssidPasswd;
 
 @end
 
@@ -32,13 +36,20 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.extendedLayoutIncludesOpaqueBars = YES;
     _titles = @[
-        @[@"Wi-Fi设置", @"格式化SD卡"],
+        @[NSLocalizedString(@"WiFiSetting", nil), NSLocalizedString(@"FormatSDCard", nil)],
 //        @[@"最近浏览的视频", @"最近浏览的图片"],
-        @[@"清理缓存", ],
-        @[@"关于我们", ],
+        @[NSLocalizedString(@"CleanCach", nil), ],
+        @[NSLocalizedString(@"AboutUs", nil), ],
     ];
 
-    [self setTitle:@"个人设置"];
+    [self setTitle:NSLocalizedString(@"ProfileSetting", nil)];
+    
+    [self initializedBaseProperties];
+}
+
+//  初始化相关数据
+- (void)initializedBaseProperties {
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandWifiInfoUrl] Delegate:self] ;
 }
 
 - (void)dealloc {
@@ -184,23 +195,16 @@
                 [self formatSDCard];
             }
         }
+            break;
         case 1:
         {
-//            break;
-//        case 2: {
             [self cleanCach];
         }
-        break;
+            break;
         case 2: {
-//            UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-//
-//            MSLocalFileVC *vc = [[MSLocalFileVC alloc] initWithCollectionViewLayout:layout];
-//            vc.hidesBottomBarWhenPushed = YES;
-//            vc.view.backgroundColor = UIColor.whiteColor;
-//
-//            [self.navigationController pushViewController:vc animated:YES];
             CPWebVC *webVC = [[CPWebVC alloc] init];
             webVC.urlStr = @"https://www.baidu.com";
+            webVC.hidesBottomBarWhenPushed = YES;
             
             [self.navigationController pushViewController:webVC animated:YES];
         }
@@ -208,6 +212,40 @@
 
         default:
             break;
+    }
+}
+
+-(void) requestFinished:(NSString*) result
+{
+    if (result != nil) {
+        NSLog(@"Result = %@", result) ;
+        
+        NSArray *lines = [result componentsSeparatedByString:@"\n"];
+        
+        for (NSString *line in lines) {
+            
+            if ([line hasPrefix:[AITCameraCommand PROPERTY_SSID]]) {
+                NSArray *properties = [line componentsSeparatedByString:@"="] ;
+                
+                if ([properties count] == 2) {
+//                    self.ssidText.text = [properties objectAtIndex:1] ;
+                    //  获取WIFI名称
+                    self.ssid = [properties objectAtIndex:1];
+                }
+            } else if ([line hasPrefix:[AITCameraCommand PROPERTY_ENCRYPTION_KEY]]) {
+                NSArray *properties = [line componentsSeparatedByString:@"="] ;
+                
+                if ([properties count] == 2) {
+//                    self.encryptionKeyText.text = [properties objectAtIndex:1] ;
+                    //  获取WIIF密码
+                    self.ssidPasswd = [properties objectAtIndex:1];
+                }
+            }
+        }
+        
+    } else {
+        NSLog(@"Result = nil") ;
+        [self.view makeToast:NSLocalizedString(@"Cannot get information from Camera", nil)];
     }
 }
 
@@ -220,15 +258,22 @@
 
     SCLTextView *evenField = [alert addTextField:@"SSID"];
 //    evenField.keyboardType = UIKeyboardTypeNumberPad;
+    if (self.ssid.length > 0) {
+        evenField.text = self.ssid;
+    }
 
     SCLTextView *oddField = [alert addTextField:@"passwd"];
     oddField.keyboardType = UIKeyboardTypeNumberPad;
+    
+    if (self.ssidPasswd.length > 0) {
+        oddField.text = self.ssidPasswd;
+    }
 
-    SCLButton *button = [alert addButton:@"确认修改" validationBlock:^BOOL {
+    SCLButton *button = [alert addButton:NSLocalizedString(@"OK", nil) validationBlock:^BOOL {
         if (evenField.text.length == 0) {
             SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
             alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-            [alert showError:@"请输入wifi名称" subTitle:nil closeButtonTitle:nil duration:2];
+            [alert showError:NSLocalizedString(@"InputSSIDNameHint", nil) subTitle:nil closeButtonTitle:nil duration:2];
 
             [evenField becomeFirstResponder];
             return NO;
@@ -237,11 +282,12 @@
         if (oddField.text.length < 8) {
             SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
             alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-            [alert showError:@"请输入>=8位数的WIFI密码" subTitle:nil closeButtonTitle:nil duration:2];
+            [alert showError:NSLocalizedString(@"InputSSIDPasswdHint", nil) subTitle:nil closeButtonTitle:nil duration:2];
             return NO;
         }
 
         //TODO: 发送修改命令
+        (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandUpdateUrl:self.ssid EncryptionKey:self.ssidPasswd] View:self.view] ;
 
         return YES;
     } actionBlock:^{
@@ -259,13 +305,11 @@
 
         buttonConfig[@"backgroundColor"] = [UIColor redColor];
         buttonConfig[@"textColor"] = [UIColor whiteColor];
-//        buttonConfig[@"borderWidth"] = @1.0f;
-//        buttonConfig[@"borderColor"] = MAIN_COLOR;
 
         return buttonConfig;
     };
 
-    [alert showEdit:self title:@"WIFI设置" subTitle:@"请输入您要修改成的WIFI名称m和密码!" closeButtonTitle:@"取消" duration:0];
+    [alert showEdit:self title:NSLocalizedString(@"WiFiSetting", nil) subTitle:NSLocalizedString(@"SSIDModifyHintMessage", nil) closeButtonTitle:NSLocalizedString(@"Cancel", nil) duration:0];
 }
 
 //  格式化内存卡
@@ -278,8 +322,8 @@
 
     alert.backgroundType = SCLAlertViewBackgroundTransparent;
 
-    [alert   showWaiting:self title:@"Waiting..."
-                subTitle:@"格式化内存卡中..."
+    [alert   showWaiting:self title:NSLocalizedString(@"Progressing", nil)
+                subTitle:NSLocalizedString(@"Formating", nil)
         closeButtonTitle:nil duration:5.0f];
 }
 
@@ -292,10 +336,7 @@
 
     alert.backgroundType = SCLAlertViewBackgroundTransparent;
 
-    [alert showTitle:@"Waiting..." subTitle:@"缓存清理中" style:SCLAlertViewStyleWaiting closeButtonTitle:nil duration:3];
-//    [alert showWaiting:self title:@"Waiting..."
-//              subTitle:@"格式化内存卡中..."
-//      closeButtonTitle:nil duration:5.0f];
+    [alert showTitle:NSLocalizedString(@"Progressing", nil) subTitle:NSLocalizedString(@"Cleaning", nil) style:SCLAlertViewStyleWaiting closeButtonTitle:nil duration:3];
 }
 
 @end

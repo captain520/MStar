@@ -5,5 +5,16 @@
   Created by 王璋传 on 2019/4/7.
   Copyright © 2019 王璋传. All rights reserved.
 */
-"ConnectWiFiHint" = "ConnectWiFiHint";
-"No rear camera found" = "No rear camera found";
+
+"ConnectWiFiHint" = "在使用之前请确保连接了设备WIFI";
+"No rear camera found" = "没有发现后置摄像头";
+"LivePreview" = "直播";
+"SD" = "SD";
+"SDFile" = "SD卡文件";
+"Local" = "本地";
+"LocalFile" = "本地文件";
+"Profile" = "我的";
+
+//"" = "";
+
+

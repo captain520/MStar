@@ -49,8 +49,7 @@
     
     UIViewController *vc = [[UIViewController alloc] init];
     vc.view.backgroundColor = UIColor.whiteColor;
-    vc.yp_tabItemTitle = @"Test";
-    
+
     self.viewControllers = @[vc];
 
 }
