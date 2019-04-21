@@ -11,9 +11,13 @@
 #import <Masonry.h>
 #import <MobileVLCKit/MobileVLCKit.h>
 #import "VLCConstants.h"
+#import "AITCameraRequest.h"
 
-@interface CPPlayerVC () <VLCMediaDelegate,VLCMediaPlayerDelegate>{
+@interface CPPlayerVC () <VLCMediaDelegate,VLCMediaPlayerDelegate,AITCameraRequestDelegate>{
     VLCMediaPlayer *mediaPlayer ;
+    
+    Camera_cmd_t camera_cmd;
+    BOOL cameraRecording;
 }
 
 //@property (nonatomic, strong) AVPlayer *player;
@@ -90,7 +94,7 @@
     
     if ( nil == self.playImageView ) {
         self.playImageView = [UIImageView new];
-        self.playImageView.backgroundColor = UIColor.redColor;
+        self.playImageView.backgroundColor = UIColor.blackColor;
         self.playImageView.contentMode = UIViewContentModeScaleToFill;
 
         [self.view addSubview:self.playImageView];
@@ -138,8 +142,10 @@
 
         [self.playerView addSubview:self.backBt];
         [self.backBt setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+        [self.backBt setTitle:@"返回" forState:UIControlStateNormal];
         [self.backBt setBackgroundImage:[UIImage imageNamed:@"shadowbg"] forState:UIControlStateNormal];
         [self.backBt setImageEdgeInsets:UIEdgeInsetsMake(0, 16, 0, 0)];
+        [self.backBt setTitleEdgeInsets:UIEdgeInsetsMake(0, 16, 0, 0)];
         [self.backBt addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.backBt mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
@@ -177,8 +183,8 @@
         
         UIButton *shotBt = [UIButton new];
         [shotBt setBackgroundImage:[UIImage imageNamed:@"yulanPaizhao"] forState:UIControlStateNormal];
-
         [self.actionView addSubview:shotBt];
+        [shotBt addTarget:self action:@selector(shotAction:) forControlEvents:UIControlEventTouchUpInside];
         [shotBt mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(8);
             make.right.mas_equalTo(-8);
@@ -187,7 +193,8 @@
         }];
         
         UIButton *recordBt = [UIButton new];
-        [recordBt setBackgroundImage:[UIImage imageNamed:@"yulanShiping"] forState:UIControlStateNormal];
+        [recordBt setImage:[UIImage imageNamed:@"recordCirle"] forState:UIControlStateNormal];
+        [recordBt addTarget:self action:@selector(recorderAction:) forControlEvents:UIControlEventTouchUpInside];
         
         [self.actionView addSubview:recordBt];
         [recordBt mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -301,9 +308,87 @@
 
 - (void)flickRecodeLight {
     
-    self.redRecrodLight.hidden = !self.redRecrodLight.hidden;
-    
+    if (cameraRecording == NO) {
+        self.redRecrodLight.hidden = YES;
+    } else {
+        self.redRecrodLight.hidden = !self.redRecrodLight.hidden;
+    }
+
     [self performSelector:@selector(flickRecodeLight) withObject:nil afterDelay:1];
 }
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationLandscapeRight;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskPortrait;
+//    return (1 << UIInterfaceOrientationPortrait) | (1 << UIInterfaceOrientationPortraitUpsideDown)
+//    | (1 << UIInterfaceOrientationLandscapeRight) | (1 << UIInterfaceOrientationLandscapeLeft);
+}
+
+- (void)shotAction:(id)sender
+{
+    camera_cmd = CAMERA_CMD_SNAPSHOT;
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraSnapshotUrl] Delegate:self];
+}
+
+- (void)recorderAction:(UIButton *)sender
+{
+    camera_cmd = CAMERA_CMD_RECORD;
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self];
+}
+
+#pragma mark - delegate method implement
+
+- (void)requestFinished:(NSString *)result
+{
+    NSLog(@"Result = %@", result);
+    
+    switch (camera_cmd) {
+        case CAMERA_CMD_RECORD:
+            if (result == nil || result.length == 0) {
+                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
+                return;
+            }
+            
+            if ([result containsString:@"OK"]) {
+                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
+                cameraRecording = !cameraRecording;
+            }
+            break;
+        case CAMERA_CMD_SNAPSHOT: {
+            if (result == nil || result.length == 0) {
+                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
+                return;
+            } else {
+                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
+                [self photosound];
+            }
+            NSLog(@"");
+        }
+            //            self.cameraSnapshotButton.enabled = YES;
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)photosound
+{
+    NSString *soundName = @"photoShutter";
+    NSString *soundType = @"caf";
+    NSString *path = [NSString stringWithFormat:@"/System/Library/Audio/UISounds/%@.%@", soundName, soundType];
+    SystemSoundID soundID;
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:path], &soundID);
+    AudioServicesPlaySystemSound(soundID);
+}
+
+
+
 
 @end

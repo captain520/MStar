@@ -106,6 +106,7 @@ static NSString * const reuseIdentifier = @"Cell";
     [super viewWillAppear:animated];
     
     self.collectionView.frame = CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT - NAV_HEIGHT - 44 - self.tabBarController.tabBar.frame.size.height);
+    [self loadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -176,10 +177,16 @@ static NSString * const reuseIdentifier = @"Cell";
     return [[NSAttributedString alloc] initWithString:@"暂无数据" attributes:nil];
 }
 
+- (void)emptyDataSet:(UIScrollView *)scrollView didTapView:(UIView *)view {
+    [self loadData];
+}
+
 
 #pragma mark - load data
 - (void)loadData {
     
+    self.dataArray = @[].mutableCopy;
+
     NSString *directory = [self filePathOf:self.fileType];
     NSError *error = nil;
     NSArray *fileNames = [self.fileManager contentsOfDirectoryAtPath:directory error:&error];
@@ -354,15 +361,18 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (void)deleteSelectLocalFiles {
+    
+
     [self.selectedIndexPaths enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *filePath = [self.dataArray objectAtIndex:obj.row];
-        
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-        
-        [self.dataArray removeObjectAtIndex:obj.row];
+        NSString *fileName = [self.dataArray objectAtIndex:obj.row];
+        NSString *path = [self filePathOf:self.fileType];
+        path = [path stringByAppendingPathComponent:fileName];
+        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
     }];
     
-    [self.collectionView reloadData];
+    [self.selectedIndexPaths removeAllObjects];
+
+    [self loadData];
 }
 
 @end

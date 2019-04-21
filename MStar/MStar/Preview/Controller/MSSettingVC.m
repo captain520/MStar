@@ -95,11 +95,11 @@
     
     NSString *key = [MSCamMenuManager manager].cammenu.keyArray[indexPath.row];
     AITCamMenu *menu = [MSCamMenuManager manager].curmenu.items[key];
-    cell.textLabel.text = menu.title;
+    cell.textLabel.text = NSLocalizedString(menu.title, nil);//menu.title;
     
     AITCamMenu *child = [menu.items valueForKey:menu.focus];
     if (child && [child isKindOfClass:[AITCamMenu class]]) {
-        cell.detailTextLabel.text = child.title;
+        cell.detailTextLabel.text = NSLocalizedString(child.title, nil);//child.title;
     } else {
         cell.detailTextLabel.text = @"";
     }

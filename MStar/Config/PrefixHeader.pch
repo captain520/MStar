@@ -43,4 +43,16 @@
 #define StatusHeight          [UIApplication sharedApplication].statusBarFrame.size.height//20
 #define NAV_HEIGHT            (44.0f + StatusHeight)
 
+
+typedef enum {
+    CAMERA_CMD_SNAPSHOT,
+    CAMERA_CMD_RECORD,
+    CAMERA_QUERY_RECORDING,
+    CAMERA_PRE_STREAMING,
+    CAMERA_QUERY_CAMID,
+    CAMERA_CMD_CAMID,
+    CAMERA_CMD_INVALIDni,
+    CAMERA_CMD_CAMMENU
+} Camera_cmd_t;
+
 #endif /* PrefixHeader_pch */

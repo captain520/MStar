@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   MStar
 
@@ -34,7 +34,6 @@
 "DownlaodSuccess" = "下载成功";
 "Play" = "播放";
 "Preview" = "预览";
-"Preview" = "预览";
 "UnknowErorr" = "未知错误";
 "DeleteCorfirm" = "确定要删除文件?";
 "DataIsEmpty" = "暂无数据";
@@ -50,11 +49,26 @@
 "Progressing" = "请等待...";
 "Formating" = "格式化内存卡中...";
 "Cleaning" = "缓存清理中...";
+"PleaseChooseYourAction" = "请选择您要的操作";
 
-
-
-
-
-//"" = "";
-
-
+"" = "";
+/*************************************** setting menu and item *******************************************/
+"VIDEO RESOLUTION" = "VIDEO RESOLUTION";    //  需要中文和其他语言
+"CAPTURE RESOLUTION" = "CAPTURE RESOLUTION";//  需要中文和其他语言
+"LOOPING VIDEO" = "LOOPING VIDEO";//  需要中文和其他语言
+"WHITE BALANCE" = "WHITE BALANCE";//  需要中文和其他语言
+"Auto" = "Auto";//  需要中文和其他语言
+"UPSIDEDOWN" = "UPSIDEDOWN";//  需要中文和其他语言
+"SPOT METER" = "SPOT METER";//  需要中文和其他语言
+"Q-SHOT" = "Q-SHOT";//  需要中文和其他语言
+"SOUND INDICATOR" = "SOUND INDICATOR";//  需要中文和其他语言
+"POWSER SAVING" = "POWSER SAVING";//  需要中文和其他语言
+"TV" = "TV";//  需要中文和其他语言
+"NTSC" = "NTSC";//  需要中文和其他语言
+"PAL" = "NTSC";//  需要中文和其他语言
+"UI Mode" = "UI Mode";//  需要中文和其他语言
+"Video Mode" = "Video Mode";//  需要中文和其他语言
+"BootUp Mode" = "BootUp Mode";//  需要中文和其他语言
+"SYNC TIME" = "SYNC TIME";//  需要中文和其他语言
+"Off" = "Off";//  需要中文和其他语言
+"ON" = "ON";//  需要中文和其他语言

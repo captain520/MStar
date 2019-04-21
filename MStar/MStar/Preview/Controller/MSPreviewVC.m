@@ -18,16 +18,7 @@
 #import "AITUtil.h"
 #import "AITCameraListen.h"
 
-typedef enum {
-    CAMERA_CMD_SNAPSHOT,
-    CAMERA_CMD_RECORD,
-    CAMERA_QUERY_RECORDING,
-    CAMERA_PRE_STREAMING,
-    CAMERA_QUERY_CAMID,
-    CAMERA_CMD_CAMID,
-    CAMERA_CMD_INVALIDni,
-    CAMERA_CMD_CAMMENU
-} Camera_cmd_t;
+
 
 static NSString *DEFAULT_RTSP_URL_AV1 = @"/liveRTSP/av1";
 static NSString *DEFAULT_RTSP_URL_V1 = @"/liveRTSP/v1";
@@ -169,6 +160,8 @@ static bool cam_front = YES;
     if (nil == self.playImageView) {
         self.playImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, UIApplication.sharedApplication.statusBarFrame.size.height + 44 * 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.width * 3 / 4)];
         self.playImageView.backgroundColor = UIColor.blackColor;
+        self.playImageView.image = [UIImage imageNamed:@"luxiang"];
+        self.playImageView.contentMode = UIViewContentModeCenter;
         [self.view addSubview:self.playImageView];
         [self.playImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(NAV_HEIGHT);
@@ -224,7 +217,7 @@ static bool cam_front = YES;
 
     {
         self.fullScreenBT = [UIButton new];
-        self.fullScreenBT.hidden = YES;
+//        self.fullScreenBT.hidden = YES;
 
         [self.view addSubview:self.fullScreenBT];
         [self.fullScreenBT addTarget:self action:@selector(fullScreenAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -303,7 +296,7 @@ static bool cam_front = YES;
 
     switch (camera_cmd) {
         case CAMERA_CMD_CAMMENU: {
-            if ([result isKindOfClass:[NSString class]] && result.length > 0) {
+            if ([result isKindOfClass:[NSString class]] && result.length > 30) {
                 [[MSCamMenuManager manager] LoadCamMenuXMLDoc:result];
                 [self performSelector:@selector(queryPreStreamCommd) withObject:nil afterDelay:1];
             } else {
@@ -425,7 +418,7 @@ static bool cam_front = YES;
             NSLog(@"");
         }
 //            self.cameraSnapshotButton.enabled = YES;
-break;
+            break;
         default:
             break;
     }

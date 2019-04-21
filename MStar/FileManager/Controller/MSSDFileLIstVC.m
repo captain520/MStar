@@ -22,7 +22,7 @@
 #import "UIButton+block.h"
 #import <Masonry.h>
 #import "SCVideoMainViewController.h"
-
+#import <IDMPhotoBrowser.h>
 
 static NSString *TAG_DCIM = @"DCIM" ;
 
@@ -283,7 +283,14 @@ typedef enum
         [weakSelf handleDownloadAction:indexPath];
     }];
     
-    [alert addButton:NSLocalizedString(@"Play", nil) actionBlock:^{
+    NSString *previewTitle = nil;
+    
+    if (self.fileType == W1MFileTypePhoto) {
+        previewTitle = @"Preview";
+    } else {
+        previewTitle = @"Play";
+    }
+    [alert addButton:NSLocalizedString(previewTitle, nil) actionBlock:^{
         [weakSelf handlePlayAction:indexPath];
     }];
     
@@ -295,7 +302,7 @@ typedef enum
         return @{@"backgroundColor" : C99};
     };
 
-    [alert showCustom:self image:[UIImage imageNamed:@"logo"] color:MAIN_COLOR title:@"" subTitle:nil closeButtonTitle:nil duration:0.0f];
+    [alert showCustom:self image:[UIImage imageNamed:@"logo"] color:MAIN_COLOR title:nil subTitle:NSLocalizedString(@"PleaseChooseYourAction", nil) closeButtonTitle:nil duration:0.0f];
 
 //    if (self.isLocalFileList == NO) {
 //        return;
@@ -319,14 +326,28 @@ typedef enum
     AITFileNode *node = [self.dataArray objectAtIndex:indexPath.row];
 //    NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [node.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]] ;
     NSString *url = [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [node.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-    SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:url];
-    vc.hidesBottomBarWhenPushed = YES;
     
-    UIApplication.sharedApplication.keyWindow.rootViewController.hidesBottomBarWhenPushed = YES;
+    if (self.fileType == W1MFileTypePhoto) {
 
-    self.navigationController.navigationBarHidden=YES;
-    
-    [self.navigationController pushViewController:vc animated:YES];
+        NSMutableArray *photos = @[].mutableCopy;
+        [photos addObject:[IDMPhoto photoWithURL:[NSURL URLWithString:url]]];
+
+        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+        
+        [self presentViewController:browser animated:YES completion:nil];
+
+    } else {
+        
+        SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:url];
+        vc.hidesBottomBarWhenPushed = YES;
+        vc.playName = node.name.lastPathComponent;
+
+        UIApplication.sharedApplication.keyWindow.rootViewController.hidesBottomBarWhenPushed = YES;
+        
+        self.navigationController.navigationBarHidden=YES;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 
 //    CPPlayerVC *playerVC = [[CPPlayerVC alloc] init];
 //    playerVC.hidesBottomBarWhenPushed = YES;

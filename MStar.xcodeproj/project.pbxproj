@@ -132,7 +132,7 @@
 		9C4D7BB8223112AA00B6273E /* MSFileListContentVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSFileListContentVC.m; sourceTree = "<group>"; };
 		9C51CCF7225E6C030087CCF8 /* UIButton+block.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+block.h"; sourceTree = "<group>"; };
 		9C51CCF8225E6C030087CCF8 /* UIButton+block.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+block.m"; sourceTree = "<group>"; };
-		9C5A5029226ABAF1002CA21A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9C5A502A226ACCEC002CA21A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9C5B241B225B9EBF000DE8D1 /* MSProfileVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSProfileVC.h; sourceTree = "<group>"; };
 		9C5B241C225B9EBF000DE8D1 /* MSProfileVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSProfileVC.m; sourceTree = "<group>"; };
 		9C8B29A12259A0B3002992B9 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
@@ -989,7 +989,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				9CA6568F22598A4E00AB124F /* zh-Hans */,
-				9C5A5029226ABAF1002CA21A /* en */,
+				9C5A502A226ACCEC002CA21A /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

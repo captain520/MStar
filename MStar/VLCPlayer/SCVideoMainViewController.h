@@ -12,4 +12,6 @@
 
 - (instancetype)initWithURL:(NSString *)url;
 
+@property (nonatomic, copy) NSString * playName;
+
 @end

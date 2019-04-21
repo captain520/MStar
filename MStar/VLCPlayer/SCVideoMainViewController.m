@@ -126,7 +126,7 @@ static const int playViewHeight = 200;
     
     [self addObserver];
     self.vlcPlayerView.playView.image = [self thumbnailImageRequest:1];
-    self.vlcPlayerView.videoName = @"视频名称测试";
+    self.vlcPlayerView.videoName = self.playName;//@"视频名称测试";
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -190,7 +190,7 @@ static const int playViewHeight = 200;
     //承载播放的视图初始化(自定义播放界面可在这里做UI定制)
     self.vlcPlayerView = [[VLCPlayerView alloc] initWithFrame:CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, playViewHeight)];
     // 设置视频名称
-    //self.vlcPlayerView.videoName = self.playName;
+    self.vlcPlayerView.videoName = self.playName;
     // 设置播放监听回调
     __weak typeof(self) weakSelf = self;
     self.vlcPlayerView.playBlock = ^(UIButton *playBtn){
