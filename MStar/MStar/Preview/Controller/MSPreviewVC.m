@@ -217,7 +217,7 @@ static bool cam_front = YES;
 
     {
         self.fullScreenBT = [UIButton new];
-//        self.fullScreenBT.hidden = YES;
+        self.fullScreenBT.hidden = YES;
 
         [self.view addSubview:self.fullScreenBT];
         [self.fullScreenBT addTarget:self action:@selector(fullScreenAction:) forControlEvents:UIControlEventTouchUpInside];
