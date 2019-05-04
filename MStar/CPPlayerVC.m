@@ -33,6 +33,8 @@
 
 @property (nonatomic,strong) UIButton *redRecrodLight;
 
+@property (nonatomic, strong) UIView * splashView;
+
 @end
 
 @implementation CPPlayerVC
@@ -41,7 +43,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.view.backgroundColor = UIColor.blackColor;
 //    [self setupUI];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
 }
 
@@ -90,11 +94,10 @@
 
 - (void)setupUI {
     
-    self.view.backgroundColor = UIColor.grayColor;
-    
+
     if ( nil == self.playImageView ) {
         self.playImageView = [UIImageView new];
-        self.playImageView.backgroundColor = UIColor.blackColor;
+        self.playImageView.backgroundColor = UIColor.clearColor;
         self.playImageView.contentMode = UIViewContentModeScaleToFill;
 
         [self.view addSubview:self.playImageView];
@@ -108,7 +111,7 @@
     
 
     self.playerView = [UIView new];
-    self.playerView.backgroundColor = [UIColor clearColor];
+    self.playerView.backgroundColor = [UIColor blackColor];
     
     [self.view addSubview:self.playerView];
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -205,10 +208,23 @@
         }];
 
     }
+    
+    if (nil == self.splashView) {
+        self.splashView = [UIView new];
+        self.splashView.backgroundColor = UIColor.whiteColor;
+        self.splashView.alpha = 0;
+        
+        [self.view.window addSubview:self.splashView];
+        [self.splashView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+            make.bottom.mas_equalTo(0);
+        }];
+    }
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    
     [self showTool];
 }
 
@@ -335,6 +351,15 @@
 {
     camera_cmd = CAMERA_CMD_SNAPSHOT;
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraSnapshotUrl] Delegate:self];
+    
+    [UIView animateWithDuration:.1 animations:^{
+        self.splashView.alpha = .5;
+//        self.view.alpha = 0;
+    } completion:^(BOOL finished) {
+//        self.view.alpha = 1;
+        self.splashView.alpha = 0;
+    }];
+
 }
 
 - (void)recorderAction:(UIButton *)sender
@@ -352,21 +377,21 @@
     switch (camera_cmd) {
         case CAMERA_CMD_RECORD:
             if (result == nil || result.length == 0) {
-                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
+//                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
                 return;
             }
             
             if ([result containsString:@"OK"]) {
-                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
+//                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
                 cameraRecording = !cameraRecording;
             }
             break;
         case CAMERA_CMD_SNAPSHOT: {
             if (result == nil || result.length == 0) {
-                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
+//                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
                 return;
             } else {
-                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
+//                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
                 [self photosound];
             }
             NSLog(@"");
@@ -388,7 +413,26 @@
     AudioServicesPlaySystemSound(soundID);
 }
 
-
+- (void)orientChange:(NSNotification *)noti {
+    //    NSDictionary* ntfDict = [noti userInfo];
+    NSLog(@"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+    UIDeviceOrientation  orient = [UIDevice currentDevice].orientation;
+    switch (orient) {
+        case UIDeviceOrientationPortrait:
+        {
+            [self backAction:nil];
+        }
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            break;
+        default:
+            break;
+    }
+}
 
 
 @end

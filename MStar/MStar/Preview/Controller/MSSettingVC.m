@@ -9,6 +9,7 @@
 #import "MSSettingVC.h"
 #import "AITCameraCommand.h"
 #import "AITCameraRequest.h"
+#import "MSSettingActionVC.h"
 
 @interface MSSettingVC ()<AITCameraRequestDelegate>
 @property (nonatomic, strong)  AITCamMenu *currentMenu;
@@ -48,16 +49,18 @@
     if ([result hasPrefix:@"0\nOK"]) {
         if (self.currentMenu.parent) {
             self.currentMenu.parent.focus = self.currentMenu.menuid;
-            [[[SCLAlertView alloc] initWithNewWindow] showSuccess:self.currentMenu.parent.title subTitle:NSLocalizedString(@"SetSuccess", nil) closeButtonTitle:nil duration:2];
+//            [[[SCLAlertView alloc] initWithNewWindow] showSuccess:self.currentMenu.parent.title subTitle:NSLocalizedString(@"SetSuccess", nil) closeButtonTitle:nil duration:2];
+            [self.view makeToast:NSLocalizedString(@"SetSuccess", nil) duration:1.0f position:CSToastPositionCenter];
             [self.tableView reloadData];
         } else {
-            [[[SCLAlertView alloc] initWithNewWindow] showSuccess:self.currentMenu.title subTitle:NSLocalizedString(@"SetSuccess", nil) closeButtonTitle:nil duration:2];
+            [self.view makeToast:NSLocalizedString(@"SetSuccess", nil) duration:1.0f position:CSToastPositionCenter];
+//            [[[SCLAlertView alloc] initWithNewWindow] showSuccess:self.currentMenu.title subTitle:NSLocalizedString(@"SetSuccess", nil) closeButtonTitle:nil duration:2];
         }
-        
-        
+
         NSLog(@"");
     } else {
-        [[[SCLAlertView alloc] initWithNewWindow] showError:self.currentMenu.parent.title subTitle:result closeButtonTitle:nil duration:2];
+        [self.view makeToast:result duration:1.0f position:CSToastPositionCenter];
+//        [[[SCLAlertView alloc] initWithNewWindow] showError:self.currentMenu.parent.title subTitle:result closeButtonTitle:nil duration:2];
     }
 //    if (curmenu.parent != nil) {
 //        curmenu = curmenu.parent;
@@ -96,6 +99,8 @@
     NSString *key = [MSCamMenuManager manager].cammenu.keyArray[indexPath.row];
     AITCamMenu *menu = [MSCamMenuManager manager].curmenu.items[key];
     cell.textLabel.text = NSLocalizedString(menu.title, nil);//menu.title;
+//    cell.textLabel.font = [UIFont systemFontOfSize:15];
+//    cell.detailTextLabel.font = [UIFont systemFontOfSize:15];
     
     AITCamMenu *child = [menu.items valueForKey:menu.focus];
     if (child && [child isKindOfClass:[AITCamMenu class]]) {
@@ -126,32 +131,56 @@
         [self setDateTime];
         return;
     }
-
-    SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-    alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-
+    
+    NSMutableArray <AITCamMenu *> *items = @[].mutableCopy;
+    
     [menu.keyArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSString *objKey = menu.keyArray[idx];
         AITCamMenu *objMenu = menu.items[objKey];
         objMenu.parent = menu;
-        SCLButton *button = [alert addButton:objMenu.title actionBlock:^{
-            [self pickAction:objMenu];
-        }];
-        button.buttonFormatBlock = ^NSDictionary* (void)
-        {
-            NSMutableDictionary *buttonConfig = [[NSMutableDictionary alloc] init];
-            
-            buttonConfig[@"backgroundColor"] = [UIColor whiteColor];
-            buttonConfig[@"textColor"] = [UIColor blackColor];
-            buttonConfig[@"borderWidth"] = @1.0f;
-            buttonConfig[@"borderColor"] = MAIN_COLOR;
-            
-            return buttonConfig;
-        };
+        
+        [items addObject:objMenu];
     }];
+    
+     __weak typeof(self) weakSelf = self;
+    
+    MSSettingActionVC *vc = [[MSSettingActionVC alloc] init];
+    vc.dataArray = items;
+    vc.title = NSLocalizedString(menu.title, nil);
+    vc.selectedActionBlock = ^(AITCamMenu * _Nonnull menuItem) {
+        [weakSelf pickAction:menuItem];
+    };
 
-    alert.backgroundType = SCLAlertViewBackgroundBlur;
-    [alert showTitle:menu.title subTitle:nil style:SCLAlertViewStyleEdit closeButtonTitle:@"cancel" duration:0];
+    [self.navigationController pushViewController:vc animated:YES];
+
+    return;
+    
+
+//    SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
+//    alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
+//
+//    [menu.keyArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        NSString *objKey = menu.keyArray[idx];
+//        AITCamMenu *objMenu = menu.items[objKey];
+//        objMenu.parent = menu;
+//        SCLButton *button = [alert addButton:objMenu.title actionBlock:^{
+//            [self pickAction:objMenu];
+//        }];
+//        button.buttonFormatBlock = ^NSDictionary* (void)
+//        {
+//            NSMutableDictionary *buttonConfig = [[NSMutableDictionary alloc] init];
+//
+//            buttonConfig[@"backgroundColor"] = [UIColor whiteColor];
+//            buttonConfig[@"textColor"] = [UIColor blackColor];
+//            buttonConfig[@"borderWidth"] = @1.0f;
+//            buttonConfig[@"borderColor"] = MAIN_COLOR;
+//
+//            return buttonConfig;
+//        };
+//    }];
+//
+//    alert.backgroundType = SCLAlertViewBackgroundBlur;
+//    [alert showTitle:menu.title subTitle:nil style:SCLAlertViewStyleEdit closeButtonTitle:@"cancel" duration:0];
     
 }
 

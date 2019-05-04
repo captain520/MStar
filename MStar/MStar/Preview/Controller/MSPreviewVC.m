@@ -17,7 +17,9 @@
 #import "VLCConstants.h"
 #import "AITUtil.h"
 #import "AITCameraListen.h"
+#import "MSTabBarVC.h"
 
+#import "MSSettingActionVC.h"
 
 
 static NSString *DEFAULT_RTSP_URL_AV1 = @"/liveRTSP/av1";
@@ -82,6 +84,10 @@ static bool cam_front = YES;
 
     [self syncDate];
     [self sendRecordCommand];
+    
+//    MSTabBarVC *rootVC = (MSTabBarVC *)[UIApplication sharedApplication].keyWindow;
+//    rootVC.supportedInterfaceOrientations
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -113,6 +119,9 @@ static bool cam_front = YES;
 - (void)initailizeBaseProperties
 {
 //    mediaPlayer = [VLCMediaPlayer alloc];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    
+    self.view.backgroundColor = UIColor.blackColor;
 
     GCDAsyncUdpSocketReceiveFilterBlock filter = ^BOOL (NSData *data, NSData *address, id *context) {
         NSString *status = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -160,7 +169,7 @@ static bool cam_front = YES;
     if (nil == self.playImageView) {
         self.playImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, UIApplication.sharedApplication.statusBarFrame.size.height + 44 * 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.width * 3 / 4)];
         self.playImageView.backgroundColor = UIColor.blackColor;
-        self.playImageView.image = [UIImage imageNamed:@"luxiang"];
+        self.playImageView.image = [UIImage imageNamed:@"NoWifi"];
         self.playImageView.contentMode = UIViewContentModeCenter;
         [self.view addSubview:self.playImageView];
         [self.playImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -189,6 +198,7 @@ static bool cam_front = YES;
         self.previewBT = [UIButton new];
         self.previewBT.backgroundColor = UIColor.groupTableViewBackgroundColor;
         self.previewBT.layer.cornerRadius = 50.0f;
+        self.previewBT.hidden = YES;
 
         [self.view addSubview:self.previewBT];
         [self.previewBT setImage:[UIImage imageNamed:@"视频"] forState:UIControlStateNormal];
@@ -223,9 +233,9 @@ static bool cam_front = YES;
         [self.fullScreenBT addTarget:self action:@selector(fullScreenAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.fullScreenBT setImage:[UIImage imageNamed:@"全屏"] forState:UIControlStateNormal];
         [self.fullScreenBT mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(UIApplication.sharedApplication.statusBarFrame.size.height * 1 + UIScreen.mainScreen.bounds.size.width * 3 / 4 - 40 - 16);
+            make.top.mas_equalTo(UIApplication.sharedApplication.statusBarFrame.size.height * 1 + UIScreen.mainScreen.bounds.size.width * 3 / 4 - 20 - 16);
             make.right.mas_equalTo(-16);
-            make.size.mas_equalTo(CGSizeMake(40, 40));
+            make.size.mas_equalTo(CGSizeMake(30, 30));
         }];
     }
 
@@ -494,6 +504,12 @@ static bool cam_front = YES;
 //        alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
 //        [alert showSuccess:@"拍照成功" subTitle:nil closeButtonTitle:nil duration:2];
 //    }
+    
+    [UIView animateWithDuration:.1 animations:^{
+        self.playImageView.alpha = 0;
+    } completion:^(BOOL finished) {
+        self.playImageView.alpha = 1;
+    }];
 }
 
 - (void)photosound
@@ -516,13 +532,20 @@ static bool cam_front = YES;
 
 - (void)fullScreenAction:(id)sender
 {
-    CPPlayerVC *playerVC = [[CPPlayerVC alloc] init];
-    playerVC.hidesBottomBarWhenPushed = YES;
-    playerVC.liveurl = liveurl;
-    playerVC.networkcache = networkcache;
+    
+    liveurl = @"---";
 
-    [self.navigationController presentViewController:playerVC animated:YES completion:^{
-    }];
+    if (liveurl.length > 0) {
+        CPPlayerVC *playerVC = [[CPPlayerVC alloc] init];
+//        playerVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        playerVC.hidesBottomBarWhenPushed = YES;
+        playerVC.liveurl = liveurl;
+        playerVC.networkcache = networkcache;
+        
+        [self.navigationController presentViewController:playerVC animated:YES  completion:^{
+        }];
+    }
+    
 }
 
 - (void)flickRecodeLight
@@ -600,6 +623,27 @@ static bool cam_front = YES;
 
 - (void)applicationDidEnterBackground:(NSNotification *)application
 {
+}
+
+- (void)orientChange:(NSNotification *)noti {
+    //    NSDictionary* ntfDict = [noti userInfo];
+    NSLog(@"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+    UIDeviceOrientation  orient = [UIDevice currentDevice].orientation;
+    switch (orient) {
+        case UIDeviceOrientationPortrait:
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+        {
+            [self fullScreenAction:nil];
+        }
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            break;
+        default:
+            break;
+    }
 }
 
 @end

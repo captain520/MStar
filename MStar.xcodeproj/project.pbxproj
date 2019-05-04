@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		396B3E492D5A47B68AEC5BF0 /* libPods-MStar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36260F7EED62A9BE8FA8478D /* libPods-MStar.a */; };
+		9C23B07E227DD9E8005221FE /* MSMediaListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C23B07D227DD9E8005221FE /* MSMediaListVC.m */; };
+		9C23B081227DE977005221FE /* MSSettingActionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C23B080227DE977005221FE /* MSSettingActionVC.m */; };
 		9C4D7B842230A08400B6273E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4D7B832230A08400B6273E /* AppDelegate.m */; };
 		9C4D7B872230A08400B6273E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4D7B862230A08400B6273E /* ViewController.m */; };
 		9C4D7B8A2230A08400B6273E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C4D7B882230A08400B6273E /* Main.storyboard */; };
@@ -101,6 +103,10 @@
 /* Begin PBXFileReference section */
 		36260F7EED62A9BE8FA8478D /* libPods-MStar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MStar.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D7B6EE3A4C6F76F84917D2A /* Pods-MStar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MStar.debug.xcconfig"; path = "Target Support Files/Pods-MStar/Pods-MStar.debug.xcconfig"; sourceTree = "<group>"; };
+		9C23B07C227DD9E8005221FE /* MSMediaListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSMediaListVC.h; sourceTree = "<group>"; };
+		9C23B07D227DD9E8005221FE /* MSMediaListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSMediaListVC.m; sourceTree = "<group>"; };
+		9C23B07F227DE977005221FE /* MSSettingActionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSSettingActionVC.h; sourceTree = "<group>"; };
+		9C23B080227DE977005221FE /* MSSettingActionVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSSettingActionVC.m; sourceTree = "<group>"; };
 		9C4D7B7F2230A08400B6273E /* MStar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MStar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C4D7B822230A08400B6273E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9C4D7B832230A08400B6273E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -417,6 +423,8 @@
 				9CDCC76B225F46B500162D9A /* MSLocalFileVC.m */,
 				9CDCC77322602BEA00162D9A /* MSLocalFileContentVC.h */,
 				9CDCC77422602BEA00162D9A /* MSLocalFileContentVC.m */,
+				9C23B07C227DD9E8005221FE /* MSMediaListVC.h */,
+				9C23B07D227DD9E8005221FE /* MSMediaListVC.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -569,6 +577,8 @@
 				9C4D7BB222310D8900B6273E /* MSSettingVC.m */,
 				9C4D7B9B2230B40000B6273E /* MSPreviewVC.h */,
 				9C4D7B9C2230B40000B6273E /* MSPreviewVC.m */,
+				9C23B07F227DE977005221FE /* MSSettingActionVC.h */,
+				9C23B080227DE977005221FE /* MSSettingActionVC.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -910,6 +920,7 @@
 				9CDCC768225F38B200162D9A /* VLCPlayer.m in Sources */,
 				9C987874225D754A009E4C8B /* CPRefreshVC.m in Sources */,
 				9CF5ED4422599C0900E136A1 /* AITCameraListen.m in Sources */,
+				9C23B081227DE977005221FE /* MSSettingActionVC.m in Sources */,
 				9C994661225713F000AD863F /* MSTestVC.m in Sources */,
 				9CF5ED3822599B9D00E136A1 /* Toast+UIView.m in Sources */,
 				9C4D7B9D2230B40000B6273E /* MSPreviewVC.m in Sources */,
@@ -958,6 +969,7 @@
 				9C99469922582BA600AD863F /* UIView+Toast.m in Sources */,
 				9CF5ED3622599B9D00E136A1 /* Reachability.m in Sources */,
 				9C4D7BA82230BCCE00B6273E /* MSDownloadView.m in Sources */,
+				9C23B07E227DD9E8005221FE /* MSMediaListVC.m in Sources */,
 				9C4D7BB02230C80700B6273E /* CPPlayerVC.m in Sources */,
 				9C4D7BA02230B78000B6273E /* MSSDFileLIstVC.m in Sources */,
 				9C4D7BB322310D8900B6273E /* MSSettingVC.m in Sources */,

@@ -269,40 +269,68 @@ typedef enum
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-    alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
     
-     __weak typeof(self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     
-    [alert addButton:NSLocalizedString(@"Delete", nil) actionBlock:^{
-        [weakSelf handleDeleteActionBlock:indexPath];
-    }];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    [alert addButton:NSLocalizedString(@"Downlaod", nil) actionBlock:^{
-        [weakSelf handleDownloadAction:indexPath];
-    }];
-    
-    NSString *previewTitle = nil;
-    
-    if (self.fileType == W1MFileTypePhoto) {
-        previewTitle = @"Preview";
-    } else {
-        previewTitle = @"Play";
-    }
-    [alert addButton:NSLocalizedString(previewTitle, nil) actionBlock:^{
-        [weakSelf handlePlayAction:indexPath];
-    }];
-    
-    SCLButton *button = [alert addButton:NSLocalizedString(@"Cancel", nil) actionBlock:^{
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
     
-    button.buttonFormatBlock = ^NSDictionary *{
-        return @{@"backgroundColor" : C99};
-    };
+    UIAlertAction *previewlAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Preview", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf handlePlayAction:indexPath];
+    }];
+    
+    UIAlertAction *downloadAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Downlaod", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf handleDownloadAction:indexPath];
+    }];
+    
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf handleDeleteActionBlock:indexPath];
+    }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:deleteAction];
+    [alertController addAction:downloadAction];
+    [alertController addAction:previewlAction];
+    
+    [self presentViewController:alertController animated:YES completion:^{
+    }];
 
-    [alert showCustom:self image:[UIImage imageNamed:@"logo"] color:MAIN_COLOR title:nil subTitle:NSLocalizedString(@"PleaseChooseYourAction", nil) closeButtonTitle:nil duration:0.0f];
+//    SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
+//    alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
+//
+//     __weak typeof(self) weakSelf = self;
+//
+//    [alert addButton:NSLocalizedString(@"Delete", nil) actionBlock:^{
+//        [weakSelf handleDeleteActionBlock:indexPath];
+//    }];
+//
+//    [alert addButton:NSLocalizedString(@"Downlaod", nil) actionBlock:^{
+//        [weakSelf handleDownloadAction:indexPath];
+//    }];
+//
+//    NSString *previewTitle = nil;
+//
+//    if (self.fileType == W1MFileTypePhoto) {
+//        previewTitle = @"Preview";
+//    } else {
+//        previewTitle = @"Play";
+//    }
+//    [alert addButton:NSLocalizedString(previewTitle, nil) actionBlock:^{
+//        [weakSelf handlePlayAction:indexPath];
+//    }];
+//
+//    SCLButton *button = [alert addButton:NSLocalizedString(@"Cancel", nil) actionBlock:^{
+//
+//    }];
+//
+//    button.buttonFormatBlock = ^NSDictionary *{
+//        return @{@"backgroundColor" : C99};
+//    };
+//
+//    [alert showCustom:self image:[UIImage imageNamed:@"logo"] color:MAIN_COLOR title:nil subTitle:NSLocalizedString(@"PleaseChooseYourAction", nil) closeButtonTitle:nil duration:0.0f];
 
 //    if (self.isLocalFileList == NO) {
 //        return;
@@ -386,7 +414,12 @@ typedef enum
         }
         
         NSString *directory = [NSString stringWithFormat:@"%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject];
-        directory = [directory stringByAppendingPathComponent:property];
+        if (self.fileType == W1MFileTypePhoto) {
+            directory = [directory stringByAppendingPathComponent:@"Photo"];
+        } else {
+            directory = [directory stringByAppendingPathComponent:@"Normal"];
+        }
+        
         BOOL isDirect = YES;
         BOOL dirExists =  [[NSFileManager defaultManager] fileExistsAtPath:directory isDirectory:&isDirect];
         if (NO == dirExists || NO == isDirect) {
@@ -464,9 +497,10 @@ typedef enum
 
         if (NO == fileNode->downloader->abort) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-                alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-                [alert showError:NSLocalizedString(@"DownlaodFail", nil) subTitle:nil closeButtonTitle:nil duration:2];
+                //                SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
+                //                alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
+                //                [alert showError:NSLocalizedString(@"DownlaodFail", nil) subTitle:nil closeButtonTitle:nil duration:2];
+                [self.view makeToast:NSLocalizedString(@"DownlaodFail", nil) duration:1.0f position:CSToastPositionCenter];
             });
         }
         
@@ -486,9 +520,10 @@ typedef enum
         
     } else if (fileNode->downloader->offsetInFile == fileNode->downloader->bodyLength) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-            alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-            [alert showSuccess:NSLocalizedString(@"DownlaodSuccess", nil) subTitle:nil closeButtonTitle:nil duration:2];
+            [self.view makeToast:NSLocalizedString(@"DownlaodSuccess", nil) duration:1.0f position:CSToastPositionCenter];
+//            SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
+//            alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
+//            [alert showSuccess:NSLocalizedString(@"DownlaodSuccess", nil) subTitle:nil closeButtonTitle:nil duration:2];
         });
         
         [dlTimer invalidate];
@@ -509,19 +544,20 @@ typedef enum
         fileNode.progress = -1;
         fileNode->downloader = nil;
         
-        SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-        alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-        [alert showError:NSLocalizedString(@"UnknowErorr", nil) subTitle:nil closeButtonTitle:nil duration:2];
+        [self.view makeToast:NSLocalizedString(@"UnknowErorr", nil) duration:1.0f position:CSToastPositionCenter];
+//        SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
+//        alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
+//        [alert showError:NSLocalizedString(@"UnknowErorr", nil) subTitle:nil closeButtonTitle:nil duration:2];
         
     }
 }
 
-- (void)downloadAction:(id)sender {
-    
-    MSDownloadView *downloadView = [[MSDownloadView alloc] initWithFrame:UIScreen.mainScreen.bounds];
-    
-    [downloadView show];
-}
+//- (void)downloadAction:(id)sender {
+//
+//    MSDownloadView *downloadView = [[MSDownloadView alloc] initWithFrame:UIScreen.mainScreen.bounds];
+//
+//    [downloadView show];
+//}
 
 - (void)playLocalVideoAction:(id)sender {
     

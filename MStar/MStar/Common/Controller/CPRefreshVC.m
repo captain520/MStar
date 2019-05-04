@@ -30,16 +30,16 @@
 #pragma mar - datasource && delegate
 
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView {
-    return [UIImage imageNamed:@"ico_meiyoushuju"];
+    return [UIImage imageNamed:@"noData"];
 }
 
-- (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView {
-    return [[NSAttributedString alloc] initWithString:NSLocalizedString(@"DataIsEmpty", nil) attributes:nil];
-}
-
-- (NSAttributedString *)buttonTitleForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state {
-    return [[NSAttributedString alloc] initWithString:NSLocalizedString(@"ClickToRefreshData", nil) attributes:@{NSForegroundColorAttributeName : C99}];
-}
+//- (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView {
+//    return [[NSAttributedString alloc] initWithString:NSLocalizedString(@"DataIsEmpty", nil) attributes:nil];
+//}
+//
+//- (NSAttributedString *)buttonTitleForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state {
+//    return [[NSAttributedString alloc] initWithString:NSLocalizedString(@"ClickToRefreshData", nil) attributes:@{NSForegroundColorAttributeName : C99}];
+//}
 
 #pragma mark - Private method implement
 

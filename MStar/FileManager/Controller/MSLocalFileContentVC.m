@@ -8,6 +8,8 @@
 
 #import "MSLocalFileContentVC.h"
 #import "MSLocalFileVC.h"
+//#import "MSSDFileLIstVC.h"
+#import "MSMediaListVC.h"
 
 @interface MSLocalFileContentVC ()<YPTabBarDelegate>
 
@@ -21,7 +23,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit", nil) style:UIBarButtonItemStyleDone target:self action:@selector(editAction:)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit", nil) style:UIBarButtonItemStyleDone target:self action:@selector(editAction:)];
     
     self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight | UIRectEdgeBottom;
     self.navigationController.navigationBar.backgroundColor = UIColor.redColor;
@@ -51,22 +53,32 @@
 
 - (void)initViewControllers {
     
-    UICollectionViewFlowLayout *normalLayout = [[UICollectionViewFlowLayout alloc] init];
-    self.normalVideoVC = [[MSLocalFileVC alloc] initWithCollectionViewLayout:normalLayout];;
-    self.normalVideoVC.yp_tabItemTitle = NSLocalizedString(@"NormalVideo", nil);
-    self.normalVideoVC.fileType = W1MFileTypeNormal;
+    MSMediaListVC *videoVC = [[MSMediaListVC alloc] initWithStyle:UITableViewStyleGrouped];
+    videoVC.yp_tabItemTitle = NSLocalizedString(@"NormalVideo", nil);
+    videoVC.fileType = W1MFileTypeNormal;
+
+    MSMediaListVC *photoVC = [[MSMediaListVC alloc] initWithStyle:UITableViewStyleGrouped];
+    photoVC.yp_tabItemTitle = NSLocalizedString(@"Photo", nil);
+    photoVC.fileType = W1MFileTypePhoto;
     
-    UICollectionViewFlowLayout *imageLayout = [[UICollectionViewFlowLayout alloc] init];
-    self.imageVc = [[MSLocalFileVC alloc] initWithCollectionViewLayout:imageLayout];
-    self.imageVc.yp_tabItemTitle = NSLocalizedString(@"Photo", nil);
-    self.imageVc.fileType = W1MFileTypePhoto;
+    self.viewControllers = @[videoVC, photoVC];
     
-    UICollectionViewFlowLayout *eventLayout = [[UICollectionViewFlowLayout alloc] init];
-    self.eventVideoVC = [[MSLocalFileVC alloc] initWithCollectionViewLayout:eventLayout];
-    self.eventVideoVC.yp_tabItemTitle = NSLocalizedString(@"EventVideo", nil);
-    self.eventVideoVC.fileType = W1MFileTypeEvent;
-    
-    self.viewControllers = @[self.normalVideoVC, self.imageVc, self.eventVideoVC];
+//    UICollectionViewFlowLayout *normalLayout = [[UICollectionViewFlowLayout alloc] init];
+//    self.normalVideoVC = [[MSLocalFileVC alloc] initWithCollectionViewLayout:normalLayout];;
+//    self.normalVideoVC.yp_tabItemTitle = NSLocalizedString(@"NormalVideo", nil);
+//    self.normalVideoVC.fileType = W1MFileTypeNormal;
+//
+//    UICollectionViewFlowLayout *imageLayout = [[UICollectionViewFlowLayout alloc] init];
+//    self.imageVc = [[MSLocalFileVC alloc] initWithCollectionViewLayout:imageLayout];
+//    self.imageVc.yp_tabItemTitle = NSLocalizedString(@"Photo", nil);
+//    self.imageVc.fileType = W1MFileTypePhoto;
+//
+////    UICollectionViewFlowLayout *eventLayout = [[UICollectionViewFlowLayout alloc] init];
+////    self.eventVideoVC = [[MSLocalFileVC alloc] initWithCollectionViewLayout:eventLayout];
+////    self.eventVideoVC.yp_tabItemTitle = NSLocalizedString(@"EventVideo", nil);
+////    self.eventVideoVC.fileType = W1MFileTypeEvent;
+//
+//    self.viewControllers = @[self.normalVideoVC, self.imageVc,/* self.eventVideoVC*/];
 }
 
 - (void)dealloc {

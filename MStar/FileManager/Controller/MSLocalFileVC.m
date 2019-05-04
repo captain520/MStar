@@ -170,12 +170,12 @@ static NSString * const reuseIdentifier = @"Cell";
 #pragma mark - Delegate && dataSource method implement
 
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView {
-    return [UIImage imageNamed:@"ico_meiyoushuju"];
+    return [UIImage imageNamed:@"noData"];
 }
 
-- (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView {
-    return [[NSAttributedString alloc] initWithString:@"暂无数据" attributes:nil];
-}
+//- (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView {
+//    return [[NSAttributedString alloc] initWithString:@"暂无数据" attributes:nil];
+//}
 
 - (void)emptyDataSet:(UIScrollView *)scrollView didTapView:(UIView *)view {
     [self loadData];

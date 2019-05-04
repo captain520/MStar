@@ -35,9 +35,10 @@
     NSDictionary *titleTextAttributes = @{NSForegroundColorAttributeName:C33,NSFontAttributeName:[UIFont boldSystemFontOfSize:18]};
     [[UINavigationBar appearance] setTitleTextAttributes:titleTextAttributes];
     
-//    [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : MAIN_COLOR} forState:UIControlStateSelected];
+    [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.blackColor} forState:UIControlStateSelected];
 
-    //    [[UITabBar appearance] setBarTintColor:[UIColor blackColor]];
+//    [[UITabBar appearance] setBarTintColor:[UIColor blackColor]];
+    [[UITabBar appearance] setTintColor:UIColor.blackColor];
 }
 
 @end
