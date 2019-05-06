@@ -501,9 +501,9 @@ static NSString *CAMERA_SetTIME = @"Camera.Preview.MJPEG.TimeStamp";
 -(void) requestFinished:(NSString*) result
 {
     if (result) {
-        [view makeToast:NSLocalizedString(@"Command Succeeded", nil)];
+        [view makeToast:NSLocalizedString(@"Command Succeeded", nil) duration:1.0f position:CSToastPositionCenter];
     } else {
-        [view makeToast:NSLocalizedString(@"Command Failed", nil)];
+        [view makeToast:NSLocalizedString(@"Command Failed", nil) duration:1.0f position:CSToastPositionCenter];
     }
 }
 

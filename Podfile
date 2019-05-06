@@ -10,7 +10,7 @@ target 'MStar' do
   pod 'mob_umssdk/UMSSDKUI'
   pod 'Masonry'
   pod 'YPTabBarController'
-  pod 'SCLAlertView-Objective-C'
+#  pod 'SCLAlertView-Objective-C'
   pod 'AFNetworking'
   pod 'BATabBarController'
   pod 'SDWebImage'
@@ -18,6 +18,6 @@ target 'MStar' do
   pod 'DZNEmptyDataSet'
   pod 'M13ProgressSuite'
   pod 'IDMPhotoBrowser'
-  pod 'IQKeyboardManager' 
+  pod 'IQKeyboardManager'
   
 end

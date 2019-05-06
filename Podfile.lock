@@ -63,7 +63,6 @@ PODS:
     - MOBFoundation
   - MOBFoundation (3.2.1)
   - pop (1.0.12)
-  - SCLAlertView-Objective-C (1.1.6)
   - SDWebImage (5.0.0):
     - SDWebImage/Core (= 5.0.0)
   - SDWebImage/Core (5.0.0)
@@ -80,7 +79,6 @@ DEPENDENCIES:
   - Masonry
   - mob_umssdk
   - mob_umssdk/UMSSDKUI
-  - SCLAlertView-Objective-C
   - SDWebImage
   - XMLReader
   - YPTabBarController
@@ -103,7 +101,6 @@ SPEC REPOS:
     - mob_umssdk
     - MOBFoundation
     - pop
-    - SCLAlertView-Objective-C
     - SDWebImage
     - XMLReader
     - YPTabBarController
@@ -125,11 +122,10 @@ SPEC CHECKSUMS:
   mob_umssdk: 1db25907745ac1821d1d0dfebdcf187520324403
   MOBFoundation: ce2ba976fd435b0cb06897466b2746e639895b7d
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
-  SCLAlertView-Objective-C: 2bb9be204bffaf24762a0e33fe6ca9645819b3b7
   SDWebImage: 5de80a0302de9e377e62f47d2fa1304efff0e55f
   XMLReader: c7e54b707c368e2fa545d8313276b4de13a36ff5
   YPTabBarController: 8591a577e74dc9331929c9a0bb960ce2f1bf953f
 
-PODFILE CHECKSUM: 394e1bd2dbf3c0ea21b14fa67f951840d5866165
+PODFILE CHECKSUM: 57d999798da0d6b7c8ad3305a49258d17c948f92
 
 COCOAPODS: 1.6.0.beta.1

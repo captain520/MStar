@@ -85,6 +85,8 @@ static bool cam_front = YES;
     [self syncDate];
     [self sendRecordCommand];
     
+    [self queryPreStreamCommd];
+
 //    MSTabBarVC *rootVC = (MSTabBarVC *)[UIApplication sharedApplication].keyWindow;
 //    rootVC.supportedInterfaceOrientations
     
@@ -294,7 +296,8 @@ static bool cam_front = YES;
 
 - (void)mediaPlayerSnapshot:(NSNotification *)aNotification
 {
-    [[[SCLAlertView alloc] initWithNewWindow] showSuccess:NSLocalizedString(@"PhotographSuccess", nil) subTitle:nil closeButtonTitle:nil duration:2];
+    [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
+    [[CPLoadStatusToast shareInstance] show];
 }
 
 - (void)requestFinished:(NSString *)result
@@ -310,7 +313,7 @@ static bool cam_front = YES;
                 [[MSCamMenuManager manager] LoadCamMenuXMLDoc:result];
                 [self performSelector:@selector(queryPreStreamCommd) withObject:nil afterDelay:1];
             } else {
-                [[[SCLAlertView alloc] init] showWarning:self title:NSLocalizedString(@"Hint", nil) subTitle:NSLocalizedString(@"ConnectTheDeviceWIFI", nil) closeButtonTitle:NSLocalizedString(@"OK", nil) duration:0.0f];
+//                [self.view makeToast:NSLocalizedString(@"ConnectTheDeviceWIFI", nil) duration:1.0f position:CSToastPositionCenter];
             }
         }
         break;
@@ -392,9 +395,7 @@ static bool cam_front = YES;
 //                [self SetCamSwitchButtonTitle:NO];
             } else {//if([result rangeOfString:@"front"].location != NSNotFound) {
                 if (YES == cam_front) {
-                    SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-                    alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-                    [alert showError:NSLocalizedString(@"No rear camera found", nil) subTitle:nil closeButtonTitle:nil duration:2];
+                    [self.view makeToast:NSLocalizedString(@"No rear camera found", nil) duration:1.0f position:CSToastPositionCenter];
                 }
                 cam_front = YES;
             }
@@ -461,10 +462,16 @@ static bool cam_front = YES;
 
 - (void)settingAction:(id)sender
 {
-    MSSettingVC *vc = [[MSSettingVC alloc] initWithStyle:UITableViewStyleGrouped];
-    vc.hidesBottomBarWhenPushed = YES;
-
-    [self.navigationController pushViewController:vc animated:YES];
+    
+    if (liveurl.length > 0) {
+        MSSettingVC *vc = [[MSSettingVC alloc] initWithStyle:UITableViewStyleGrouped];
+        vc.hidesBottomBarWhenPushed = YES;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    } else {
+        [self.view makeToast:NSLocalizedString(@"ConnectWiFiHint", nil) duration:1. position:CSToastPositionCenter];
+    }
+    
 }
 
 - (void)previewAction:(UIButton *)sender

@@ -38,20 +38,20 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.extendedLayoutIncludesOpaqueBars = YES;
     _titles = @[
-        @[NSLocalizedString(@"WiFiSetting", nil), NSLocalizedString(@"FormatSDCard", nil)],
+        @[NSLocalizedString(@"WiFiSetting", nil),NSLocalizedString(@"FormatSDCard", nil)],
 //        @[@"最近浏览的视频", @"最近浏览的图片"],
         @[NSLocalizedString(@"CleanCach", nil), ],
-        @[NSLocalizedString(@"AboutUs", nil), ],
+        @[NSLocalizedString(@"Version", nil), ],
     ];
 
-    [self setTitle:NSLocalizedString(@"ProfileSetting", nil)];
+//    [self setTitle:NSLocalizedString(@"ProfileSetting", nil)];
     
     [self initializedBaseProperties];
 }
 
 //  初始化相关数据
 - (void)initializedBaseProperties {
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandWifiInfoUrl] Delegate:self] ;
+//    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandWifiInfoUrl] Delegate:self] ;
 }
 
 - (void)dealloc {
@@ -61,7 +61,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+//    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -70,7 +70,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+//    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -86,10 +86,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (0 == section) {
-        return SCREENWIDTH * 3 / 5;
-    }
-
+//    if (0 == section) {
+//        return SCREENWIDTH * 3 / 5;
+//    }
+//
     return 8;
 }
 
@@ -133,12 +133,42 @@
 
     cell.textLabel.text = self.titles[indexPath.section][indexPath.row];
     cell.textLabel.textColor = C33;
+    if (2 == indexPath.section) {
+        cell.detailTextLabel.text = @"V1.2.0";
+    }
+    
+    NSString *imageName = nil;
+
+    switch (indexPath.section) {
+        case 0:
+        {
+            if (0 == indexPath.row) {
+                imageName = @"icon_wifi";
+            } else if (1 == indexPath.row) {
+                imageName = @"icon_restore";
+            }
+        }
+            break;
+        case 1:
+            imageName = @"icon_clean";
+            break;
+        case 2:
+            imageName = @"icon_version";
+            break;
+            
+        default:
+            break;
+    }
+    
+    cell.imageView.image = [UIImage imageNamed:imageName];
 
     return cell;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    return nil;
+    
     if (0 != section) {
         return nil;
     }
@@ -204,11 +234,11 @@
         }
             break;
         case 2: {
-            CPWebVC *webVC = [[CPWebVC alloc] init];
-            webVC.urlStr = @"https://www.baidu.com";
-            webVC.hidesBottomBarWhenPushed = YES;
-            
-            [self.navigationController pushViewController:webVC animated:YES];
+//            CPWebVC *webVC = [[CPWebVC alloc] init];
+//            webVC.urlStr = @"https://www.baidu.com";
+//            webVC.hidesBottomBarWhenPushed = YES;
+//
+//            [self.navigationController pushViewController:webVC animated:YES];
         }
         break;
 
@@ -246,8 +276,6 @@
         }
         
     } else {
-        NSLog(@"Result = nil") ;
-        [self.view makeToast:NSLocalizedString(@"Cannot get information from Camera", nil)];
     }
 }
 
@@ -260,66 +288,6 @@
     vc.hidesBottomBarWhenPushed = YES;
 
     [self.navigationController pushViewController:vc animated:YES];
-    
-    return;
-    
-    SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-    [alert setHorizontalButtons:YES];
-
-    SCLTextView *evenField = [alert addTextField:@"SSID"];
-//    evenField.keyboardType = UIKeyboardTypeNumberPad;
-    if (self.ssid.length > 0) {
-        evenField.text = self.ssid;
-    }
-
-    SCLTextView *oddField = [alert addTextField:@"passwd"];
-    oddField.keyboardType = UIKeyboardTypeNumberPad;
-    
-    if (self.ssidPasswd.length > 0) {
-        oddField.text = self.ssidPasswd;
-    }
-
-    SCLButton *button = [alert addButton:NSLocalizedString(@"OK", nil) validationBlock:^BOOL {
-        if (evenField.text.length == 0) {
-            SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-            alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-            [alert showError:NSLocalizedString(@"InputSSIDNameHint", nil) subTitle:nil closeButtonTitle:nil duration:2];
-
-            [evenField becomeFirstResponder];
-            return NO;
-        }
-
-        if (oddField.text.length < 8) {
-            SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-            alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-            [alert showError:NSLocalizedString(@"InputSSIDPasswdHint", nil) subTitle:nil closeButtonTitle:nil duration:2];
-            return NO;
-        }
-
-        //TODO: 发送修改命令
-        (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandUpdateUrl:self.ssid EncryptionKey:self.ssidPasswd] View:self.view] ;
-
-        return YES;
-    } actionBlock:^{
-        SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-        alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-                       [alert showSuccess:@"修改成功" subTitle:nil closeButtonTitle:nil duration:2];
-                   });
-    }];
-
-    button.buttonFormatBlock = ^NSDictionary * (void)
-    {
-        NSMutableDictionary *buttonConfig = [[NSMutableDictionary alloc] init];
-
-        buttonConfig[@"backgroundColor"] = [UIColor redColor];
-        buttonConfig[@"textColor"] = [UIColor whiteColor];
-
-        return buttonConfig;
-    };
-
-    [alert showEdit:self title:NSLocalizedString(@"WiFiSetting", nil) subTitle:NSLocalizedString(@"SSIDModifyHintMessage", nil) closeButtonTitle:NSLocalizedString(@"Cancel", nil) duration:0];
 }
 
 //  格式化内存卡

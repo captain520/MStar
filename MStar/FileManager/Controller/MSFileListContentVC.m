@@ -32,8 +32,8 @@
     
     [self setTabBarFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 44) contentViewFrame:CGRectMake(0, 44, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height - 44 - UIApplication.sharedApplication.statusBarFrame.size.height - 44)];
     
-    self.tabBar.itemTitleColor = UIColor.blackColor;
-    self.tabBar.itemTitleSelectedColor = SELECTED_COLOR;
+    self.tabBar.itemTitleColor = UIColor.grayColor;
+    self.tabBar.itemTitleSelectedColor = UIColor.blackColor;
     self.tabBar.itemTitleFont = [UIFont systemFontOfSize:14];
     self.tabBar.itemTitleSelectedFont = [UIFont systemFontOfSize:16];
     self.tabBar.leadingSpace = 20;
@@ -41,7 +41,7 @@
     
     self.tabBar.itemFontChangeFollowContentScroll = YES;
     self.tabBar.indicatorScrollFollowContent = YES;
-    self.tabBar.indicatorColor = SELECTED_COLOR;
+    self.tabBar.indicatorColor = UIColor.blackColor;
     
     [self.tabBar setIndicatorWidth:80 marginTop:42 marginBottom:0 tapSwitchAnimated:YES];
     

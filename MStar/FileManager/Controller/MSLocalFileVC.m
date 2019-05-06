@@ -137,19 +137,6 @@ static NSString * const reuseIdentifier = @"Cell";
     if (NO == isInEdit && self.selectedIndexPaths.count > 0) {
         
          __weak typeof(self) weakSelf = self;
-        
-        SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-        alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-        
-        SCLButton *button = [alert addButton:NSLocalizedString(@"Delete",nil) actionBlock:^{
-            [weakSelf deleteSelectLocalFiles];
-        }];
-        
-        button.buttonFormatBlock = ^NSDictionary *{
-            return @{@"backgroundColor" : UIColor.redColor};
-        };
-        
-        [alert showWarning:nil subTitle:NSLocalizedString(@"DeleteCorfirm", nil) closeButtonTitle:NSLocalizedString(@"Cancel", nil) duration:0];
     }
     
     [self.collectionView reloadData];

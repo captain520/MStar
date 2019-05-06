@@ -50,25 +50,26 @@
 "Formating" = "格式化内存卡中...";
 "Cleaning" = "缓存清理中...";
 "PleaseChooseYourAction" = "请选择您要的操作";
+"Version" = "版本号";
 
 "" = "";
 /*************************************** setting menu and item *******************************************/
-"VIDEO RESOLUTION" = "VIDEO RESOLUTION";    //  需要中文和其他语言
-"CAPTURE RESOLUTION" = "CAPTURE RESOLUTION";//  需要中文和其他语言
-"LOOPING VIDEO" = "LOOPING VIDEO";//  需要中文和其他语言
-"WHITE BALANCE" = "WHITE BALANCE";//  需要中文和其他语言
-"Auto" = "Auto";//  需要中文和其他语言
 "UPSIDEDOWN" = "UPSIDEDOWN";//  需要中文和其他语言
 "SPOT METER" = "SPOT METER";//  需要中文和其他语言
 "Q-SHOT" = "Q-SHOT";//  需要中文和其他语言
 "SOUND INDICATOR" = "SOUND INDICATOR";//  需要中文和其他语言
-"POWSER SAVING" = "POWSER SAVING";//  需要中文和其他语言
+"POWSER SAVING" = "技能";//  需要中文和其他语言
 "TV" = "TV";//  需要中文和其他语言
 "NTSC" = "NTSC";//  需要中文和其他语言
-"PAL" = "NTSC";//  需要中文和其他语言
+"PAL" = "PAL";//  需要中文和其他语言
 "UI Mode" = "UI Mode";//  需要中文和其他语言
 "Video Mode" = "Video Mode";//  需要中文和其他语言
 "BootUp Mode" = "BootUp Mode";//  需要中文和其他语言
-"SYNC TIME" = "SYNC TIME";//  需要中文和其他语言
-"Off" = "Off";//  需要中文和其他语言
-"ON" = "ON";//  需要中文和其他语言
+"SYNC TIME" = "同步时间";//  需要中文和其他语言
+"Off" = "关闭";//  需要中文和其他语言
+"ON" = "开启";//  需要中文和其他语言
+"VIDEO RESOLUTION" = "视频分辨率";    //  需要中文和其他语言
+"CAPTURE RESOLUTION" = "捕获分辨率";//  需要中文和其他语言
+"LOOPING VIDEO" = "循环视频";//  需要中文和其他语言
+"WHITE BALANCE" = "白平衡";//  需要中文和其他语言
+"Auto" = "自动";//  需要中文和其他语言
