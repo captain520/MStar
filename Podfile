@@ -18,5 +18,6 @@ target 'MStar' do
   pod 'DZNEmptyDataSet'
   pod 'M13ProgressSuite'
   pod 'IDMPhotoBrowser'
+  pod 'IQKeyboardManager' 
   
 end

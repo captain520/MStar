@@ -22,6 +22,7 @@ PODS:
     - DACircularProgress
     - pop
     - SDWebImage
+  - IQKeyboardManager (6.2.1)
   - JiMu (1.0.5):
     - MOBFoundation
   - M13ProgressSuite (1.2.9)
@@ -74,6 +75,7 @@ DEPENDENCIES:
   - BATabBarController
   - DZNEmptyDataSet
   - IDMPhotoBrowser
+  - IQKeyboardManager
   - M13ProgressSuite
   - Masonry
   - mob_umssdk
@@ -90,6 +92,7 @@ SPEC REPOS:
     - DACircularProgress
     - DZNEmptyDataSet
     - IDMPhotoBrowser
+    - IQKeyboardManager
     - JiMu
     - M13ProgressSuite
     - Masonry
@@ -111,6 +114,7 @@ SPEC CHECKSUMS:
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   IDMPhotoBrowser: 4bb459b1faffc228e92bccdf7c54ad6d6b7e8c37
+  IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
   JiMu: a4acc97530f5c74c8f48884fbc808332e890a90d
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
@@ -126,6 +130,6 @@ SPEC CHECKSUMS:
   XMLReader: c7e54b707c368e2fa545d8313276b4de13a36ff5
   YPTabBarController: 8591a577e74dc9331929c9a0bb960ce2f1bf953f
 
-PODFILE CHECKSUM: 1312a7c9a2976516eb1c5c2e4717c3b9bf24c02c
+PODFILE CHECKSUM: 394e1bd2dbf3c0ea21b14fa67f951840d5866165
 
 COCOAPODS: 1.6.0.beta.1
