@@ -12,6 +12,8 @@
 #import "NYWaterWaveView.h"
 #import "CPWebVC.h"
 #import "AITCameraRequest.h"
+#import "CPLoadStatusToast.h"
+#import "MSModifyPwdVC.h"
 
 @interface MSProfileVC ()<AITCameraRequestDelegate> {
 }
@@ -253,6 +255,14 @@
 
 - (IBAction)showValidation:(id)sender
 {
+    
+    MSModifyPwdVC *vc = [MSModifyPwdVC new];
+    vc.hidesBottomBarWhenPushed = YES;
+
+    [self.navigationController pushViewController:vc animated:YES];
+    
+    return;
+    
     SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
     [alert setHorizontalButtons:YES];
 
@@ -315,28 +325,25 @@
 //  格式化内存卡
 - (void)formatSDCard
 {
-    SCLAlertView *alert = [[SCLAlertView alloc] init];
-
-    alert.showAnimationType = SCLAlertViewHideAnimationSlideOutToCenter;
-    alert.hideAnimationType = SCLAlertViewHideAnimationSlideOutFromCenter;
-
-    alert.backgroundType = SCLAlertViewBackgroundTransparent;
-
-    [alert   showWaiting:self title:NSLocalizedString(@"Progressing", nil)
-                subTitle:NSLocalizedString(@"Formating", nil)
-        closeButtonTitle:nil duration:5.0f];
+//    SCLAlertView *alert = [[SCLAlertView alloc] init];
+//
+//    alert.showAnimationType = SCLAlertViewHideAnimationSlideOutToCenter;
+//    alert.hideAnimationType = SCLAlertViewHideAnimationSlideOutFromCenter;
+//
+//    alert.backgroundType = SCLAlertViewBackgroundTransparent;
+//
+//    [alert   showWaiting:self title:NSLocalizedString(@"Progressing", nil)
+//                subTitle:NSLocalizedString(@"Formating", nil)
+//        closeButtonTitle:nil duration:5.0f];
+    
+    [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
+    [[CPLoadStatusToast shareInstance] show];
 }
 
 - (void)cleanCach
 {
-    SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-
-    alert.showAnimationType = SCLAlertViewHideAnimationSlideOutToCenter;
-    alert.hideAnimationType = SCLAlertViewHideAnimationSlideOutFromCenter;
-
-    alert.backgroundType = SCLAlertViewBackgroundTransparent;
-
-    [alert showTitle:NSLocalizedString(@"Progressing", nil) subTitle:NSLocalizedString(@"Cleaning", nil) style:SCLAlertViewStyleWaiting closeButtonTitle:nil duration:3];
+    [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
+    [[CPLoadStatusToast shareInstance] show];
 }
 
 @end

@@ -23,6 +23,7 @@
 #import <Masonry.h>
 #import "SCVideoMainViewController.h"
 #import <IDMPhotoBrowser.h>
+#import "CPDownloadActionSheet.h"
 
 static NSString *TAG_DCIM = @"DCIM" ;
 
@@ -52,8 +53,9 @@ typedef enum
 }
 
 @property (nonatomic, strong)AITFileNode *selectedFileNode;
-@property (nonatomic, strong) M13ProgressHUD * hud;
+//@property (nonatomic, strong) M13ProgressHUD * hud;
 @property (nonatomic, assign) BOOL hasLoaded;
+@property (nonatomic, strong) CPDownloadActionSheet *downloadActionSheet;;
 
 @end
 
@@ -95,6 +97,14 @@ typedef enum
     self.currentPage = 0;
 }
 #pragma mark - setter && getter method
+
+- (CPDownloadActionSheet *)downloadActionSheet {
+    if (nil == _downloadActionSheet) {
+        _downloadActionSheet = [CPDownloadActionSheet new];
+    }
+    
+    return _downloadActionSheet;
+}
 #pragma mark - Setup UI
 - (void)setupUI {
     [self.tableView registerNib:[UINib nibWithNibName:@"MSFIleListCell" bundle:nil] forCellReuseIdentifier:@"MSFIleListCell"];
@@ -434,7 +444,7 @@ typedef enum
         fileNode.progress = 0.0;
         [fileNode->downloader startDownload];
         cancelButton.hidden = NO;
-        self.hud.hidden = NO;
+//        self.hud.hidden = NO;
 
         
         dlTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateUI:) userInfo:fileNode repeats:YES];
@@ -446,49 +456,58 @@ typedef enum
     AITFileNode *fileNode = timer.userInfo;
     
 
-    if (nil == self.hud) {
-        
-        self.hud = [[M13ProgressHUD alloc] initWithProgressView:[[M13ProgressViewRing alloc] init]];
-        
-        // Configure the progress view
-        self.hud.progressViewSize = CGSizeMake(60.0, 60.0);
-        self.hud.animationPoint = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
-        
-        // Add the HUD to the window. (Or any UIView)
-        UIWindow *window = UIApplication.sharedApplication.keyWindow;
-        [window addSubview:self.hud];
-        
-        // Show the HUD
-        [self.hud show:YES];
-        
-        cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-        cancelButton.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2 + 38);
-        [cancelButton setImage:[UIImage imageNamed:@"iccancel"] forState:UIControlStateNormal];
-
-        [self.hud addSubview:cancelButton];
-        [cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.hud.progressView.mas_bottom).offset(80);
-            make.centerX.mas_equalTo(0);
-            make.size.mas_equalTo(CGSizeMake(60, 60));
-        }];
-    }
-    
-    if (nil == self.hud.superview) {
-        UIWindow *window = UIApplication.sharedApplication.keyWindow;
-        [window addSubview:self.hud];
-        [self.hud show:YES];
-    }
-    
-    [cancelButton buttonAction:^{
-        fileNode->downloader->abort = YES;
-    }];
+//    if (nil == self.hud) {
+//
+//        self.hud = [[M13ProgressHUD alloc] initWithProgressView:[[M13ProgressViewRing alloc] init]];
+//
+//        // Configure the progress view
+//        self.hud.progressViewSize = CGSizeMake(60.0, 60.0);
+//        self.hud.animationPoint = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+//
+//        // Add the HUD to the window. (Or any UIView)
+//        UIWindow *window = UIApplication.sharedApplication.keyWindow;
+//        [window addSubview:self.hud];
+//
+//        // Show the HUD
+//        [self.hud show:YES];
+//
+//        cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+//        cancelButton.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2 + 38);
+//        [cancelButton setImage:[UIImage imageNamed:@"iccancel"] forState:UIControlStateNormal];
+//
+//        [self.hud addSubview:cancelButton];
+//        [cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.top.mas_equalTo(self.hud.progressView.mas_bottom).offset(80);
+//            make.centerX.mas_equalTo(0);
+//            make.size.mas_equalTo(CGSizeMake(60, 60));
+//        }];
+//    }
+//
+//    if (nil == self.hud.superview) {
+//        UIWindow *window = UIApplication.sharedApplication.keyWindow;
+//        [window addSubview:self.hud];
+//        [self.hud show:YES];
+//    }
+//
+//    [cancelButton buttonAction:^{
+//        fileNode->downloader->abort = YES;
+//    }];
     
     //Update the HUD progress
     
-    [self.hud setProgress:1.* fileNode->downloader->offsetInFile/fileNode->downloader->bodyLength animated:YES];
+    if (nil == self.downloadActionSheet) {
+        [self.downloadActionSheet show];
+        self.downloadActionSheet.cancelActionBlock = ^{
+            fileNode->downloader->abort = YES;
+        };
+    }
+    
+    self.downloadActionSheet.percent = 1.* fileNode->downloader->offsetInFile/fileNode->downloader->bodyLength;
+
+//    [self.hud setProgress:1.* fileNode->downloader->offsetInFile/fileNode->downloader->bodyLength animated:YES];
     
     // Update the HUD status
-    self.hud.status = @"Processing";
+//    self.hud.status = @"Processing";
     
     NSLog(@"----------:%.2f%%",100.* fileNode->downloader->offsetInFile/fileNode->downloader->bodyLength);
     
@@ -514,7 +533,8 @@ typedef enum
         dlTimer = nil;
         fileNode.progress = -1;
         fileNode->downloader = nil;
-        [self.hud dismiss:YES];
+//        [self.hud dismiss:YES];
+        [self.downloadActionSheet dimiss];
         
         return;
         
@@ -532,7 +552,8 @@ typedef enum
         fileNode->downloader = nil;
         // Hide the HUD
         cancelButton.hidden = YES;
-        [self.hud dismiss:YES];
+//        [self.hud dismiss:YES];
+        [self.downloadActionSheet dimiss];
         
         return;
     }

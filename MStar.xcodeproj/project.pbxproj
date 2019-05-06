@@ -10,6 +10,10 @@
 		396B3E492D5A47B68AEC5BF0 /* libPods-MStar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36260F7EED62A9BE8FA8478D /* libPods-MStar.a */; };
 		9C23B07E227DD9E8005221FE /* MSMediaListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C23B07D227DD9E8005221FE /* MSMediaListVC.m */; };
 		9C23B081227DE977005221FE /* MSSettingActionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C23B080227DE977005221FE /* MSSettingActionVC.m */; };
+		9C3D7C0A227EC5B200BCB077 /* CPDownloadActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3D7C09227EC5B200BCB077 /* CPDownloadActionSheet.m */; };
+		9C3D7C0D227EC5EA00BCB077 /* CPLoadStatusToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3D7C0C227EC5EA00BCB077 /* CPLoadStatusToast.m */; };
+		9C3D7C11227EE55300BCB077 /* MSModifyPwdVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3D7C0F227EE55300BCB077 /* MSModifyPwdVC.m */; };
+		9C3D7C12227EE55300BCB077 /* MSModifyPwdVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C3D7C10227EE55300BCB077 /* MSModifyPwdVC.xib */; };
 		9C4D7B842230A08400B6273E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4D7B832230A08400B6273E /* AppDelegate.m */; };
 		9C4D7B872230A08400B6273E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4D7B862230A08400B6273E /* ViewController.m */; };
 		9C4D7B8A2230A08400B6273E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C4D7B882230A08400B6273E /* Main.storyboard */; };
@@ -107,6 +111,13 @@
 		9C23B07D227DD9E8005221FE /* MSMediaListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSMediaListVC.m; sourceTree = "<group>"; };
 		9C23B07F227DE977005221FE /* MSSettingActionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSSettingActionVC.h; sourceTree = "<group>"; };
 		9C23B080227DE977005221FE /* MSSettingActionVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSSettingActionVC.m; sourceTree = "<group>"; };
+		9C3D7C08227EC5B200BCB077 /* CPDownloadActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPDownloadActionSheet.h; path = "../../../../../../GitHub/CPSpace/CPSpace/自定义ActionSheet/View/CPDownloadActionSheet.h"; sourceTree = "<group>"; };
+		9C3D7C09227EC5B200BCB077 /* CPDownloadActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CPDownloadActionSheet.m; path = "../../../../../../GitHub/CPSpace/CPSpace/自定义ActionSheet/View/CPDownloadActionSheet.m"; sourceTree = "<group>"; };
+		9C3D7C0B227EC5EA00BCB077 /* CPLoadStatusToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPLoadStatusToast.h; sourceTree = "<group>"; };
+		9C3D7C0C227EC5EA00BCB077 /* CPLoadStatusToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPLoadStatusToast.m; sourceTree = "<group>"; };
+		9C3D7C0E227EE55300BCB077 /* MSModifyPwdVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSModifyPwdVC.h; sourceTree = "<group>"; };
+		9C3D7C0F227EE55300BCB077 /* MSModifyPwdVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSModifyPwdVC.m; sourceTree = "<group>"; };
+		9C3D7C10227EE55300BCB077 /* MSModifyPwdVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MSModifyPwdVC.xib; sourceTree = "<group>"; };
 		9C4D7B7F2230A08400B6273E /* MStar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MStar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C4D7B822230A08400B6273E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9C4D7B832230A08400B6273E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -382,6 +393,9 @@
 			children = (
 				9C5B241B225B9EBF000DE8D1 /* MSProfileVC.h */,
 				9C5B241C225B9EBF000DE8D1 /* MSProfileVC.m */,
+				9C3D7C0E227EE55300BCB077 /* MSModifyPwdVC.h */,
+				9C3D7C0F227EE55300BCB077 /* MSModifyPwdVC.m */,
+				9C3D7C10227EE55300BCB077 /* MSModifyPwdVC.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -439,6 +453,10 @@
 		9C987878225D7AA7009E4C8B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9C3D7C0B227EC5EA00BCB077 /* CPLoadStatusToast.h */,
+				9C3D7C0C227EC5EA00BCB077 /* CPLoadStatusToast.m */,
+				9C3D7C08227EC5B200BCB077 /* CPDownloadActionSheet.h */,
+				9C3D7C09227EC5B200BCB077 /* CPDownloadActionSheet.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -839,6 +857,7 @@
 			files = (
 				9C994662225713F000AD863F /* MSTestVC.xib in Resources */,
 				9CDCC764225F38B200162D9A /* ic_sp_bf@2x.png in Resources */,
+				9C3D7C12227EE55300BCB077 /* MSModifyPwdVC.xib in Resources */,
 				9C4D7B8F2230A08500B6273E /* LaunchScreen.storyboard in Resources */,
 				9CDCC761225F38B200162D9A /* ic_bf_ks.png in Resources */,
 				9CA6568E22598A4E00AB124F /* Localizable.strings in Resources */,
@@ -921,6 +940,7 @@
 				9C987874225D754A009E4C8B /* CPRefreshVC.m in Sources */,
 				9CF5ED4422599C0900E136A1 /* AITCameraListen.m in Sources */,
 				9C23B081227DE977005221FE /* MSSettingActionVC.m in Sources */,
+				9C3D7C0D227EC5EA00BCB077 /* CPLoadStatusToast.m in Sources */,
 				9C994661225713F000AD863F /* MSTestVC.m in Sources */,
 				9CF5ED3822599B9D00E136A1 /* Toast+UIView.m in Sources */,
 				9C4D7B9D2230B40000B6273E /* MSPreviewVC.m in Sources */,
@@ -946,6 +966,7 @@
 				9C4D7BB9223112AA00B6273E /* MSFileListContentVC.m in Sources */,
 				9C4D7B872230A08400B6273E /* ViewController.m in Sources */,
 				9CA17409225A1145008EA36F /* MSFunction.m in Sources */,
+				9C3D7C11227EE55300BCB077 /* MSModifyPwdVC.m in Sources */,
 				9C99469A22582BA600AD863F /* UIButton+FillColor.m in Sources */,
 				9C4D7B922230A08500B6273E /* main.m in Sources */,
 				9C99468D22582BA600AD863F /* NSStringAdditions.m in Sources */,
@@ -958,6 +979,7 @@
 				9C99468C22582BA600AD863F /* UIImage+GIF.m in Sources */,
 				9CF5ED4C22599C1C00E136A1 /* AITCameraRequest.m in Sources */,
 				9C9F779D2267712300853423 /* CPActionButton.m in Sources */,
+				9C3D7C0A227EC5B200BCB077 /* CPDownloadActionSheet.m in Sources */,
 				9C99469522582BA600AD863F /* NSFileManager+FilePath.m in Sources */,
 				9C98787E225DB252009E4C8B /* ZZError.m in Sources */,
 				9CF5ED4D22599C1C00E136A1 /* AITCameraCommand.m in Sources */,
