@@ -1,0 +1,75 @@
+/*
+  Localizable.strings
+  MStar
+
+  Created by 王璋传 on 2019/4/7.
+  Copyright © 2019 王璋传. All rights reserved.
+*/
+
+"ConnectWiFiHint" = "在使用之前請確保連接了設備WIFI";
+"No rear camera found" = "沒有發現後置監視器";
+"LivePreview" = "直播";
+"SD" = "SD";
+"SDFile" = "SD卡檔案";
+"Local" = "本地";
+"LocalFile" = "本地檔案";
+"Profile" = "我的";
+"SetSuccess" = "設定成功";
+"Setting" = "設定";
+"PhotographSuccess" = "拍照成功";
+"Hint" = "提示";
+"ConnectTheDeviceWIFI" = "請先連接設備Wi-Fi";
+"OK" = "好的";
+"Cancel" = "取消";
+"SendCommandFail" = "命令發送失敗";
+"SendCommandSuccess" = "命令發送成功";
+"NormalVideo" = "普通視頻";
+"Photo" = "圖片";
+"EventVideo" = "鎖存視頻";
+"Done" = "完成";
+"Edit" = "編輯";
+"Delete" = "删除";
+"Downlaod" = "下載";
+"DownlaodFail" = "下載失敗";
+"DownlaodSuccess" = "下載成功";
+"Play" = "播放";
+"Preview" = "預覽";
+"UnknowErorr" = "未知錯誤";
+"DeleteCorfirm" = "確定要刪除檔?";
+"DataIsEmpty" = "暫無數據";
+"ClickToRefreshData" = "點擊重繪";
+"WiFiSetting" = "Wi-Fi設定";
+"FormatSDCard" = "格式化SD卡";
+"CleanCach" = "清理緩存";
+"AboutUs" = "關於我們";
+"ProfileSetting" = "個人設置";
+"InputSSIDNameHint" = "請輸入wifi名稱";
+"InputSSIDPasswdHint" = "請輸入>=8位數的WIFI密碼";
+"SSIDModifyHintMessage" = "請輸入您要修改成的WIFI名稱和密碼!";
+"Progressing" = "進展...";
+"Formating" = "格式化記憶體卡中...";
+"Cleaning" = "緩存清理中...";
+"PleaseChooseYourAction" = "請選擇您要的操作";
+"Version" = "版本號";
+
+"" = "";
+/*************************************** setting menu and item *******************************************/
+"UPSIDEDOWN" = "UPSIDEDOWN"
+"SPOT METER" = "SPOT METER"
+"Q-SHOT" = "Q-SHOT"
+"SOUND INDICATOR" = "SOUND INDICATOR"
+"TV" = "TV"
+"NTSC" = "NTSC"
+"PAL" = "PAL"
+"UI Mode" = "UI Mode"
+"BootUp Mode" = "BootUp Mode"
+"Video Mode" = "錄影分辯率"
+"SYNC TIME" = "同步時間"
+"Off" = "關閉"
+"ON" = "開啟"
+"VIDEO RESOLUTION" = "視頻分辯率";
+"CAPTURE RESOLUTION" = "捕獲分辯率"
+"LOOPING VIDEO" = "迴圈視頻"
+"WHITE BALANCE" = "白平衡"
+"Auto" = "自動"
+"POWSER SAVING" = "省電模式"

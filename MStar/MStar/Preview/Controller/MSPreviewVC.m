@@ -469,7 +469,7 @@ static bool cam_front = YES;
         
         [self.navigationController pushViewController:vc animated:YES];
     } else {
-        [self.view makeToast:NSLocalizedString(@"ConnectWiFiHint", nil) duration:1. position:CSToastPositionCenter];
+        [self.view makeToast:NSLocalizedString(@"ConnectTheDeviceWIFI", nil) duration:1. position:CSToastPositionCenter];
     }
     
 }
