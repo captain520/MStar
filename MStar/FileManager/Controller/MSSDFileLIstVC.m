@@ -248,6 +248,7 @@ typedef enum
     static NSString *cellIdenitifier = @"MSFIleListCell";
     
     MSFIleListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdenitifier];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (self.isLocalFileList == NO) {
         [cell.downloadBT setImage:[UIImage imageNamed:@"download"] forState:UIControlStateNormal];
         [cell.downloadBT addTarget:self action:@selector(downloadAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -257,14 +258,17 @@ typedef enum
     }
     
 
-    AITFileNode *node = [self.dataArray objectAtIndex:indexPath.row];
-    cell.nameLabel.text = [node.name lastPathComponent];
-    cell.sizeLabel.text = [NSByteCountFormatter stringFromByteCount:node.size countStyle:NSByteCountFormatterCountStyleDecimal];
-    NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [node.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]] ;
-    if (W1MFileTypePhoto == self.fileType) {
-        [cell.iconImageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"tupian"]];
-    } else {
-        cell.url = url;
+    if (indexPath.row < self.dataArray.count) {
+        
+        AITFileNode *node = [self.dataArray objectAtIndex:indexPath.row];
+        cell.nameLabel.text = [node.name lastPathComponent];
+        cell.sizeLabel.text = [NSByteCountFormatter stringFromByteCount:node.size countStyle:NSByteCountFormatterCountStyleDecimal];
+        NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [node.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]] ;
+        if (W1MFileTypePhoto == self.fileType) {
+            [cell.iconImageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"tupian"]];
+        } else {
+            cell.url = url;
+        }
     }
 
     return cell;
@@ -495,7 +499,7 @@ typedef enum
     
     //Update the HUD progress
     
-    if (nil == self.downloadActionSheet) {
+    if (nil == _downloadActionSheet) {
         [self.downloadActionSheet show];
         self.downloadActionSheet.cancelActionBlock = ^{
             fileNode->downloader->abort = YES;

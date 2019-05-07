@@ -23,45 +23,9 @@ PODS:
     - pop
     - SDWebImage
   - IQKeyboardManager (6.2.1)
-  - JiMu (1.0.5):
-    - MOBFoundation
   - M13ProgressSuite (1.2.9)
   - Masonry (1.1.0)
-  - MJRefresh (3.1.15.7)
-  - mob_paysdk (1.2.0):
-    - mob_paysdk/PaySDK (= 1.2.0)
-    - MOBFoundation
-  - mob_paysdk/PaySDK (1.2.0):
-    - MOBFoundation
-  - mob_sharesdk (4.2.2):
-    - mob_sharesdk/ShareSDK (= 4.2.2)
-    - MOBFoundation
-  - mob_sharesdk/ShareSDK (4.2.2):
-    - MOBFoundation
-  - mob_smssdk (3.2.3):
-    - MOBFoundation
-  - mob_umssdk (1.2.0.1):
-    - JiMu
-    - mob_paysdk
-    - mob_sharesdk
-    - mob_smssdk
-    - mob_umssdk/Core (= 1.2.0.1)
-    - MOBFoundation
-  - mob_umssdk/Core (1.2.0.1):
-    - JiMu
-    - mob_paysdk
-    - mob_sharesdk
-    - mob_smssdk
-    - MOBFoundation
-  - mob_umssdk/UMSSDKUI (1.2.0.1):
-    - JiMu
-    - MJRefresh
-    - mob_paysdk
-    - mob_sharesdk
-    - mob_smssdk
-    - mob_umssdk/Core
-    - MOBFoundation
-  - MOBFoundation (3.2.1)
+  - MJRefresh (3.1.16)
   - pop (1.0.12)
   - SDWebImage (5.0.0):
     - SDWebImage/Core (= 5.0.0)
@@ -77,8 +41,7 @@ DEPENDENCIES:
   - IQKeyboardManager
   - M13ProgressSuite
   - Masonry
-  - mob_umssdk
-  - mob_umssdk/UMSSDKUI
+  - MJRefresh
   - SDWebImage
   - XMLReader
   - YPTabBarController
@@ -91,15 +54,9 @@ SPEC REPOS:
     - DZNEmptyDataSet
     - IDMPhotoBrowser
     - IQKeyboardManager
-    - JiMu
     - M13ProgressSuite
     - Masonry
     - MJRefresh
-    - mob_paysdk
-    - mob_sharesdk
-    - mob_smssdk
-    - mob_umssdk
-    - MOBFoundation
     - pop
     - SDWebImage
     - XMLReader
@@ -112,20 +69,14 @@ SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   IDMPhotoBrowser: 4bb459b1faffc228e92bccdf7c54ad6d6b7e8c37
   IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
-  JiMu: a4acc97530f5c74c8f48884fbc808332e890a90d
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
-  mob_paysdk: d28d26d9eb201a6183e38552d178e04be24bea5f
-  mob_sharesdk: e36e88015480f4d0c28e99ef8875ce1e10ca3a9e
-  mob_smssdk: cdb6a31d4fd4667ed928e2eca03f21ad89ebc05c
-  mob_umssdk: 1db25907745ac1821d1d0dfebdcf187520324403
-  MOBFoundation: ce2ba976fd435b0cb06897466b2746e639895b7d
+  MJRefresh: 7798e16e53a5ef7f332dd05b27664db4e29530fd
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: 5de80a0302de9e377e62f47d2fa1304efff0e55f
   XMLReader: c7e54b707c368e2fa545d8313276b4de13a36ff5
   YPTabBarController: 8591a577e74dc9331929c9a0bb960ce2f1bf953f
 
-PODFILE CHECKSUM: 57d999798da0d6b7c8ad3305a49258d17c948f92
+PODFILE CHECKSUM: ec3b7604ab74b4e3f77179aeac089db348f8c173
 
 COCOAPODS: 1.6.0.beta.1

@@ -13,7 +13,6 @@
 #import "MSFileListContentVC.h"
 #import "MSProfileVC.h"
 
-#import <UMSSDKUI/UMSProfileViewController.h>
 
 @interface ViewController ()<BATabBarControllerDelegate>
 

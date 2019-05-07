@@ -9,7 +9,7 @@
 #import "MSTabBarVC.h"
 #import "MSPreviewVC.h"
 
-#import <UMSSDKUI/UMSProfileViewController.h>
+//#import <UMSSDKUI/UMSProfileViewController.h>
 #import "MSPreviewVC.h"
 #import "MSSDFileLIstVC.h"
 #import "MSFileListContentVC.h"

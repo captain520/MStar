@@ -46,6 +46,8 @@
           [error localizedDescription],
           [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
     [requestDelegate requestFinished: nil] ;
+    
+    !self.failBlock ? : self.failBlock(error);
 }
 
 #pragma mark - NSURLConnectionDataDelegate
@@ -66,6 +68,32 @@
     
     NSLog(@"Requesting Result = %@", result) ;
     [requestDelegate requestFinished: result] ;
+    
+    !self.actionBlock ? : self.actionBlock(result);
+}
+
+- (id) initWithUrl: (NSURL *) url block:(void (^)(NSString *resutl))block fail:(void (^)(NSError *error))failBlock {
+    
+    self = [super init] ;
+    
+    if (self) {
+        
+        NSLog(@"Requesting URL = %@",url);
+        self.actionBlock = block;
+        self.failBlock = failBlock;
+        
+        receivedData = [[NSMutableData alloc] init] ;
+        
+        NSURLRequest * request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:15.0] ;
+        
+        NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO] ;
+        
+        [connection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+        
+        [connection start];
+    }
+    
+    return self ;
 }
 
 

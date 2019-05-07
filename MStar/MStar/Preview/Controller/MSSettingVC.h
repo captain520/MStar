@@ -10,4 +10,6 @@
 
 @interface MSSettingVC : UITableViewController
 
+@property (nonatomic, assign) BOOL isRecording;
+
 @end

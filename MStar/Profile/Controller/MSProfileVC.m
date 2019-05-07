@@ -22,6 +22,7 @@
 
 @property (nonatomic, copy) NSString * ssid;
 @property (nonatomic, copy) NSString * ssidPasswd;
+@property (nonatomic, copy) NSString * FWversion;
 
 @end
 
@@ -61,7 +62,34 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-//    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    if (nil != self.FWversion) {
+        return;
+    }
+    
+     __weak typeof(self) weakSelf = self;
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQuerySettings]
+                                    block:^(NSString *result) {
+                                        [weakSelf handleQuerySettings:result];
+                                    } fail:^(NSError *error) {
+                                    }];
+}
+
+- (void)handleQuerySettings:(NSString *)result {
+    if (NO == [result containsString:@"OK\n"]) {
+        return;
+    }
+    
+    NSArray <NSString *> *cameraMenu = [result componentsSeparatedByString:@"\n"];
+    [cameraMenu enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj containsString:@"Camera.Menu.FWversion="]) {
+            self.FWversion = [obj componentsSeparatedByString:@"="].lastObject;
+            
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+            *stop = YES;
+        }
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -70,7 +98,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-//    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -86,10 +113,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-//    if (0 == section) {
-//        return SCREENWIDTH * 3 / 5;
-//    }
-//
     return 8;
 }
 
@@ -134,7 +157,7 @@
     cell.textLabel.text = self.titles[indexPath.section][indexPath.row];
     cell.textLabel.textColor = C33;
     if (2 == indexPath.section) {
-        cell.detailTextLabel.text = @"V1.2.0";
+        cell.detailTextLabel.text = self.FWversion;
     }
     
     NSString *imageName = nil;
@@ -153,7 +176,10 @@
             imageName = @"icon_clean";
             break;
         case 2:
+        {
             imageName = @"icon_version";
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
             break;
             
         default:
@@ -234,11 +260,7 @@
         }
             break;
         case 2: {
-//            CPWebVC *webVC = [[CPWebVC alloc] init];
-//            webVC.urlStr = @"https://www.baidu.com";
-//            webVC.hidesBottomBarWhenPushed = YES;
-//
-//            [self.navigationController pushViewController:webVC animated:YES];
+            
         }
         break;
 
@@ -251,31 +273,19 @@
 {
     if (result != nil) {
         NSLog(@"Result = %@", result) ;
-        
-        NSArray *lines = [result componentsSeparatedByString:@"\n"];
-        
-        for (NSString *line in lines) {
-            
-            if ([line hasPrefix:[AITCameraCommand PROPERTY_SSID]]) {
-                NSArray *properties = [line componentsSeparatedByString:@"="] ;
+        NSArray <NSString *> *cameraMenu = [result componentsSeparatedByString:@"\n"];
+        [cameraMenu enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj containsString:@"Camera.Menu.FWversion="]) {
+                self.FWversion = [obj componentsSeparatedByString:@"="].lastObject;
                 
-                if ([properties count] == 2) {
-//                    self.ssidText.text = [properties objectAtIndex:1] ;
-                    //  获取WIFI名称
-                    self.ssid = [properties objectAtIndex:1];
-                }
-            } else if ([line hasPrefix:[AITCameraCommand PROPERTY_ENCRYPTION_KEY]]) {
-                NSArray *properties = [line componentsSeparatedByString:@"="] ;
-                
-                if ([properties count] == 2) {
-//                    self.encryptionKeyText.text = [properties objectAtIndex:1] ;
-                    //  获取WIIF密码
-                    self.ssidPasswd = [properties objectAtIndex:1];
-                }
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationAutomatic];
+
+                *stop = YES;
             }
-        }
-        
+        }];
+
     } else {
+        
     }
 }
 
@@ -293,19 +303,38 @@
 //  格式化内存卡
 - (void)formatSDCard
 {
-//    SCLAlertView *alert = [[SCLAlertView alloc] init];
-//
-//    alert.showAnimationType = SCLAlertViewHideAnimationSlideOutToCenter;
-//    alert.hideAnimationType = SCLAlertViewHideAnimationSlideOutFromCenter;
-//
-//    alert.backgroundType = SCLAlertViewBackgroundTransparent;
-//
-//    [alert   showWaiting:self title:NSLocalizedString(@"Progressing", nil)
-//                subTitle:NSLocalizedString(@"Formating", nil)
-//        closeButtonTitle:nil duration:5.0f];
     
-    [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
+    __weak typeof(self) weakSelf = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"FormatSDCard", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf handleFormatSDCardAction];
+    }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:confirmAction];
+    
+    [self presentViewController:alertController animated:YES completion:^{
+    }];
+}
+
+- (void)handleFormatSDCardAction {
+    
+    [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
     [[CPLoadStatusToast shareInstance] show];
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SDFormat" Value:@"capture"]
+                                          block:^(NSString *result) {
+                                              [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
+                                              [[CPLoadStatusToast shareInstance] show];
+                                          } fail:^(NSError *error) {
+                                              [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleFail;
+                                              [[CPLoadStatusToast shareInstance] show];
+                                          }];
 }
 
 - (void)cleanCach

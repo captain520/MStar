@@ -6,8 +6,8 @@ target 'MStar' do
   # use_frameworks!
 
   # Pods for MStar
-  pod 'mob_umssdk'
-  pod 'mob_umssdk/UMSSDKUI'
+#  pod 'mob_umssdk'
+#  pod 'mob_umssdk/UMSSDKUI'
   pod 'Masonry'
   pod 'YPTabBarController'
 #  pod 'SCLAlertView-Objective-C'
@@ -19,5 +19,6 @@ target 'MStar' do
   pod 'M13ProgressSuite'
   pod 'IDMPhotoBrowser'
   pod 'IQKeyboardManager'
+  pod 'MJRefresh'
   
 end

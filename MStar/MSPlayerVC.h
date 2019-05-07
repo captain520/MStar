@@ -10,4 +10,6 @@
 
 @interface MSPlayerVC : UIViewController
 
+@property (nonatomic, copy) NSString * liveUrl;
+
 @end

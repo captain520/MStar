@@ -909,20 +909,14 @@
 				"${PODS_ROOT}/IDMPhotoBrowser/Classes/IDMPhotoBrowser.bundle",
 				"${PODS_ROOT}/IDMPhotoBrowser/Classes/IDMPBLocalizations.bundle",
 				"${PODS_ROOT}/IQKeyboardManager/IQKeyboardManager/Resources/IQKeyboardManager.bundle",
-				"${PODS_ROOT}/JiMu/JiMu.bundle",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
-				"${PODS_ROOT}/mob_sharesdk/ShareSDK/Support/Required/ShareSDK.bundle",
-				"${PODS_ROOT}/mob_umssdk/SDK/UMSSDK/UMSSDKUI.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IDMPhotoBrowser.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IDMPBLocalizations.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IQKeyboardManager.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JiMu.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ShareSDK.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/UMSSDKUI.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1198,25 +1192,7 @@
 					"-framework",
 					"\"JavaScriptCore\"",
 					"-framework",
-					"\"JiMu\"",
-					"-framework",
-					"\"MOBFoundation\"",
-					"-framework",
-					"\"MOBFoundationEx\"",
-					"-framework",
-					"\"MOBPaySDK\"",
-					"-framework",
-					"\"SMS_SDK\"",
-					"-framework",
-					"\"ShareSDK\"",
-					"-framework",
-					"\"ShareSDKConnector\"",
-					"-framework",
 					"\"UIKit\"",
-					"-framework",
-					"\"UMSSDK\"",
-					"-framework",
-					"\"UMSSDKUI\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhizai.Test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1274,25 +1250,7 @@
 					"-framework",
 					"\"JavaScriptCore\"",
 					"-framework",
-					"\"JiMu\"",
-					"-framework",
-					"\"MOBFoundation\"",
-					"-framework",
-					"\"MOBFoundationEx\"",
-					"-framework",
-					"\"MOBPaySDK\"",
-					"-framework",
-					"\"SMS_SDK\"",
-					"-framework",
-					"\"ShareSDK\"",
-					"-framework",
-					"\"ShareSDKConnector\"",
-					"-framework",
 					"\"UIKit\"",
-					"-framework",
-					"\"UMSSDK\"",
-					"-framework",
-					"\"UMSSDKUI\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhizai.Test;
 				PRODUCT_NAME = "$(TARGET_NAME)";

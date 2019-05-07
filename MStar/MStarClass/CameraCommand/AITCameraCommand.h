@@ -83,4 +83,14 @@ typedef enum {
 - (id) initWithUrl: (NSURL*) url View: (UIView *)aView ;
 - (id) initWithUrl: (NSURL*) url Delegate:(id<AITCameraRequestDelegate>)delegate ;
 
+
+/**
+ 获取固件版本信息
+
+ @return 获取固件版本信息 Url
+ */
++(NSURL*) commandQueryFWversion;
+
+- (id) initWithUrl: (NSURL*) url block:(void (^)(NSString *result))block fail:(void (^)(NSError *error ))failBlock;
+
 @end

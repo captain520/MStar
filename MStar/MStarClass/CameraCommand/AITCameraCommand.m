@@ -501,9 +501,9 @@ static NSString *CAMERA_SetTIME = @"Camera.Preview.MJPEG.TimeStamp";
 -(void) requestFinished:(NSString*) result
 {
     if (result) {
-        [view makeToast:NSLocalizedString(@"Command Succeeded", nil) duration:1.0f position:CSToastPositionCenter];
+        [view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:1.0f position:CSToastPositionCenter];
     } else {
-        [view makeToast:NSLocalizedString(@"Command Failed", nil) duration:1.0f position:CSToastPositionCenter];
+        [view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:1.0f position:CSToastPositionCenter];
     }
 }
 
@@ -516,5 +516,29 @@ static NSString *CAMERA_SetTIME = @"Camera.Preview.MJPEG.TimeStamp";
     }
     return self ;
 }
+
++(NSURL*) commandQueryFWversion
+{
+    NSMutableArray * arguments = [[NSMutableArray alloc] init] ;
+    
+    [arguments addObject: [AITCameraCommand buildProperty:PROPERTY_FWversion]] ;
+    
+    return [AITCameraCommand buildRequestUrl:CGI_PATH Action: ACTION_GET ArgumentList: [AITCameraCommand buildArgumentList:arguments]] ;
+    
+}
+
+
+- (id) initWithUrl: (NSURL*) url block:(void (^)(NSString *result))block fail:(void (^)(NSError *error ))failBlock {
+    
+    self = [super init] ;
+    
+    if (self) {
+        request = [[AITCameraRequest alloc] initWithUrl:url block:block fail:failBlock] ;
+    }
+    return self ;
+    
+}
+
+
 
 @end

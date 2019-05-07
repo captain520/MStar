@@ -13,6 +13,9 @@
 
 @interface MSSettingVC ()<AITCameraRequestDelegate>
 @property (nonatomic, strong)  AITCamMenu *currentMenu;
+
+@property (nonatomic, assign) BOOL isRecordingWhenSetting;
+
 @end
 
 @implementation MSSettingVC
@@ -26,11 +29,32 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self initailizeBaseProperties];
+    [self loadData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (self.isRecording == YES) {
+        [self sendRecordCommand:^{
+            self.isRecordingWhenSetting = NO;
+        }];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if (self.isRecordingWhenSetting != self.isRecording) {
+        [self sendRecordCommand:^{
+//            self.isRecordingWhenSetting = YES;
+        }];
+    }
 }
 
 #pragma mark - Initialized properties
@@ -49,27 +73,45 @@
     if ([result hasPrefix:@"0\nOK"]) {
         if (self.currentMenu.parent) {
             self.currentMenu.parent.focus = self.currentMenu.menuid;
-//            [[[SCLAlertView alloc] initWithNewWindow] showSuccess:self.currentMenu.parent.title subTitle:NSLocalizedString(@"SetSuccess", nil) closeButtonTitle:nil duration:2];
             [self.view makeToast:NSLocalizedString(@"SetSuccess", nil) duration:1.0f position:CSToastPositionCenter];
             [self.tableView reloadData];
         } else {
             [self.view makeToast:NSLocalizedString(@"SetSuccess", nil) duration:1.0f position:CSToastPositionCenter];
-//            [[[SCLAlertView alloc] initWithNewWindow] showSuccess:self.currentMenu.title subTitle:NSLocalizedString(@"SetSuccess", nil) closeButtonTitle:nil duration:2];
         }
-
-        NSLog(@"");
     } else {
         [self.view makeToast:result duration:1.0f position:CSToastPositionCenter];
-//        [[[SCLAlertView alloc] initWithNewWindow] showError:self.currentMenu.parent.title subTitle:result closeButtonTitle:nil duration:2];
     }
-//    if (curmenu.parent != nil) {
-//        curmenu = curmenu.parent;
-//        [self.navigationController popViewControllerAnimated:YES];
-//    }
 }
 #pragma mark - load data
 - (void)loadData {
     
+    
+    if ([MSCamMenuManager manager].cammenu) {
+        
+        [self.tableView reloadData];
+        
+    } else {
+        
+        __weak typeof(self) weakSelf = self;
+        
+        (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandGetCamMenu]
+                                              block:^(NSString *result) {
+                                                  [weakSelf handleLoadDataBlock:result];
+                                              } fail:^(NSError *error) {
+                                                  
+                                              }];
+    }
+    
+}
+
+- (void)handleLoadDataBlock:(NSString *)result {
+    if (result.length < 20) {
+        return;
+    }
+
+    [[MSCamMenuManager manager] LoadCamMenuXMLDoc:result];
+
+    [self.tableView reloadData];
 }
 
 #pragma mark - Private method implement
@@ -99,9 +141,7 @@
     NSString *key = [MSCamMenuManager manager].cammenu.keyArray[indexPath.row];
     AITCamMenu *menu = [MSCamMenuManager manager].curmenu.items[key];
     cell.textLabel.text = NSLocalizedString(menu.title, nil);//menu.title;
-//    cell.textLabel.font = [UIFont systemFontOfSize:15];
-//    cell.detailTextLabel.font = [UIFont systemFontOfSize:15];
-    
+
     AITCamMenu *child = [menu.items valueForKey:menu.focus];
     if (child && [child isKindOfClass:[AITCamMenu class]]) {
         cell.detailTextLabel.text = NSLocalizedString(child.title, nil);//child.title;
@@ -152,36 +192,6 @@
     };
 
     [self.navigationController pushViewController:vc animated:YES];
-
-    return;
-    
-
-//    SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-//    alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-//
-//    [menu.keyArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        NSString *objKey = menu.keyArray[idx];
-//        AITCamMenu *objMenu = menu.items[objKey];
-//        objMenu.parent = menu;
-//        SCLButton *button = [alert addButton:objMenu.title actionBlock:^{
-//            [self pickAction:objMenu];
-//        }];
-//        button.buttonFormatBlock = ^NSDictionary* (void)
-//        {
-//            NSMutableDictionary *buttonConfig = [[NSMutableDictionary alloc] init];
-//
-//            buttonConfig[@"backgroundColor"] = [UIColor whiteColor];
-//            buttonConfig[@"textColor"] = [UIColor blackColor];
-//            buttonConfig[@"borderWidth"] = @1.0f;
-//            buttonConfig[@"borderColor"] = MAIN_COLOR;
-//
-//            return buttonConfig;
-//        };
-//    }];
-//
-//    alert.backgroundType = SCLAlertViewBackgroundBlur;
-//    [alert showTitle:menu.title subTitle:nil style:SCLAlertViewStyleEdit closeButtonTitle:@"cancel" duration:0];
-    
 }
 
 - (void)pickAction:(AITCamMenu *)sender {
@@ -201,6 +211,18 @@
     //[dateFormatter release];
     NSLog(@"User's current time in their preference format:%@",currentTime);
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetDateTime :currentTime] Delegate:self] ;
+}
+
+- (void)sendRecordCommand:(void (^)(void))block
+{
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl]
+                                          block:^(NSString *result) {
+                                              if (YES == [result containsString:@"OK\n"]) {
+                                                  !block ? : block();
+                                              }
+                                          } fail:^(NSError *error) {
+                                              
+                                          }];
 }
 
 @end

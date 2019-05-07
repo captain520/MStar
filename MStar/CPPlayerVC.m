@@ -97,7 +97,7 @@
 
     if ( nil == self.playImageView ) {
         self.playImageView = [UIImageView new];
-        self.playImageView.backgroundColor = UIColor.clearColor;
+        self.playImageView.backgroundColor = UIColor.blackColor;
         self.playImageView.contentMode = UIViewContentModeScaleToFill;
 
         [self.view addSubview:self.playImageView];
@@ -111,7 +111,7 @@
     
 
     self.playerView = [UIView new];
-    self.playerView.backgroundColor = [UIColor blackColor];
+    self.playerView.backgroundColor = [UIColor clearColor];
     
     [self.view addSubview:self.playerView];
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -415,7 +415,6 @@
 
 - (void)orientChange:(NSNotification *)noti {
     //    NSDictionary* ntfDict = [noti userInfo];
-    NSLog(@"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
     UIDeviceOrientation  orient = [UIDevice currentDevice].orientation;
     switch (orient) {
         case UIDeviceOrientationPortrait:
