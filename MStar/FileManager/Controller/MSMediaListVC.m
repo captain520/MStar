@@ -217,7 +217,8 @@
     }];
     
     MSPhotoBrowserVC *browser = [[MSPhotoBrowserVC alloc] initWithPhotos:photos];
-    
+    [browser setInitialPageIndex:indexPath.row];
+
     [self presentViewController:browser animated:YES completion:nil];
 }
 

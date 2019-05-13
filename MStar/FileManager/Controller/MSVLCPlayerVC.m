@@ -38,8 +38,10 @@
 - (VLCMediaPlayer *)player {
     if (nil == _player) {
         
-        NSString *urlStr = @"http://122.144.137.20:81/2018/12/video/d63797a1912a4f529d8cffab862d8747.mp4";
-        self.videoUrl = urlStr;
+        if (self.videoUrl == nil) {
+            NSString *urlStr = @"http://122.144.137.20:81/2018/12/video/d63797a1912a4f529d8cffab862d8747.mp4";
+            self.videoUrl = urlStr;
+        }
 //        VLCMedia *media = [VLCMedia mediaWithURL:[NSURL fileURLWithPath:self.videoUrl]];
         VLCMedia *media = [VLCMedia mediaWithURL:[NSURL URLWithString:self.videoUrl]];
 

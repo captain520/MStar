@@ -446,7 +446,8 @@ typedef enum
         
         MSVLCPlayerVC *vc = [[MSVLCPlayerVC alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
-        
+        vc.videoUrl = url;
+
         [self presentViewController:vc animated:YES completion:nil];
         
 //        SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:url];

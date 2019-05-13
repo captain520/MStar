@@ -8,7 +8,7 @@
 
 #import "MSPhotoBrowserVC.h"
 
-@interface MSPhotoBrowserVC ()
+@interface MSPhotoBrowserVC ()<IDMPhotoBrowserDelegate>
 
 @property (nonatomic, strong) UIButton * backAction;
 
@@ -24,6 +24,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.displayDoneButton = NO;
+    self.displayArrowButton = NO;
+    self.delegate = self;
+    self.displayCounterLabel = YES;
+    self.displayToolbar = YES;
+    self.autoHideInterface = NO;
 //    self.autoHideInterface = YES;
 //    self.edgesForExtendedLayout = UIRectEdgeNone;
 //    self.automaticallyAdjustsScrollViewInsets = YES;
@@ -56,6 +61,9 @@
     }
 }
 #pragma mark - Delegate && dataSource method implement
+- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didShowPhotoAtIndex:(NSUInteger)index {
+    NSLog(@"----:%@",@(index));
+}
 #pragma mark - load data
 - (void)loadData {
     
