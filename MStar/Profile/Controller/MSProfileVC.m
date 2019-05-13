@@ -39,10 +39,10 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.extendedLayoutIncludesOpaqueBars = YES;
     _titles = @[
-        @[NSLocalizedString(@"WiFiSetting", nil),NSLocalizedString(@"FormatSDCard", nil)],
+//        @[NSLocalizedString(@"WiFiSetting", nil),NSLocalizedString(@"FormatSDCard", nil)],
 //        @[@"最近浏览的视频", @"最近浏览的图片"],
-        @[NSLocalizedString(@"CleanCach", nil), ],
-        @[NSLocalizedString(@"Version", nil), ],
+        @[NSLocalizedString(@"CleanCach", nil), NSLocalizedString(@"AboutUs", nil)],
+//        @[NSLocalizedString(@"Version", nil), ],
     ];
 
 //    [self setTitle:NSLocalizedString(@"ProfileSetting", nil)];
@@ -62,17 +62,17 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (nil != self.FWversion) {
-        return;
-    }
-    
-     __weak typeof(self) weakSelf = self;
-    
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQuerySettings]
-                                    block:^(NSString *result) {
-                                        [weakSelf handleQuerySettings:result];
-                                    } fail:^(NSError *error) {
-                                    }];
+//    if (nil != self.FWversion) {
+//        return;
+//    }
+//
+//     __weak typeof(self) weakSelf = self;
+//
+//    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQuerySettings]
+//                                    block:^(NSString *result) {
+//                                        [weakSelf handleQuerySettings:result];
+//                                    } fail:^(NSError *error) {
+//                                    }];
 }
 
 - (void)handleQuerySettings:(NSString *)result {
@@ -108,12 +108,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 8;
+    return [self.titles[section] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -166,9 +166,9 @@
         case 0:
         {
             if (0 == indexPath.row) {
-                imageName = @"icon_wifi";
+                imageName = @"icon_clean";
             } else if (1 == indexPath.row) {
-                imageName = @"icon_restore";
+                imageName = @"icon_version";
             }
         }
             break;
@@ -245,28 +245,36 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    switch (indexPath.section) {
-        case 0: {
-            if (0 == indexPath.row) {
-                [self showValidation:nil];
-            } else if (1 == indexPath.row) {
-                [self formatSDCard];
-            }
-        }
-            break;
-        case 1:
-        {
+    switch (indexPath.row) {
+        case 0:
             [self cleanCach];
-        }
             break;
-        case 2: {
             
-        }
-        break;
-
         default:
             break;
     }
+//    switch (indexPath.section) {
+//        case 0: {
+//            if (0 == indexPath.row) {
+//                [self showValidation:nil];
+//            } else if (1 == indexPath.row) {
+//                [self formatSDCard];
+//            }
+//        }
+//            break;
+//        case 1:
+//        {
+//            [self cleanCach];
+//        }
+//            break;
+//        case 2: {
+//
+//        }
+//        break;
+//
+//        default:
+//            break;
+//    }
 }
 
 -(void) requestFinished:(NSString*) result
@@ -341,6 +349,11 @@
 {
     [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
     [[CPLoadStatusToast shareInstance] show];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
+        [[CPLoadStatusToast shareInstance] show];
+    });
 }
 
 @end

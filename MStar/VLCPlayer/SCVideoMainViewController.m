@@ -222,33 +222,33 @@ static const int playViewHeight = 200;
         }
     };
     
-//    self.vlcPlayerView.rotateBlock = ^(NSInteger result){
-//        if (result == 0) { // 横屏
-//            // 旋转view
-//            weakSelf.view.transform = CGAffineTransformMakeRotation(M_PI/2); // 旋转90°
-//            CGRect frame = [UIScreen mainScreen].bounds; // 获取当前屏幕大小
-//            // 重新设置所有view的frame
-//            weakSelf.view.bounds = CGRectMake(0, 0,frame.size.height + 20,frame.size.width);
-//            weakSelf.vlcPlayerView.frame = weakSelf.view.bounds;
-//            weakSelf.bPortrait = NO;
-//
-//            [weakSelf setNeedsStatusBarAppearanceUpdate];
-//        } else { // 竖屏
-//            // 旋转view
-//            weakSelf.view.transform = CGAffineTransformMakeRotation(M_PI*2); // 旋转90°
-//            CGRect frame = [UIScreen mainScreen].bounds; // 获取当前屏幕大小
-//            // 重新设置所有view的frame
-//            weakSelf.view.bounds = CGRectMake(0, 0,frame.size.width,frame.size.height);
-//            weakSelf.vlcPlayerView.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, playViewHeight);
-//
-//            weakSelf.bPortrait = YES;
-//            [weakSelf setNeedsStatusBarAppearanceUpdate];
-//        }
-//    };
+    self.vlcPlayerView.rotateBlock = ^(NSInteger result){
+        if (result == 0) { // 横屏
+            // 旋转view
+            weakSelf.view.transform = CGAffineTransformMakeRotation(M_PI/2); // 旋转90°
+            CGRect frame = [UIScreen mainScreen].bounds; // 获取当前屏幕大小
+            // 重新设置所有view的frame
+            weakSelf.view.bounds = CGRectMake(0, 0,frame.size.height + 20,frame.size.width);
+            weakSelf.vlcPlayerView.frame = weakSelf.view.bounds;
+            weakSelf.bPortrait = NO;
+
+            [weakSelf setNeedsStatusBarAppearanceUpdate];
+        } else { // 竖屏
+            // 旋转view
+            weakSelf.view.transform = CGAffineTransformMakeRotation(M_PI*2); // 旋转90°
+            CGRect frame = [UIScreen mainScreen].bounds; // 获取当前屏幕大小
+            // 重新设置所有view的frame
+            weakSelf.view.bounds = CGRectMake(0, 0,frame.size.width,frame.size.height);
+            weakSelf.vlcPlayerView.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, playViewHeight);
+
+            weakSelf.bPortrait = YES;
+            [weakSelf setNeedsStatusBarAppearanceUpdate];
+        }
+    };
     
     [self.view addSubview:self.vlcPlayerView];
     
-    [self fullAction];
+//    [self fullAction];
 }
 
 - (void)fullAction {

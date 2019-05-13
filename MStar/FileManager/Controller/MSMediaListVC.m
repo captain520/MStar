@@ -15,6 +15,8 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AVFoundation/AVAssetImageGenerator.h>
 #import <AVFoundation/AVAsset.h>
+#import "MSVLCPlayerVC.h"
+#import "MSPhotoBrowserVC.h"
 
 @interface MSMediaListVC ()<DZNEmptyDataSetSource,DZNEmptyDataSetDelegate>
 
@@ -41,6 +43,8 @@
     
     [self loadData];
 }
+
+
 
 - (void)setupUI {
     self.tableView.emptyDataSetSource = self;
@@ -212,7 +216,7 @@
         [photos addObject:[IDMPhoto photoWithFilePath:filePath]];
     }];
     
-    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+    MSPhotoBrowserVC *browser = [[MSPhotoBrowserVC alloc] initWithPhotos:photos];
     
     [self presentViewController:browser animated:YES completion:nil];
 }
@@ -223,30 +227,52 @@
     NSString *path = [self filePathOf:self.fileType];
     path = [path stringByAppendingPathComponent:fileName];
     
-    SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:path];
+    MSVLCPlayerVC *vc = [[MSVLCPlayerVC alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
     
-    UIApplication.sharedApplication.keyWindow.rootViewController.hidesBottomBarWhenPushed = YES;
+    [self presentViewController:vc animated:YES completion:nil];
+//    [self.navigationController presentViewController:vc animated:YES completion:nil];
+//    [self.navigationController pushViewController:vc animated:YES];
     
-    self.navigationController.navigationBarHidden=YES;
-    
-    [self.navigationController pushViewController:vc animated:YES];
+//    SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:path];
+//    vc.hidesBottomBarWhenPushed = YES;
+//
+//    UIApplication.sharedApplication.keyWindow.rootViewController.hidesBottomBarWhenPushed = YES;
+//
+//    self.navigationController.navigationBarHidden=YES;
+//
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)deleteMeida:(NSIndexPath *)indexPath {
+    
+    __weak typeof(self) weakSelf = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Hint", nil) message:NSLocalizedString(@"DeleteCorfirm", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf deleteFileAt:indexPath];
+    }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:confirmAction];
+    
+    [self presentViewController:alertController animated:YES completion:^{
+    }];
+}
 
+- (void)deleteFileAt:(NSIndexPath *)indexPath {
+    
     [self.dataArray removeObjectAtIndex:indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
     
     if (self.dataArray.count == 0) {
         [self.tableView reloadData];
     }
-    
-//    NSString *fileName = self.dataArray[indexPath.row];
-//    NSString *path = [self filePathOf:self.fileType];
-//    path = [path stringByAppendingPathComponent:fileName];
-//
-//    [self.fileManager removeItemAtPath:path error:nil];
 }
 
 - (UIImage*) thumbnailImageForVideo:(NSURL *)videoURL atTime:(NSTimeInterval)time {

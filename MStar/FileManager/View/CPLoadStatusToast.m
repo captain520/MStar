@@ -247,4 +247,10 @@
     [self dimiss];
 }
 
+- (void)showWithStyle:(CPLoadStatusStyle)style {
+    self.style = style;
+    
+    [self show];
+}
+
 @end

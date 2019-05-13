@@ -46,6 +46,12 @@ static bool cam_front = YES;
 @property (nonatomic, strong) UIButton *redRecrodLight;
 @property (nonatomic, strong) UIImageView *playImageView;
 
+@property (nonatomic, strong) UIImageView * splashView;
+
+@property (nonatomic, assign) BOOL hasAppear;
+
+@property (nonatomic, assign) CGSize videoSize;
+
 @end
 
 @implementation MSPreviewVC
@@ -86,6 +92,7 @@ static bool cam_front = YES;
     //    [self syncDate];
     //    [self sendRecordCommand];
     
+    self.hasAppear = YES;
 
     [self reloadPlayer];
 }
@@ -124,6 +131,8 @@ static bool cam_front = YES;
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    
+    self.hasAppear = NO;
 }
 
 #pragma mark - Initialized properties
@@ -172,6 +181,27 @@ static bool cam_front = YES;
 //}
 
 #pragma mark - setter && getter method
+
+- (UIImageView *)splashView {
+    
+    if (nil == _splashView) {
+        _splashView = [UIImageView new];
+        _splashView.backgroundColor = UIColor.blackColor;
+        _splashView.alpha = 0;
+        
+        [self.playImageView addSubview:_splashView];
+        
+        [_splashView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+            make.bottom.mas_equalTo(0);
+        }];
+    }
+    
+    return _splashView;
+}
+
 #pragma mark - Setup UI
 - (void)setupUI
 {
@@ -189,6 +219,7 @@ static bool cam_front = YES;
             make.left.mas_equalTo(0);
             make.right.mas_equalTo(0);
             make.height.mas_equalTo(SCREENWIDTH * 480. / 720);
+//            make.height.mas_equalTo(400);
         }];
     }
     
@@ -224,7 +255,7 @@ static bool cam_front = YES;
         }];
         
         self.shotBT = [UIButton new];
-        self.shotBT.backgroundColor = UIColor.groupTableViewBackgroundColor;
+        self.shotBT.backgroundColor = UIColor.clearColor;//UIColor.groupTableViewBackgroundColor;
         self.shotBT.layer.cornerRadius = 30.0f;
         
         [self.view addSubview:self.shotBT];
@@ -287,6 +318,16 @@ static bool cam_front = YES;
             break;
         case VLCMediaPlayerStatePlaying: {
             NSLog(@"playing");
+            if (self.videoSize.width == 0 || self.videoSize.height == 0) {
+                self.videoSize = mediaPlayer.videoSize;
+                
+//                [self.playImageView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.top.mas_equalTo(NAV_HEIGHT);
+//                    make.left.mas_equalTo(0);
+//                    make.right.mas_equalTo(0);
+//                    make.height.mas_equalTo(SCREENWIDTH * self.videoSize.width / self.videoSize.height);
+//                }];
+            }
             self.previewBT.selected = YES;
         }
             break;
@@ -306,8 +347,7 @@ static bool cam_front = YES;
 
 - (void)mediaPlayerSnapshot:(NSNotification *)aNotification
 {
-    [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
-    [[CPLoadStatusToast shareInstance] show];
+    self.playImageView.image = mediaPlayer.lastSnapshot;
 }
 
 - (void)requestFinished:(NSString *)result
@@ -455,19 +495,52 @@ static bool cam_front = YES;
 - (void)switchCameralAction:(id)sender
 {
     if ([mediaPlayer isPlaying]) {
+        [self mediaSnapshot];
         [mediaPlayer stop];
-        usleep(800000);
         NSLog(@"cameraSwitchClick");
         
+
         camera_cmd = CAMERA_CMD_CAMID;
         
+         __weak typeof(self) weakSelf = self;
+
         if (cam_front) {
             //  前置转后置
-            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetCameraidUrl:CAMERAID_CMD_REAR] Delegate:self];
+            //            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetCameraidUrl:CAMERAID_CMD_REAR] Delegate:self];
+            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetCameraidUrl:CAMERAID_CMD_REAR]
+                                                  block:^(NSString *result) {
+                                                      [weakSelf handleSwitchBlock:result];
+                                                  } fail:^(NSError *error) {
+                                                      
+                                                  }];
         } else {
             //  后置转前置
-            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetCameraidUrl:CAMERAID_CMD_FRONT] Delegate:self];
+//            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetCameraidUrl:CAMERAID_CMD_FRONT] Delegate:self];
+            (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetCameraidUrl:CAMERAID_CMD_FRONT]
+                                                  block:^(NSString *result) {
+                                                      [weakSelf handleSwitchBlock:result];
+                                                  } fail:^(NSError *error) {
+                                                      
+                                                  }];
         }
+    }
+}
+
+- (void)handleSwitchBlock:(NSString *)result {
+    
+    if (result && [result containsString:@"OK\n"]) {
+        
+        [UIView transitionWithView:self.playImageView
+                          duration:1.0f
+                           options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+                           } completion:^(BOOL finished) {
+                               cam_front = !cam_front;
+                               [self->mediaPlayer play];
+                           }];
+        
+    } else {
+        [self->mediaPlayer play];
+        [self.view makeToast:NSLocalizedString(@"No rear camera found", nil) duration:3.0 position:@"CSToastPositionCenter"];
     }
 }
 
@@ -501,11 +574,12 @@ static bool cam_front = YES;
 //  拍照
 - (void)shotAction:(id)sender
 {
-     __weak typeof(self) weakSelf = self;
+    //  直接先调用效果
+    [self handleShotActionBlock];
     
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraSnapshotUrl]
                                           block:^(NSString *result) {
-                                              [weakSelf handleShotActionBlock];
+//                                              [weakSelf handleShotActionBlock];
                                           } fail:^(NSError *error) {
                                               
                                           }];
@@ -513,13 +587,13 @@ static bool cam_front = YES;
 }
 
 - (void)handleShotActionBlock {
-    
+
     [self photosound];
 
     [UIView animateWithDuration:.1 animations:^{
-        self.playImageView.alpha = 0;
+        self.splashView.alpha = 1;
     } completion:^(BOOL finished) {
-        self.playImageView.alpha = 1;
+        self.splashView.alpha = 0;
     }];
     
 }
@@ -560,8 +634,11 @@ static bool cam_front = YES;
 
 - (void)fullScreenAction:(id)sender
 {
-    [mediaPlayer stop];
     
+    NSLog(@"%s",__FUNCTION__);
+    
+    [mediaPlayer stop];
+
     if (liveurl.length > 0) {
         CPPlayerVC *playerVC = [[CPPlayerVC alloc] init];
         //        playerVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
@@ -682,6 +759,7 @@ static bool cam_front = YES;
                                                                 ]];
     }
     
+    mediaPlayer.videoAspectRatio = "3:2";
     [mediaPlayer setDelegate:self];
     [mediaPlayer setDrawable:self.playImageView];
     
@@ -758,7 +836,8 @@ static bool cam_front = YES;
             break;
         case UIDeviceOrientationLandscapeLeft:
         {
-            [self fullScreenAction:nil];
+            NSLog(@"%s",__FUNCTION__);
+            !self.hasAppear ? : [self fullScreenAction:nil];
         }
             break;
         case UIDeviceOrientationPortraitUpsideDown:
@@ -768,6 +847,12 @@ static bool cam_front = YES;
         default:
             break;
     }
+}
+
+- (void)mediaSnapshot {
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject;
+    path = [path stringByAppendingPathComponent:@"Snapshot.png"];
+    [mediaPlayer saveVideoSnapshotAt:path withWidth:SCREENWIDTH andHeight:(SCREENWIDTH * 480. / 720)];
 }
 
 @end

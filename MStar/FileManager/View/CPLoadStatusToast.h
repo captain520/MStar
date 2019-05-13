@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)show;
 
+- (void)showWithStyle:(CPLoadStatusStyle)style;
+
 
 /**
  移除toast

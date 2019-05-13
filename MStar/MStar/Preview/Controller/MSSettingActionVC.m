@@ -24,13 +24,15 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndex inSection:0];
+    
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"UITableViewCell"];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    if (self.selectedIndexPath) {
+    if (self.selectedIndexPath && self.selectedIndexPath.row != self.selectedIndex) {
         !self.selectedActionBlock ? : self.selectedActionBlock(self.dataArray[self.selectedIndexPath.row]);
     }
 }

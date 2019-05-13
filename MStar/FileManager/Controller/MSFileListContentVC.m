@@ -60,7 +60,7 @@
 - (void)initViewControllers {
     
     if (self.isLocalFileList == NO) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SwitchCameral"] style:UIBarButtonItemStylePlain target:self action:@selector(switchCameralAction:)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SwitchCameralRear"] style:UIBarButtonItemStylePlain target:self action:@selector(switchCameralAction:)];
     }
     
     self.normalVideoVC = [[MSSDFileLIstVC alloc] initWithStyle:UITableViewStyleGrouped];;
@@ -81,9 +81,15 @@
     self.viewControllers = @[self.normalVideoVC, self.imageVc, self.eventVideoVC];
 }
 
-- (void)switchCameralAction:(id)sender {
+- (void)switchCameralAction:(UIBarButtonItem *)sender {
     
     self.isRear = !self.isRear;
+    if (self.isRear) {
+        sender.image = [UIImage imageNamed:@"SwitchCameralFront"];
+    } else {
+        sender.image = [UIImage imageNamed:@"SwitchCameralRear"];
+    }
+
     self.normalVideoVC.isRear = self.isRear;
     [self.normalVideoVC refreshAllData];
     

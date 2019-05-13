@@ -145,7 +145,7 @@
 
         [self.playerView addSubview:self.backBt];
         [self.backBt setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-        [self.backBt setTitle:@"返回" forState:UIControlStateNormal];
+        [self.backBt setTitle:@"" forState:UIControlStateNormal];
         [self.backBt setBackgroundImage:[UIImage imageNamed:@"shadowbg"] forState:UIControlStateNormal];
         [self.backBt setImageEdgeInsets:UIEdgeInsetsMake(0, 16, 0, 0)];
         [self.backBt setTitleEdgeInsets:UIEdgeInsetsMake(0, 16, 0, 0)];
@@ -178,40 +178,45 @@
         [self.playerView addSubview:self.actionView];
         [self.actionView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
-            make.right.mas_equalTo(0);
+            make.right.mas_equalTo(-16);
             make.bottom.mas_equalTo(0);
             make.width.mas_equalTo(80);
         }];
         
         
         UIButton *shotBt = [UIButton new];
-        [shotBt setBackgroundImage:[UIImage imageNamed:@"yulanPaizhao"] forState:UIControlStateNormal];
+        [shotBt setImage:[UIImage imageNamed:@"拍照白色"] forState:UIControlStateNormal];
+//        shotBt.backgroundColor = UIColor.purpleColor;
         [self.actionView addSubview:shotBt];
         [shotBt addTarget:self action:@selector(shotAction:) forControlEvents:UIControlEventTouchUpInside];
         [shotBt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(8);
-            make.right.mas_equalTo(-8);
-            make.height.mas_equalTo(shotBt.mas_width);
-            make.bottom.mas_equalTo(-16 * 3);
+            make.left.mas_equalTo(14);
+            make.right.mas_equalTo(-14);
+            make.height.mas_equalTo(shotBt.mas_width).multipliedBy(172./196);;
+            make.centerY.mas_equalTo(60);
+//            make.bottom.mas_equalTo(-16 * 3);
         }];
         
         UIButton *recordBt = [UIButton new];
-        [recordBt setImage:[UIImage imageNamed:@"recordCirle"] forState:UIControlStateNormal];
+//        recordBt.backgroundColor = UIColor.purpleColor;
+        [recordBt setImage:[UIImage imageNamed:@"录像白色"] forState:UIControlStateNormal];
+        [recordBt setImage:[UIImage imageNamed:@"已停止白色"] forState:UIControlStateSelected];
         [recordBt addTarget:self action:@selector(recorderAction:) forControlEvents:UIControlEventTouchUpInside];
         
         [self.actionView addSubview:recordBt];
         [recordBt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(8);
-            make.right.mas_equalTo(-8);
+            make.left.mas_equalTo(12);
+            make.right.mas_equalTo(-12);
             make.height.mas_equalTo(recordBt.mas_width);
-            make.bottom.mas_equalTo(shotBt.mas_top).offset(-16 * 3);
+//            make.bottom.mas_equalTo(shotBt.mas_top).offset(-16 * 3);
+            make.centerY.mas_equalTo(-60);
         }];
 
     }
     
     if (nil == self.splashView) {
         self.splashView = [UIView new];
-        self.splashView.backgroundColor = UIColor.whiteColor;
+        self.splashView.backgroundColor = UIColor.blackColor;
         self.splashView.alpha = 0;
         
         [self.view.window addSubview:self.splashView];
@@ -306,7 +311,7 @@
         
         [self.actionView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
-            make.right.mas_equalTo(0);
+            make.right.mas_equalTo(-16);
             make.bottom.mas_equalTo(0);
             make.width.mas_equalTo(80);
         }];
@@ -353,7 +358,7 @@
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraSnapshotUrl] Delegate:self];
     
     [UIView animateWithDuration:.1 animations:^{
-        self.splashView.alpha = .5;
+        self.splashView.alpha = 1;
 //        self.view.alpha = 0;
     } completion:^(BOOL finished) {
 //        self.view.alpha = 1;
@@ -364,8 +369,27 @@
 
 - (void)recorderAction:(UIButton *)sender
 {
-    camera_cmd = CAMERA_CMD_RECORD;
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self];
+//    camera_cmd = CAMERA_CMD_RECORD;
+//    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self];
+//}
+    sender.selected = !sender.selected;
+    
+    __weak typeof(self) weakSelf = self;
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl]
+                                          block:^(NSString *result) {
+                                              [weakSelf handleRecordActionBlock:result];
+                                          } fail:^(NSError *error) {
+                                              
+                                          }];
+}
+
+- (void)handleRecordActionBlock:(NSString *)result {
+    if (NO == [result containsString:@"OK\n"]) {
+        return;
+    }
+    
+    cameraRecording = !cameraRecording;
 }
 
 #pragma mark - delegate method implement

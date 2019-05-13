@@ -24,6 +24,8 @@
 #import "SCVideoMainViewController.h"
 #import <IDMPhotoBrowser.h>
 #import "CPDownloadActionSheet.h"
+#import "MSPhotoBrowserVC.h"
+#import "MSVLCPlayerVC.h"
 
 static NSString *TAG_DCIM = @"DCIM" ;
 
@@ -208,22 +210,55 @@ typedef enum
 #pragma mark - load data
 - (void)loadData {
     
+    NSLog(@"************ %s %s******************",__FILE__,__FUNCTION__);
+
     cmd_tag = CAMERA_FILE_LIST;
     
+     __weak typeof(self) weakSelf = self;
+    
     int index = (int)(self.pageSize * self.currentPage);
+    NSURL *requestUrl = nil;
     switch (self.fileType) {
         case W1MFileTypeNormal:
-        cameraCommand = [[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandListFileUrl:(int)(self.pageSize) From:index isRear:self.isRear fileType:W1MFileTypeNormal] Delegate:self] ;
+        {
+            requestUrl = [AITCameraCommand commandListFileUrl:(int)(self.pageSize) From:index isRear:self.isRear fileType:W1MFileTypeNormal];
+        }
             break;
         case W1MFileTypePhoto:
-            cameraCommand = [[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandListFileUrl:(int)(self.pageSize) From:index isRear:self.isRear fileType:W1MFileTypePhoto] Delegate:self] ;
+        {
+            requestUrl = [AITCameraCommand commandListFileUrl:(int)(self.pageSize) From:index isRear:self.isRear fileType:W1MFileTypePhoto];
+        }
             break;
         case W1MFileTypeEvent:
-            cameraCommand = [[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandListFileUrl:(int)(self.pageSize) From:index isRear:self.isRear fileType:W1MFileTypeEvent] Delegate:self] ;
+            requestUrl = [AITCameraCommand commandListFileUrl:(int)(self.pageSize) From:index isRear:self.isRear fileType:W1MFileTypeEvent];
             break;
         default:
             break;
     }
+    
+    if (requestUrl == nil) {
+        return;
+    }
+
+    (void)[[AITCameraCommand alloc] initWithUrl:requestUrl
+                                          block:^(NSString *result) {
+                                              if (result.length > 10) {
+                                                  [weakSelf handleLoadFileListBlock:result];
+                                              } else {
+                                                  [weakSelf handleErrorBlock];
+                                              }
+                                          } fail:^(NSError *error) {
+                                              [weakSelf handleErrorBlock];
+                                          }];
+}
+
+- (void)handleErrorBlock {
+    [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
+    
+    [self.tableView.mj_footer setHidden:YES];
+
+    [self.tableView reloadData];
 }
 
 #pragma mark - Private method implement
@@ -354,6 +389,31 @@ typedef enum
 }
 
 - (void)handleDeleteActionBlock:(NSIndexPath *)indexPath {
+    
+    
+    __weak typeof(self) weakSelf = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Hint", nil) message:NSLocalizedString(@"DeleteCorfirm", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf deleteFileAt:indexPath];
+    }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:confirmAction];
+    
+    [self presentViewController:alertController animated:YES completion:^{
+    }];
+
+}
+
+//  删除文件
+- (void)deleteFileAt:(NSIndexPath *)indexPath {
+    
     AITFileNode *file = [self.dataArray objectAtIndex:indexPath.row];
     cmd_tag = CAMERA_FILE_DELETE;
     cameraCommand = [[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandDelFileUrl:[file.name stringByReplacingOccurrencesOfString: @"/" withString:@"$"]] Delegate:self] ;
@@ -374,21 +434,30 @@ typedef enum
         NSMutableArray *photos = @[].mutableCopy;
         [photos addObject:[IDMPhoto photoWithURL:[NSURL URLWithString:url]]];
 
-        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+        MSPhotoBrowserVC *browser = [[MSPhotoBrowserVC alloc] initWithPhotos:photos];
         
         [self presentViewController:browser animated:YES completion:nil];
+//        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+//
+//        [self presentViewController:browser animated:YES completion:nil];
 
     } else {
         
-        SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:url];
+        
+        MSVLCPlayerVC *vc = [[MSVLCPlayerVC alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
-        vc.playName = node.name.lastPathComponent;
-
-        UIApplication.sharedApplication.keyWindow.rootViewController.hidesBottomBarWhenPushed = YES;
         
-        self.navigationController.navigationBarHidden=YES;
+        [self presentViewController:vc animated:YES completion:nil];
         
-        [self.navigationController pushViewController:vc animated:YES];
+//        SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:url];
+//        vc.hidesBottomBarWhenPushed = YES;
+//        vc.playName = node.name.lastPathComponent;
+//
+//        UIApplication.sharedApplication.keyWindow.rootViewController.hidesBottomBarWhenPushed = YES;
+//
+//        self.navigationController.navigationBarHidden=YES;
+//
+//        [self.navigationController pushViewController:vc animated:YES];
     }
 
 //    CPPlayerVC *playerVC = [[CPPlayerVC alloc] init];
@@ -441,17 +510,45 @@ typedef enum
             [[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
         }
 
-        // Create downloader
-        url = [NSURL URLWithString: [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [fileNode.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]] ;
-        filename = [fileNode.name substringFromIndex:[fileNode.name rangeOfString:@"/" options:NSBackwardsSearch].location + 1] ;
-        fileNode->downloader = [[AITFileDownloader alloc] initWithUrl:url Path:[directory stringByAppendingPathComponent:filename]];
-        fileNode.progress = 0.0;
-        [fileNode->downloader startDownload];
-        cancelButton.hidden = NO;
-//        self.hud.hidden = NO;
 
-        
-        dlTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateUI:) userInfo:fileNode repeats:YES];
+         __weak typeof(self) weakSelf = self;
+//        [self.downloadActionSheet show];
+        [[CPDownloadActionSheet manager] show];
+        [CPDownloadActionSheet manager].cancelActionBlock = ^{
+            [[AITFileDownloader manager] abortDownload];
+        };
+
+        [[AITFileDownloader manager] startDownloadFrom:fileNode.name
+                                                    to:[directory stringByAppendingPathComponent:fileNode.name.lastPathComponent]
+                                              progress:^(CGFloat downloadPer) {
+                                                  NSLog(@"************** %@ ****************",@(downloadPer));
+                                                  [CPDownloadActionSheet manager].percent = downloadPer;;
+                                              } finished:^{
+                                                  NSLog(@"finished");
+                                                  [[CPDownloadActionSheet manager] dimiss];
+                                                  [[CPLoadStatusToast shareInstance] showWithStyle:CPLoadStatusStyleLoadingSuccess];
+                                              } abort:^{
+                                                  NSLog(@"Abort");
+                                                  [[CPDownloadActionSheet manager] dimiss];
+                                                  [[CPLoadStatusToast shareInstance] showWithStyle:CPLoadStatusStyleFail];
+                                              } error:^(NSError *error) {
+                                                  NSLog(@"Error");
+                                                  [[CPDownloadActionSheet manager] dimiss];
+                                                  [[CPLoadStatusToast shareInstance] showWithStyle:CPLoadStatusStyleFail];
+                                              }];
+
+        // Create downloader
+//        url = [NSURL URLWithString: [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [fileNode.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]] ;
+//        filename = [fileNode.name substringFromIndex:[fileNode.name rangeOfString:@"/" options:NSBackwardsSearch].location + 1] ;
+//        NSLog(@"");
+//        fileNode->downloader = [[AITFileDownloader alloc] initWithUrl:url Path:[directory stringByAppendingPathComponent:filename]];
+//        fileNode.progress = 0.0;
+//        [fileNode->downloader startDownload];
+//        cancelButton.hidden = NO;
+////        self.hud.hidden = NO;
+//
+//
+//        dlTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateUI:) userInfo:fileNode repeats:YES];
     }
 }
 
@@ -499,11 +596,22 @@ typedef enum
     
     //Update the HUD progress
     
+#if 0
     if (nil == _downloadActionSheet) {
         [self.downloadActionSheet show];
+//        self.downloadActionSheet.cancelActionBlock = ^{
+//            fileNode->downloader->abort = YES;
+//        };
+    }
+    
+    if (self.downloadActionSheet.cancelActionBlock) {
         self.downloadActionSheet.cancelActionBlock = ^{
             fileNode->downloader->abort = YES;
         };
+    }
+    
+    if (nil == self.downloadActionSheet.superview) {
+        [self.downloadActionSheet show];
     }
     
     self.downloadActionSheet.percent = 1.* fileNode->downloader->offsetInFile/fileNode->downloader->bodyLength;
@@ -575,6 +683,7 @@ typedef enum
 //        [alert showError:NSLocalizedString(@"UnknowErorr", nil) subTitle:nil closeButtonTitle:nil duration:2];
         
     }
+#endif
 }
 
 //- (void)downloadAction:(id)sender {

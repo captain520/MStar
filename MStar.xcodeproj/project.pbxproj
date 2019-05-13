@@ -40,7 +40,6 @@
 		9C99466A225714EE00AD863F /* AppDelegate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C994669225714EE00AD863F /* AppDelegate+Category.m */; };
 		9C99466D22582B0900AD863F /* UIColor+ColorWithHex.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C99466B22582B0900AD863F /* UIColor+ColorWithHex.m */; };
 		9C99468C22582BA600AD863F /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C99466E22582BA000AD863F /* UIImage+GIF.m */; };
-		9C99468D22582BA600AD863F /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C99467322582BA000AD863F /* NSStringAdditions.m */; };
 		9C99468E22582BA600AD863F /* UITextField+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C99467422582BA000AD863F /* UITextField+Extension.m */; };
 		9C99468F22582BA600AD863F /* UIView+UIView_LineEX.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C99467522582BA100AD863F /* UIView+UIView_LineEX.m */; };
 		9C99469022582BA600AD863F /* NSString+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C99467922582BA100AD863F /* NSString+Category.m */; };
@@ -90,6 +89,10 @@
 		9CDCC77222602B4D00162D9A /* MSContentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDCC77122602B4D00162D9A /* MSContentVC.m */; };
 		9CDCC77522602BEA00162D9A /* MSLocalFileContentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDCC77422602BEA00162D9A /* MSLocalFileContentVC.m */; };
 		9CDCC778226036E100162D9A /* NYWaterWaveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDCC777226036E100162D9A /* NYWaterWaveView.m */; };
+		9CDFFC7022850D93003159A3 /* MSVLCPlayerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDFFC6D22850D93003159A3 /* MSVLCPlayerVC.m */; };
+		9CDFFC7122850D93003159A3 /* MSVLCPlayerVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CDFFC6E22850D93003159A3 /* MSVLCPlayerVC.xib */; };
+		9CDFFC74228513EE003159A3 /* UIViewController+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDFFC73228513EE003159A3 /* UIViewController+Category.m */; };
+		9CDFFC7722857AEA003159A3 /* MSPhotoBrowserVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDFFC7622857AEA003159A3 /* MSPhotoBrowserVC.m */; };
 		9CF5ED3622599B9D00E136A1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5ED2F22599B9D00E136A1 /* Reachability.m */; };
 		9CF5ED3722599B9D00E136A1 /* AITUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5ED3022599B9D00E136A1 /* AITUtil.m */; };
 		9CF5ED3822599B9D00E136A1 /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5ED3222599B9D00E136A1 /* Toast+UIView.m */; };
@@ -171,13 +174,11 @@
 		9C99467022582BA000AD863F /* NSString+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Category.h"; sourceTree = "<group>"; };
 		9C99467122582BA000AD863F /* NSFileManager+FilePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+FilePath.h"; sourceTree = "<group>"; };
 		9C99467222582BA000AD863F /* UIImageView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Extension.h"; sourceTree = "<group>"; };
-		9C99467322582BA000AD863F /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		9C99467422582BA000AD863F /* UITextField+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Extension.m"; sourceTree = "<group>"; };
 		9C99467522582BA100AD863F /* UIView+UIView_LineEX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+UIView_LineEX.m"; sourceTree = "<group>"; };
 		9C99467722582BA100AD863F /* UIImage+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+GIF.h"; sourceTree = "<group>"; };
 		9C99467822582BA100AD863F /* UIButton+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Extension.h"; sourceTree = "<group>"; };
 		9C99467922582BA100AD863F /* NSString+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Category.m"; sourceTree = "<group>"; };
-		9C99467A22582BA100AD863F /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		9C99467B22582BA200AD863F /* UITextField+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+Extension.h"; sourceTree = "<group>"; };
 		9C99467D22582BA200AD863F /* UIButton+FillColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+FillColor.h"; sourceTree = "<group>"; };
 		9C99467F22582BA200AD863F /* UIImageView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Extension.m"; sourceTree = "<group>"; };
@@ -249,6 +250,13 @@
 		9CDCC77422602BEA00162D9A /* MSLocalFileContentVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSLocalFileContentVC.m; sourceTree = "<group>"; };
 		9CDCC776226036E100162D9A /* NYWaterWaveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NYWaterWaveView.h; sourceTree = "<group>"; };
 		9CDCC777226036E100162D9A /* NYWaterWaveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NYWaterWaveView.m; sourceTree = "<group>"; };
+		9CDFFC6D22850D93003159A3 /* MSVLCPlayerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSVLCPlayerVC.m; sourceTree = "<group>"; };
+		9CDFFC6E22850D93003159A3 /* MSVLCPlayerVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MSVLCPlayerVC.xib; sourceTree = "<group>"; };
+		9CDFFC6F22850D93003159A3 /* MSVLCPlayerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSVLCPlayerVC.h; sourceTree = "<group>"; };
+		9CDFFC72228513EE003159A3 /* UIViewController+Category.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Category.h"; sourceTree = "<group>"; };
+		9CDFFC73228513EE003159A3 /* UIViewController+Category.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Category.m"; sourceTree = "<group>"; };
+		9CDFFC7522857AEA003159A3 /* MSPhotoBrowserVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSPhotoBrowserVC.h; sourceTree = "<group>"; };
+		9CDFFC7622857AEA003159A3 /* MSPhotoBrowserVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSPhotoBrowserVC.m; sourceTree = "<group>"; };
 		9CF5ED2F22599B9D00E136A1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		9CF5ED3022599B9D00E136A1 /* AITUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AITUtil.m; sourceTree = "<group>"; };
 		9CF5ED3122599B9D00E136A1 /* route.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = route.h; sourceTree = "<group>"; };
@@ -428,6 +436,9 @@
 		9C987876225D7AA7009E4C8B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				9CDFFC6F22850D93003159A3 /* MSVLCPlayerVC.h */,
+				9CDFFC6D22850D93003159A3 /* MSVLCPlayerVC.m */,
+				9CDFFC6E22850D93003159A3 /* MSVLCPlayerVC.xib */,
 				9C9F779B2267712200853423 /* CPActionButton.h */,
 				9C9F779C2267712200853423 /* CPActionButton.m */,
 				9C4D7B9E2230B78000B6273E /* MSSDFileLIstVC.h */,
@@ -440,6 +451,8 @@
 				9CDCC77422602BEA00162D9A /* MSLocalFileContentVC.m */,
 				9C23B07C227DD9E8005221FE /* MSMediaListVC.h */,
 				9C23B07D227DD9E8005221FE /* MSMediaListVC.m */,
+				9CDFFC7522857AEA003159A3 /* MSPhotoBrowserVC.h */,
+				9CDFFC7622857AEA003159A3 /* MSPhotoBrowserVC.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -536,8 +549,6 @@
 				9C99468222582BA300AD863F /* NSFileManager+FilePath.m */,
 				9C99467022582BA000AD863F /* NSString+Category.h */,
 				9C99467922582BA100AD863F /* NSString+Category.m */,
-				9C99467A22582BA100AD863F /* NSStringAdditions.h */,
-				9C99467322582BA000AD863F /* NSStringAdditions.m */,
 				9C99467822582BA100AD863F /* UIButton+Extension.h */,
 				9C99468122582BA300AD863F /* UIButton+Extension.m */,
 				9C99467D22582BA200AD863F /* UIButton+FillColor.h */,
@@ -626,6 +637,8 @@
 				9CA174042259EA11008EA36F /* Controller */,
 				9CA174052259EA11008EA36F /* Model */,
 				9CA174062259EA11008EA36F /* View */,
+				9CDFFC72228513EE003159A3 /* UIViewController+Category.h */,
+				9CDFFC73228513EE003159A3 /* UIViewController+Category.m */,
 			);
 			name = Common;
 			path = MStar/Common;
@@ -870,6 +883,7 @@
 				9CDCC75C225F38B200162D9A /* ic_sp_xz@2x.png in Resources */,
 				9CDCC75E225F38B200162D9A /* ic_kt_bf@2x.png in Resources */,
 				9CDCC760225F38B200162D9A /* ic_bf_ks@2x.png in Resources */,
+				9CDFFC7122850D93003159A3 /* MSVLCPlayerVC.xib in Resources */,
 				9CDCC762225F38B200162D9A /* ic_bf_zt@2x.png in Resources */,
 				9C4D7BA52230B87600B6273E /* MSFIleListCell.xib in Resources */,
 				9CDCC75F225F38B200162D9A /* ic_kj_bf@2x.png in Resources */,
@@ -966,8 +980,8 @@
 				9CA17409225A1145008EA36F /* MSFunction.m in Sources */,
 				9C3D7C11227EE55300BCB077 /* MSModifyPwdVC.m in Sources */,
 				9C99469A22582BA600AD863F /* UIButton+FillColor.m in Sources */,
+				9CDFFC7722857AEA003159A3 /* MSPhotoBrowserVC.m in Sources */,
 				9C4D7B922230A08500B6273E /* main.m in Sources */,
-				9C99468D22582BA600AD863F /* NSStringAdditions.m in Sources */,
 				9CDCC767225F38B200162D9A /* VLCPlayerView.m in Sources */,
 				9C99466A225714EE00AD863F /* AppDelegate+Category.m in Sources */,
 				9CDCC778226036E100162D9A /* NYWaterWaveView.m in Sources */,
@@ -983,6 +997,7 @@
 				9CF5ED4D22599C1C00E136A1 /* AITCameraCommand.m in Sources */,
 				9C4D7B842230A08400B6273E /* AppDelegate.m in Sources */,
 				9CDCC76C225F46B500162D9A /* MSLocalFileVC.m in Sources */,
+				9CDFFC7022850D93003159A3 /* MSVLCPlayerVC.m in Sources */,
 				9C99469822582BA600AD863F /* UIImage+Category.m in Sources */,
 				9CA17410225A248B008EA36F /* AITCamMenu.m in Sources */,
 				9C5B241D225B9EBF000DE8D1 /* MSProfileVC.m in Sources */,
@@ -991,6 +1006,7 @@
 				9C4D7BA82230BCCE00B6273E /* MSDownloadView.m in Sources */,
 				9C23B07E227DD9E8005221FE /* MSMediaListVC.m in Sources */,
 				9C4D7BB02230C80700B6273E /* CPPlayerVC.m in Sources */,
+				9CDFFC74228513EE003159A3 /* UIViewController+Category.m in Sources */,
 				9C4D7BA02230B78000B6273E /* MSSDFileLIstVC.m in Sources */,
 				9C4D7BB322310D8900B6273E /* MSSettingVC.m in Sources */,
 			);

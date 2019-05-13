@@ -35,7 +35,7 @@
 "Play" = "播放";
 "Preview" = "預覽";
 "UnknowErorr" = "未知錯誤";
-"DeleteCorfirm" = "確定要刪除檔?";
+"DeleteCorfirm" = "確定要刪除檔案?";
 "DataIsEmpty" = "暫無數據";
 "ClickToRefreshData" = "點擊重繪";
 "WiFiSetting" = "Wi-Fi設定";
@@ -52,7 +52,7 @@
 "PleaseChooseYourAction" = "請選擇您要的操作";
 "Version" = "固件版本號";
 
-"" = "";
+"Video" = "視頻";
 /*************************************** setting menu and item *******************************************/
 "UPSIDEDOWN" = "UPSIDEDOWN";
 "SPOT METER" = "SPOT METER";

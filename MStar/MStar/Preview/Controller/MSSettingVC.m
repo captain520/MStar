@@ -10,11 +10,15 @@
 #import "AITCameraCommand.h"
 #import "AITCameraRequest.h"
 #import "MSSettingActionVC.h"
+#import "MSModifyPwdVC.h"
 
 @interface MSSettingVC ()<AITCameraRequestDelegate>
 @property (nonatomic, strong)  AITCamMenu *currentMenu;
 
 @property (nonatomic, assign) BOOL isRecordingWhenSetting;
+
+@property (nonatomic, strong) NSArray <NSString *> *stationarySettings;
+@property (nonatomic, copy) NSString * FWversion;
 
 @end
 
@@ -60,6 +64,11 @@
 #pragma mark - Initialized properties
 - (void)initailizeBaseProperties {
     self.title = NSLocalizedString(@"Setting", nil);
+    self.stationarySettings = @[
+                                NSLocalizedString(@"WiFiSetting", nil),
+                                NSLocalizedString(@"FormatSDCard", nil),
+                                NSLocalizedString(@"Version", nil)
+                                ];
 }
 #pragma mark - setter && getter method
 #pragma mark - Setup UI
@@ -67,7 +76,6 @@
     
 }
 #pragma mark - Delegate && dataSource method implement
-
 -(void) requestFinished:(NSString*) result
 {
     if ([result hasPrefix:@"0\nOK"]) {
@@ -102,6 +110,36 @@
                                               }];
     }
     
+    //  获取版本号
+    if (nil != self.FWversion) {
+        return;
+    }
+    
+    __weak typeof(self) weakSelf = self;
+
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQuerySettings]
+                                          block:^(NSString *result) {
+                                              [weakSelf handleQuerySettings:result];
+                                          } fail:^(NSError *error) {
+                                          }];
+    
+}
+
+- (void)handleQuerySettings:(NSString *)result {
+    if (NO == [result containsString:@"OK\n"]) {
+        return;
+    }
+    
+    NSArray <NSString *> *cameraMenu = [result componentsSeparatedByString:@"\n"];
+    [cameraMenu enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj containsString:@"Camera.Menu.FWversion="]) {
+            self.FWversion = [obj componentsSeparatedByString:@"="].lastObject;
+            
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+            *stop = YES;
+        }
+    }];
 }
 
 - (void)handleLoadDataBlock:(NSString *)result {
@@ -120,10 +158,14 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (0 == section) {
+        return self.stationarySettings.count;
+    }
+    
     return [MSCamMenuManager manager].curmenu.items.count;
 }
 
@@ -138,16 +180,27 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
-    NSString *key = [MSCamMenuManager manager].cammenu.keyArray[indexPath.row];
-    AITCamMenu *menu = [MSCamMenuManager manager].curmenu.items[key];
-    cell.textLabel.text = NSLocalizedString(menu.title, nil);//menu.title;
-
-    AITCamMenu *child = [menu.items valueForKey:menu.focus];
-    if (child && [child isKindOfClass:[AITCamMenu class]]) {
-        cell.detailTextLabel.text = NSLocalizedString(child.title, nil);//child.title;
+    if (0 == indexPath.section) {
+        cell.textLabel.text = self.stationarySettings[indexPath.row];
+        if (self.FWversion.length > 0 && indexPath.row == 2) {
+            cell.detailTextLabel.text = self.FWversion;
+        } else {
+            cell.detailTextLabel.text = @"";
+        }
     } else {
-        cell.detailTextLabel.text = @"";
+        
+        NSString *key = [MSCamMenuManager manager].cammenu.keyArray[indexPath.row];
+        AITCamMenu *menu = [MSCamMenuManager manager].curmenu.items[key];
+        cell.textLabel.text = NSLocalizedString(menu.title, nil);//menu.title;
+        
+        AITCamMenu *child = [menu.items valueForKey:menu.focus];
+        if (child && [child isKindOfClass:[AITCamMenu class]]) {
+            cell.detailTextLabel.text = NSLocalizedString(child.title, nil);//child.title;
+        } else {
+            cell.detailTextLabel.text = @"";
+        }
     }
+    
 
     return cell;
 }
@@ -163,35 +216,58 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSString *key = [MSCamMenuManager manager].cammenu.keyArray[indexPath.row];
-    AITCamMenu *menu = [MSCamMenuManager manager].curmenu.items[key];
-
-    if ([menu.title isEqualToString:@"SYNC TIME"]) {
-        self.currentMenu = menu;
-        [self setDateTime];
-        return;
+    if (0 == indexPath.section) {
+        switch (indexPath.row) {
+            case 0:
+                [self push2WiFiMaagerVC];
+                break;
+            case 1:
+                [self formatSDCard];
+                break;
+            case 2:
+                
+                break;
+            default:
+                break;
+        }
+    } else {
+        
+        NSString *key = [MSCamMenuManager manager].cammenu.keyArray[indexPath.row];
+        AITCamMenu *menu = [MSCamMenuManager manager].curmenu.items[key];
+        
+        if ([menu.title isEqualToString:@"SYNC TIME"]) {
+            self.currentMenu = menu;
+            [self setDateTime];
+            return;
+        }
+        
+        NSMutableArray <AITCamMenu *> *items = @[].mutableCopy;
+        __block NSInteger currenIndex = 0;
+        
+        [menu.keyArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *objKey = menu.keyArray[idx];
+            AITCamMenu *objMenu = menu.items[objKey];
+            objMenu.parent = menu;
+            if ([objMenu.menuid isEqualToString:menu.focus]) {
+                currenIndex = idx;
+            }
+            
+            [items addObject:objMenu];
+        }];
+        
+        __weak typeof(self) weakSelf = self;
+        
+        MSSettingActionVC *vc = [[MSSettingActionVC alloc] init];
+        vc.dataArray = items;
+        vc.selectedIndex = currenIndex;
+        vc.title = NSLocalizedString(menu.title, nil);
+        vc.selectedActionBlock = ^(AITCamMenu * _Nonnull menuItem) {
+            [weakSelf pickAction:menuItem];
+        };
+        
+        [self.navigationController pushViewController:vc animated:YES];
     }
     
-    NSMutableArray <AITCamMenu *> *items = @[].mutableCopy;
-    
-    [menu.keyArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *objKey = menu.keyArray[idx];
-        AITCamMenu *objMenu = menu.items[objKey];
-        objMenu.parent = menu;
-        
-        [items addObject:objMenu];
-    }];
-    
-     __weak typeof(self) weakSelf = self;
-    
-    MSSettingActionVC *vc = [[MSSettingActionVC alloc] init];
-    vc.dataArray = items;
-    vc.title = NSLocalizedString(menu.title, nil);
-    vc.selectedActionBlock = ^(AITCamMenu * _Nonnull menuItem) {
-        [weakSelf pickAction:menuItem];
-    };
-
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)pickAction:(AITCamMenu *)sender {
@@ -222,6 +298,50 @@
                                               }
                                           } fail:^(NSError *error) {
                                               
+                                          }];
+}
+
+//  wifi设置
+- (void)push2WiFiMaagerVC {
+    
+    MSModifyPwdVC *vc = [MSModifyPwdVC new];
+    vc.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+//  格式化内存卡
+- (void)formatSDCard {
+    __weak typeof(self) weakSelf = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"FormatSDCard", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf handleFormatSDCardAction];
+    }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:confirmAction];
+    
+    [self presentViewController:alertController animated:YES completion:^{
+    }];
+}
+
+- (void)handleFormatSDCardAction {
+    
+    [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
+    [[CPLoadStatusToast shareInstance] show];
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SDFormat" Value:@"capture"]
+                                          block:^(NSString *result) {
+                                              [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
+                                              [[CPLoadStatusToast shareInstance] show];
+                                          } fail:^(NSError *error) {
+                                              [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleFail;
+                                              [[CPLoadStatusToast shareInstance] show];
                                           }];
 }
 

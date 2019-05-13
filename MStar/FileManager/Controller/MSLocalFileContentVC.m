@@ -54,7 +54,7 @@
 - (void)initViewControllers {
     
     MSMediaListVC *videoVC = [[MSMediaListVC alloc] initWithStyle:UITableViewStyleGrouped];
-    videoVC.yp_tabItemTitle = NSLocalizedString(@"NormalVideo", nil);
+    videoVC.yp_tabItemTitle = NSLocalizedString(@"Video", nil);
     videoVC.fileType = W1MFileTypeNormal;
 
     MSMediaListVC *photoVC = [[MSMediaListVC alloc] initWithStyle:UITableViewStyleGrouped];

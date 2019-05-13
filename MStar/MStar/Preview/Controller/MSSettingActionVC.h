@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) void (^selectedActionBlock)(AITCamMenu *menuItem);
 
+@property (nonatomic, assign) NSInteger selectedIndex;
+
 @end
 
 NS_ASSUME_NONNULL_END
