@@ -69,6 +69,8 @@
 		9CA656A722599A3700AB124F /* libc++.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CA656A622599A3700AB124F /* libc++.1.tbd */; };
 		9CA656A922599A4700AB124F /* libz.1.1.3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CA656A822599A4700AB124F /* libz.1.1.3.tbd */; };
 		9CA656AB22599A5000AB124F /* libbz2.1.0.5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CA656AA22599A4F00AB124F /* libbz2.1.0.5.tbd */; };
+		9CAA92AA2295517E0050E2C3 /* MSAboutVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CAA92A92295517E0050E2C3 /* MSAboutVC.m */; };
+		9CAA92AD229554E10050E2C3 /* MSAboutUsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CAA92AC229554E10050E2C3 /* MSAboutUsHeader.m */; };
 		9CDCC746225F38AB00162D9A /* SCVideoMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDCC744225F38AA00162D9A /* SCVideoMainViewController.m */; };
 		9CDCC75B225F38B200162D9A /* ic_jt_bf@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CDCC748225F38B200162D9A /* ic_jt_bf@2x.png */; };
 		9CDCC75C225F38B200162D9A /* ic_sp_xz@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CDCC749225F38B200162D9A /* ic_sp_xz@2x.png */; };
@@ -205,7 +207,6 @@
 		9CA1740E225A248B008EA36F /* AITCamMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AITCamMenu.m; sourceTree = "<group>"; };
 		9CA1740F225A248B008EA36F /* AITCamMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AITCamMenu.h; sourceTree = "<group>"; };
 		9CA6568A225989F300AB124F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
-		9CA6568B225989F300AB124F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		9CA6568F22598A4E00AB124F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		9CA656922259999800AB124F /* MobileVLCKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MobileVLCKit.framework; sourceTree = "<group>"; };
 		9CA65694225999EA00AB124F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -220,6 +221,10 @@
 		9CA656A622599A3700AB124F /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
 		9CA656A822599A4700AB124F /* libz.1.1.3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.1.3.tbd; path = usr/lib/libz.1.1.3.tbd; sourceTree = SDKROOT; };
 		9CA656AA22599A4F00AB124F /* libbz2.1.0.5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.1.0.5.tbd; path = usr/lib/libbz2.1.0.5.tbd; sourceTree = SDKROOT; };
+		9CAA92A82295517E0050E2C3 /* MSAboutVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSAboutVC.h; sourceTree = "<group>"; };
+		9CAA92A92295517E0050E2C3 /* MSAboutVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSAboutVC.m; sourceTree = "<group>"; };
+		9CAA92AB229554E10050E2C3 /* MSAboutUsHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSAboutUsHeader.h; sourceTree = "<group>"; };
+		9CAA92AC229554E10050E2C3 /* MSAboutUsHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSAboutUsHeader.m; sourceTree = "<group>"; };
 		9CDCC744225F38AA00162D9A /* SCVideoMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCVideoMainViewController.m; sourceTree = "<group>"; };
 		9CDCC745225F38AA00162D9A /* SCVideoMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCVideoMainViewController.h; sourceTree = "<group>"; };
 		9CDCC748225F38B200162D9A /* ic_jt_bf@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_jt_bf@2x.png"; sourceTree = "<group>"; };
@@ -405,6 +410,8 @@
 				9C3D7C0E227EE55300BCB077 /* MSModifyPwdVC.h */,
 				9C3D7C0F227EE55300BCB077 /* MSModifyPwdVC.m */,
 				9C3D7C10227EE55300BCB077 /* MSModifyPwdVC.xib */,
+				9CAA92A82295517E0050E2C3 /* MSAboutVC.h */,
+				9CAA92A92295517E0050E2C3 /* MSAboutVC.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -419,6 +426,8 @@
 		9C5B241A225B9EA1000DE8D1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9CAA92AB229554E10050E2C3 /* MSAboutUsHeader.h */,
+				9CAA92AC229554E10050E2C3 /* MSAboutUsHeader.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -986,6 +995,7 @@
 				9C99466A225714EE00AD863F /* AppDelegate+Category.m in Sources */,
 				9CDCC778226036E100162D9A /* NYWaterWaveView.m in Sources */,
 				9CF5ED4622599C0900E136A1 /* GCDAsyncSocket.m in Sources */,
+				9CAA92AA2295517E0050E2C3 /* MSAboutVC.m in Sources */,
 				9CDCC77222602B4D00162D9A /* MSContentVC.m in Sources */,
 				9C99468E22582BA600AD863F /* UITextField+Extension.m in Sources */,
 				9C99468C22582BA600AD863F /* UIImage+GIF.m in Sources */,
@@ -1004,6 +1014,7 @@
 				9C99469922582BA600AD863F /* UIView+Toast.m in Sources */,
 				9CF5ED3622599B9D00E136A1 /* Reachability.m in Sources */,
 				9C4D7BA82230BCCE00B6273E /* MSDownloadView.m in Sources */,
+				9CAA92AD229554E10050E2C3 /* MSAboutUsHeader.m in Sources */,
 				9C23B07E227DD9E8005221FE /* MSMediaListVC.m in Sources */,
 				9C4D7BB02230C80700B6273E /* CPPlayerVC.m in Sources */,
 				9CDFFC74228513EE003159A3 /* UIViewController+Category.m in Sources */,
@@ -1028,7 +1039,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				9C4D7B8E2230A08500B6273E /* Base */,
-				9CA6568B225989F300AB124F /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1167,7 +1177,7 @@
 				CODE_SIGN_ENTITLEMENTS = MStar/MStar.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q6C42F4665;
+				DEVELOPMENT_TEAM = 37XF7678WV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1210,7 +1220,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhizai.Test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.togevision.mstar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1226,7 +1236,7 @@
 				CODE_SIGN_ENTITLEMENTS = MStar/MStar.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q6C42F4665;
+				DEVELOPMENT_TEAM = 37XF7678WV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1268,7 +1278,7 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhizai.Test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.togevision.mstar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;

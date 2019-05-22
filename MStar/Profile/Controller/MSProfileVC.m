@@ -14,6 +14,7 @@
 #import "AITCameraRequest.h"
 #import "CPLoadStatusToast.h"
 #import "MSModifyPwdVC.h"
+#import "MSAboutVC.h"
 
 @interface MSProfileVC ()<AITCameraRequestDelegate> {
 }
@@ -249,7 +250,14 @@
         case 0:
             [self cleanCach];
             break;
+        case 1:
+        {
+            MSAboutVC *vc = [[MSAboutVC alloc] initWithStyle:UITableViewStyleGrouped];
+            vc.hidesBottomBarWhenPushed = YES;
             
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
         default:
             break;
     }
