@@ -42,8 +42,17 @@
             NSString *urlStr = @"http://122.144.137.20:81/2018/12/video/d63797a1912a4f529d8cffab862d8747.mp4";
             self.videoUrl = urlStr;
         }
-//        VLCMedia *media = [VLCMedia mediaWithURL:[NSURL fileURLWithPath:self.videoUrl]];
-        VLCMedia *media = [VLCMedia mediaWithURL:[NSURL URLWithString:self.videoUrl]];
+        
+        NSURL *mediaUrl = nil;
+
+        if ([self.videoUrl hasPrefix:@"http"]) {
+            mediaUrl = [NSURL URLWithString:self.videoUrl];
+        } else {
+            mediaUrl = [NSURL fileURLWithPath:self.videoUrl];
+        }
+        
+        VLCMedia *media = [VLCMedia mediaWithURL:mediaUrl];
+//        VLCMedia *media = [VLCMedia mediaWithURL:[NSURL URLWithString:self.videoUrl]];
 
         _player = [[VLCMediaPlayer alloc] initWithOptions:nil];
         _player.delegate = self;

@@ -230,6 +230,7 @@
     
     MSVLCPlayerVC *vc = [[MSVLCPlayerVC alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
+    vc.videoUrl = path;
     
     [self presentViewController:vc animated:YES completion:nil];
 //    [self.navigationController presentViewController:vc animated:YES completion:nil];

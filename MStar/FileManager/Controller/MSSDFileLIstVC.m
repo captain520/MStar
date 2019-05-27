@@ -453,7 +453,7 @@ typedef enum
 //        SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:url];
 //        vc.hidesBottomBarWhenPushed = YES;
 //        vc.playName = node.name.lastPathComponent;
-//
+        
 //        UIApplication.sharedApplication.keyWindow.rootViewController.hidesBottomBarWhenPushed = YES;
 //
 //        self.navigationController.navigationBarHidden=YES;
