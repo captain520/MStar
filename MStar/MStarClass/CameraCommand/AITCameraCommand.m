@@ -443,6 +443,16 @@ static NSString *CAMERA_SetTIME = @"Camera.Preview.MJPEG.TimeStamp";
 
 }
 
++ (NSURL*) commandFormat
+{
+    NSMutableArray * arguments = [[NSMutableArray alloc] init] ;
+    
+    [arguments addObject: [AITCameraCommand buildProperty:@"SD0" Value:@"format"]] ;
+    
+    return [AITCameraCommand buildRequestUrl:CGI_PATH Action: ACTION_SET ArgumentList: [AITCameraCommand buildArgumentList:arguments]] ;
+    
+}
+
 /*
  * Get cammenu.xml
  * http://AIT.camera.dev/cdv/cammenu.xml

@@ -59,6 +59,7 @@ typedef enum {
 + (NSURL*) commandSetAWB: (NSString*) nsawb;
 //
 + (NSURL*) commandSetDateTime: (NSString *) datetime;
++ (NSURL*) commandFormat;
 //
 + (NSURL*) commandGetCamMenu;
 

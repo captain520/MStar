@@ -52,6 +52,8 @@ static bool cam_front = YES;
 
 @property (nonatomic, assign) CGSize videoSize;
 
+@property (nonatomic, copy) NSString * dateStr;
+
 @end
 
 @implementation MSPreviewVC
@@ -65,6 +67,11 @@ static bool cam_front = YES;
     NSString *networkcache;
 }
 
+unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsigned char day,unsigned char hour,unsigned char min,unsigned char second)
+{
+    return (((year^month) + day&hour)^min)+second;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -73,6 +80,12 @@ static bool cam_front = YES;
     [self initailizeBaseProperties];
     [self setupUI];
     [self flickRecodeLight];
+
+    char a = TogevisionCRC(19, 6, 26, 8, 8, 8);
+    
+    NSLog(@"%d",a);
+    
+    NSLog(@"");
 }
 
 - (void)didReceiveMemoryWarning
@@ -92,9 +105,30 @@ static bool cam_front = YES;
     //    [self syncDate];
     //    [self sendRecordCommand];
     
+    if (cameraRecording == NO) {
+        [self recorderAction:nil];
+    }
+
     self.hasAppear = YES;
 
     [self reloadPlayer];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    if (cameraRecording == YES) {
+        [self recorderAction:nil];
+    }
+    
+    self.hasAppear = NO;
+    
+    [mediaPlayer stop];
 }
 
 - (void)reloadPlayer {
@@ -111,29 +145,18 @@ static bool cam_front = YES;
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     NSLog(@"viewWillDisappear");
 
-    if (YES == cameraRecording) {
-        [mediaPlayer stop];
-    } else {
-        
-    }
+//    if (YES == cameraRecording) {
+//        [mediaPlayer stop];
+//    } else {
+//
+//    }
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    
-    self.hasAppear = NO;
-}
 
 #pragma mark - Initialized properties
 - (void)initailizeBaseProperties
@@ -411,6 +434,7 @@ static bool cam_front = YES;
             //            liveurl = [NSString stringWithFormat:@"rtsp://%@%@", [AITUtil getCameraAddress], DEFAULT_RTSP_URL_V1];
             self.fullScreenBT.hidden = NO;
             
+            liveurl = [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], DEFAULT_RTSP_URL_V1];
             NSLog(@"MRL = %@", liveurl);
             VLCMedia *media = [VLCMedia mediaWithURL:[NSURL URLWithString:liveurl]];
             media.delegate = self;
@@ -734,6 +758,8 @@ static bool cam_front = YES;
         networkcache = NETWORK_CACHE_MJPG;
         liveurl = [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], DEFAULT_MJPEG_PUSH_URL];
     }
+    
+//    liveurl = [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], DEFAULT_RTSP_URL_V1];
     // Check is recording or idle
     if (![recording caseInsensitiveCompare:@"Recording"]) {
         cameraRecording = YES;
@@ -799,17 +825,71 @@ static bool cam_front = YES;
 - (void)syncDate:(void (^)(void))block {
     
     NSDate *date = [NSDate date];
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"yyyy$MM$dd$HH$mm$ss"];
     NSString *dateStr = [formatter stringFromDate:date];
     
+
+    NSDateFormatter *formatter1 = [[NSDateFormatter alloc]init];
+    [formatter1 setDateFormat:@"yy-MM-dd-HH-mm-ss"];
+    self.dateStr = [formatter1 stringFromDate:date];
+
+     __weak typeof(self) weakSelf = self;
 //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetDateTime:dateStr] Delegate:nil];
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetDateTime:dateStr]
                                           block:^(NSString *result) {
-                                              !block ? : block();
+                                              if ([result containsString:@"OK"]) {
+                                                  [weakSelf getFwVersion:block];
+                                              } else {
+                                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                      [weakSelf syncDate:block];
+                                                  });
+                                              }
                                           } fail:^(NSError *error) {
-                                              !block ? : block();
+                                              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                  [weakSelf syncDate:block];
+                                              });
                                           }];
+}
+
+- (void)getFwVersion:(void (^)(void))block {
+    
+    __weak typeof(self) weakSelf = self;
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQuerySettings]
+                                          block:^(NSString *result) {
+                                              [weakSelf handleQuerySettings:result block:block];
+                                          } fail:^(NSError *error) {
+                                          }];
+}
+
+- (void)handleQuerySettings:(NSString *)result block:(void (^)(void))block {
+    if (NO == [result containsString:@"OK\n"]) {
+        return;
+    }
+    
+    NSArray <NSString *> *cameraMenu = [result componentsSeparatedByString:@"\n"];
+    [cameraMenu enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj containsString:@"Camera.Menu.FWversion="]) {
+            NSString *fwversion = [obj componentsSeparatedByString:@"="].lastObject;
+            NSLog(@"---- fwversion ------%@",fwversion);
+            
+            NSString *encrypByte = [fwversion componentsSeparatedByString:@"-"].lastObject;
+            
+            NSArray *dateStrs = [self.dateStr componentsSeparatedByString:@"-"];
+            
+            int ret = TogevisionCRC([dateStrs[0] intValue], [dateStrs[1] intValue], [dateStrs[2] intValue], [dateStrs[3] intValue], [dateStrs[4] intValue], [dateStrs[5] intValue]);
+
+            if (ret == encrypByte.intValue) {
+                NSLog(@"是自己的设备%d",ret);
+                !block ? : block();
+            } else {
+                NSLog(@"不是自己的设备%d",ret);
+            }
+            
+        }
+    }];
 }
 
 - (void)applicationWillResignActive:(NSNotification *)application
@@ -854,5 +934,7 @@ static bool cam_front = YES;
     path = [path stringByAppendingPathComponent:@"Snapshot.png"];
     [mediaPlayer saveVideoSnapshotAt:path withWidth:SCREENWIDTH andHeight:(SCREENWIDTH * 480. / 720)];
 }
+
+
 
 @end

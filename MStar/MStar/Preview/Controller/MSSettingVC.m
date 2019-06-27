@@ -335,7 +335,9 @@
     [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
     [[CPLoadStatusToast shareInstance] show];
     
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SDFormat" Value:@"capture"]
+//    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SDFormat" Value:@"capture"]
+//    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SD0" Value:@"format"]
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"FactoryReset" Value:@"Camera"]
                                           block:^(NSString *result) {
                                               [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
                                               [[CPLoadStatusToast shareInstance] show];
@@ -343,6 +345,7 @@
                                               [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleFail;
                                               [[CPLoadStatusToast shareInstance] show];
                                           }];
+    
 }
 
 @end
