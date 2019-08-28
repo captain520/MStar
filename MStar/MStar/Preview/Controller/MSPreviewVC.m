@@ -67,7 +67,7 @@ static bool cam_front = YES;
     NSString *networkcache;
 }
 
-unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsigned char day,unsigned char hour,unsigned char min,unsigned char second)
+static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsigned char day,unsigned char hour,unsigned char min,unsigned char second)
 {
     return (((year^month) + day&hour)^min)+second;
 }
@@ -228,7 +228,8 @@ unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsigned char
 #pragma mark - Setup UI
 - (void)setupUI
 {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SwitchCameral"] style:UIBarButtonItemStylePlain target:self action:@selector(switchCameralAction:)];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SwitchCameral"] style:UIBarButtonItemStylePlain target:self action:@selector(switchCameralAction:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"] style:UIBarButtonItemStylePlain target:self action:@selector(backAction:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"setting"] style:UIBarButtonItemStylePlain target:self action:@selector(settingAction:)];
     
     if (nil == self.playImageView) {
@@ -249,32 +250,35 @@ unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsigned char
     {
         self.recordBT = [UIButton new];
         self.recordBT.backgroundColor = UIColor.groupTableViewBackgroundColor;
-        self.recordBT.layer.cornerRadius = 30.0f;
+        self.recordBT.layer.cornerRadius = 45.0f;
         
         [self.view addSubview:self.recordBT];
         [self.recordBT setImage:[UIImage imageNamed:@"录像"] forState:UIControlStateSelected];
         [self.recordBT setImage:[UIImage imageNamed:@"已停止"] forState:UIControlStateNormal];
         [self.recordBT addTarget:self action:@selector(recorderAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.recordBT mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(400);
-            make.left.mas_equalTo(32);
-            make.size.mas_equalTo(CGSizeMake(60, 60));
+            make.top.mas_equalTo(400 + 100);
+//            make.left.mas_equalTo(32);
+            make.centerX.mas_equalTo(0);
+            make.size.mas_equalTo(CGSizeMake(90, 90));
         }];
         
         self.previewBT = [UIButton new];
-        self.previewBT.backgroundColor = UIColor.groupTableViewBackgroundColor;
-        self.previewBT.layer.cornerRadius = 50.0f;
-        self.previewBT.hidden = YES;
+//        self.previewBT.backgroundColor = UIColor.groupTableViewBackgroundColor;
+//        self.previewBT.layer.cornerRadius = 30.0f;
+//        self.previewBT.hidden = YES;
         
         [self.view addSubview:self.previewBT];
-        [self.previewBT setImage:[UIImage imageNamed:@"视频"] forState:UIControlStateNormal];
-        [self.previewBT setImage:[UIImage imageNamed:@"停止"] forState:UIControlStateSelected];
-        [self.previewBT addTarget:self action:@selector(previewAction:) forControlEvents:UIControlEventTouchUpInside];
+        //SwitchCameral
+        [self.previewBT setImage:[UIImage imageNamed:@"切换前后镜头"] forState:UIControlStateNormal];
+//        [self.previewBT setImage:[UIImage imageNamed:@"视频"] forState:UIControlStateNormal];
+//        [self.previewBT setImage:[UIImage imageNamed:@"停止"] forState:UIControlStateSelected];
+        [self.previewBT addTarget:self action:@selector(switchCameralAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.previewBT mas_makeConstraints:^(MASConstraintMaker *make) {
-            //            make.top.mas_equalTo(300);
-            make.size.mas_equalTo(CGSizeMake(100, 100));
-            make.centerX.mas_equalTo(0);
-            make.centerY.mas_equalTo(self.recordBT.mas_centerY);
+            make.top.mas_equalTo(400);
+            make.left.mas_equalTo(32);
+//            make.size.mas_equalTo(CGSizeMake(60, 60));
+            make.width.mas_equalTo(60);
         }];
         
         self.shotBT = [UIButton new];
@@ -523,6 +527,8 @@ unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsigned char
         [mediaPlayer stop];
         NSLog(@"cameraSwitchClick");
         
+        
+        self.playImageView.image = nil;
 
         camera_cmd = CAMERA_CMD_CAMID;
         
@@ -553,7 +559,7 @@ unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsigned char
 - (void)handleSwitchBlock:(NSString *)result {
     
     if (result && [result containsString:@"OK\n"]) {
-        
+
         [UIView transitionWithView:self.playImageView
                           duration:1.0f
                            options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
@@ -573,11 +579,17 @@ unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsigned char
     
     if (liveurl.length > 0) {
         
-        MSSettingVC *vc = [[MSSettingVC alloc] initWithStyle:UITableViewStyleGrouped];
-        vc.hidesBottomBarWhenPushed = YES;
-        vc.isRecording = cameraRecording;
-        
-        [self.navigationController pushViewController:vc animated:YES];
+        [self stopRecord:^(BOOL isRecording) {
+            if (NO == isRecording) {
+                MSSettingVC *vc = [[MSSettingVC alloc] initWithStyle:UITableViewStyleGrouped];
+                vc.hidesBottomBarWhenPushed = YES;
+                vc.isRecording = NO;
+                
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+            
+        }];
+
         
     } else {
         [self.view makeToast:NSLocalizedString(@"ConnectTheDeviceWIFI", nil) duration:1. position:CSToastPositionCenter];
@@ -648,11 +660,41 @@ unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsigned char
 }
 
 - (void)handleRecordActionBlock:(NSString *)result {
-    if (NO == [result containsString:@"OK\n"]) {
+    
+//    NSLog(@"**********%@",result);
+//
+//    if (NO == [result containsString:@"OK\n"]) {
+//        return;
+//    }
+//
+//    cameraRecording = !cameraRecording;
+    
+
+    __weak typeof(self) weakSelf = self;
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQueryPreviewStatusUrl]
+                                          block:^(NSString *result) {
+                                              [weakSelf queryRecordState:result];
+                                          } fail:^(NSError *error) {
+                                              
+                                          }];
+
+}
+
+- (void)queryRecordState:(NSString *)result {
+    
+    if ([result containsString:@"OK\n"] == NO) {
         return;
     }
     
-    cameraRecording = !cameraRecording;
+    NSDictionary *dict = [AITCameraCommand buildResultDictionary:result];
+    NSString *recording = [dict objectForKey:[AITCameraCommand PROPERTY_QUERY_RECORD]];
+    
+    if (![recording caseInsensitiveCompare:@"Recording"]) {
+        cameraRecording = YES;
+    } else {
+        cameraRecording = NO;
+    }
 }
 
 
@@ -932,9 +974,68 @@ unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsigned char
 - (void)mediaSnapshot {
     NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject;
     path = [path stringByAppendingPathComponent:@"Snapshot.png"];
-    [mediaPlayer saveVideoSnapshotAt:path withWidth:SCREENWIDTH andHeight:(SCREENWIDTH * 480. / 720)];
+    
+//    [mediaPlayer saveVideoSnapshotAt:path withWidth:SCREENWIDTH andHeight:(SCREENWIDTH * 480. / 720)];
 }
 
+- (void)backAction:(id)sender {
+    [self.parentViewController.navigationController popToRootViewControllerAnimated:YES];
+}
 
+- (void)stopRecord:(void (^)(BOOL isRecording))block {
+    
+    __weak typeof(self) weakSelf = self;
+    
+    //  查询录制状态
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQueryPreviewStatusUrl]
+                                          block:^(NSString *result) {
+                                              [weakSelf getRecordStateWith:result block:block];
+                                          } fail:^(NSError *error) {
+                                              !block ? : block(YES);
+                                          }];
+}
+
+- (void)getRecordStateWith:(NSString *)result block:(void (^)(BOOL isRecording))block {
+    
+    if ([result containsString:@"OK\n"] == NO) {
+        return;
+    }
+    
+    NSDictionary *dict = [AITCameraCommand buildResultDictionary:result];
+    NSString *recording = [dict objectForKey:[AITCameraCommand PROPERTY_QUERY_RECORD]];
+    
+    if (![recording caseInsensitiveCompare:@"Recording"]) {
+        cameraRecording = YES;
+    } else {
+        cameraRecording = NO;
+    }
+    
+    if ( YES == cameraRecording) {
+        [self stop:block];
+    } else {
+        !block ? : block(NO);
+    }
+}
+
+- (void)stop:(void (^)(BOOL isRecording))block {
+    
+    __weak typeof(self) weakSelf = self;
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl]
+                                          block:^(NSString *result) {
+                                              
+                                              sleep(1);
+                                              [weakSelf stopRecord:block];
+//                                              [weakSelf performSelector:@selector(stopRecord:) withObject:nil afterDelay:1];
+//                                              if ([result containsString:@"OK"]) {
+////                                                  !block ? : block(NO);
+//                                              } else {
+////                                                  !block ? : block(YES);
+//                                              }
+                                          } fail:^(NSError *error) {
+                                              !block ? : block(YES);
+                                          }];
+}
 
 @end

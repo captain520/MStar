@@ -44,7 +44,6 @@
 #define StatusHeight          [UIApplication sharedApplication].statusBarFrame.size.height//20
 #define NAV_HEIGHT            (44.0f + StatusHeight)
 
-
 typedef enum {
     CAMERA_CMD_SNAPSHOT,
     CAMERA_CMD_RECORD,
@@ -55,5 +54,11 @@ typedef enum {
     CAMERA_CMD_INVALIDni,
     CAMERA_CMD_CAMMENU
 } Camera_cmd_t;
+
+
+/**************************************** Key *****************************************/
+
+#define MSDEVICE_WIFI_NAME_KEY_STRING       @"MSDEVICE_WIFI_KEY_STRING"
+#define MSDEVICE_WIFI_PASSWD_KEY_STRING     @"MSDEVICE_WIFI_PASSWD_KEY_STRING"
 
 #endif /* PrefixHeader_pch */

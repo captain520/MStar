@@ -40,7 +40,7 @@
     
     self.nameLB = [UILabel new];
     self.nameLB.font = [UIFont boldSystemFontOfSize:20];
-    self.nameLB.text = @"M-Star";
+    self.nameLB.text = @"iCarEyes";
     [self.contentView addSubview:self.nameLB];
     [self.nameLB mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(0);

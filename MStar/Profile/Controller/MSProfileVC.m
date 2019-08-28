@@ -54,6 +54,8 @@
 //  初始化相关数据
 - (void)initializedBaseProperties {
 //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandWifiInfoUrl] Delegate:self] ;
+    
+    self.title = NSLocalizedString(@"Profile", nil);
 }
 
 - (void)dealloc {

@@ -109,18 +109,21 @@
             NSLog(@"Paused");
             [self.playPauseButton setImage:[UIImage imageNamed:@"播放按钮"] forState:UIControlStateNormal];
             [self showTool];
+            [[CPLoadStatusToast shareInstance] dimiss];
         }
             break;
         case VLCMediaPlayerStateStopped: {
             NSLog(@"Stoped");
             [self.playPauseButton setImage:[UIImage imageNamed:@"播放按钮"] forState:UIControlStateNormal];
             [self showTool];
+            [[CPLoadStatusToast shareInstance] dimiss];
         }
             break;
         case VLCMediaPlayerStateEnded: {
             NSLog(@"playing");
             [self.playPauseButton setImage:[UIImage imageNamed:@"播放按钮"] forState:UIControlStateNormal];
             [self showTool];
+            [[CPLoadStatusToast shareInstance] dimiss];
         }
             break;
         case VLCMediaPlayerStatePlaying: {
@@ -128,12 +131,21 @@
             [self.playPauseButton setImage:[UIImage imageNamed:@"暂停按钮"] forState:UIControlStateNormal];
 //            [self performSelector:@selector(showTool) withObject:nil afterDelay:3];
             [self showTool];
+            [[CPLoadStatusToast shareInstance] dimiss];
         }
             break;
         case VLCMediaPlayerStateError: {
             [self.playPauseButton setImage:[UIImage imageNamed:@"播放按钮"] forState:UIControlStateNormal];
             NSLog(@"error");
             [self showTool];
+            [[CPLoadStatusToast shareInstance] dimiss];
+        }
+            break;
+            
+        case VLCMediaPlayerStateBuffering: {
+            NSLog(@"6666666666");
+//            [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
+//            [[CPLoadStatusToast shareInstance] show];
         }
             break;
         default:

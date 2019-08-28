@@ -269,6 +269,12 @@
 
 - (void)deleteFileAt:(NSIndexPath *)indexPath {
     
+    NSString *fileName = [self.dataArray objectAtIndex:indexPath.row];
+    NSString *directory = [self filePathOf:self.fileType];
+    NSString *filePath = [directory stringByAppendingPathComponent:fileName];
+
+    [self.fileManager removeItemAtPath:filePath error:nil];
+
     [self.dataArray removeObjectAtIndex:indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
     

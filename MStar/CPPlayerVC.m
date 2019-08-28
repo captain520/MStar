@@ -44,7 +44,7 @@
     // Do any additional setup after loading the view.
     
     self.view.backgroundColor = UIColor.blackColor;
-//    [self setupUI];
+    //    [self setupUI];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
 }
@@ -67,7 +67,7 @@
     [super viewDidAppear:animated];
     
     [self setupUI];
-
+    
     [self autoDimiss];
     
     [self flickRecodeLight];
@@ -94,12 +94,12 @@
 
 - (void)setupUI {
     
-
+    
     if ( nil == self.playImageView ) {
         self.playImageView = [UIImageView new];
         self.playImageView.backgroundColor = UIColor.blackColor;
         self.playImageView.contentMode = UIViewContentModeScaleToFill;
-
+        
         [self.view addSubview:self.playImageView];
         [self.playImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(0);
@@ -109,7 +109,7 @@
         }];
     }
     
-
+    
     self.playerView = [UIView new];
     self.playerView.backgroundColor = [UIColor clearColor];
     
@@ -134,15 +134,15 @@
     [mediaPlayer setMedia:media];
     [mediaPlayer play];
     
-//    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
-//    self.playerLayer.frame = self.playerView.bounds;
-//    [self.playerView.layer addSublayer:self.playerLayer];
+    //    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
+    //    self.playerLayer.frame = self.playerView.bounds;
+    //    [self.playerView.layer addSublayer:self.playerLayer];
     
     {
         self.backBt = [UIButton new];
         self.backBt.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-//        self.backBt.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.5f];
-
+        //        self.backBt.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.5f];
+        
         [self.playerView addSubview:self.backBt];
         [self.backBt setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
         [self.backBt setTitle:@"" forState:UIControlStateNormal];
@@ -156,7 +156,7 @@
             make.right.mas_equalTo(0);
             make.height.mas_equalTo(60);
         }];
-
+        
         self.redRecrodLight = [UIButton new];
         
         [self.redRecrodLight setTitleColor:UIColor.redColor forState:UIControlStateNormal];
@@ -186,7 +186,7 @@
         
         UIButton *shotBt = [UIButton new];
         [shotBt setImage:[UIImage imageNamed:@"拍照白色"] forState:UIControlStateNormal];
-//        shotBt.backgroundColor = UIColor.purpleColor;
+        //        shotBt.backgroundColor = UIColor.purpleColor;
         [self.actionView addSubview:shotBt];
         [shotBt addTarget:self action:@selector(shotAction:) forControlEvents:UIControlEventTouchUpInside];
         [shotBt mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -194,11 +194,11 @@
             make.right.mas_equalTo(-14);
             make.height.mas_equalTo(shotBt.mas_width).multipliedBy(172./196);;
             make.centerY.mas_equalTo(60);
-//            make.bottom.mas_equalTo(-16 * 3);
+            //            make.bottom.mas_equalTo(-16 * 3);
         }];
         
         UIButton *recordBt = [UIButton new];
-//        recordBt.backgroundColor = UIColor.purpleColor;
+        //        recordBt.backgroundColor = UIColor.purpleColor;
         [recordBt setImage:[UIImage imageNamed:@"录像白色"] forState:UIControlStateNormal];
         [recordBt setImage:[UIImage imageNamed:@"已停止白色"] forState:UIControlStateSelected];
         [recordBt addTarget:self action:@selector(recorderAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -208,10 +208,10 @@
             make.left.mas_equalTo(12);
             make.right.mas_equalTo(-12);
             make.height.mas_equalTo(recordBt.mas_width);
-//            make.bottom.mas_equalTo(shotBt.mas_top).offset(-16 * 3);
+            //            make.bottom.mas_equalTo(shotBt.mas_top).offset(-16 * 3);
             make.centerY.mas_equalTo(-60);
         }];
-
+        
     }
     
     if (nil == self.splashView) {
@@ -299,7 +299,7 @@
 - (void)showTool {
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showTool) object:nil];
-
+    
     [UIView animateWithDuration:.5 animations:^{
         
         [self.backBt mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -315,7 +315,7 @@
             make.bottom.mas_equalTo(0);
             make.width.mas_equalTo(80);
         }];
-
+        
         [self.view layoutIfNeeded];
         
     } completion:^(BOOL finished) {
@@ -334,7 +334,7 @@
     } else {
         self.redRecrodLight.hidden = !self.redRecrodLight.hidden;
     }
-
+    
     [self performSelector:@selector(flickRecodeLight) withObject:nil afterDelay:1];
 }
 
@@ -348,8 +348,8 @@
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskLandscapeRight | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskPortrait;
-//    return (1 << UIInterfaceOrientationPortrait) | (1 << UIInterfaceOrientationPortraitUpsideDown)
-//    | (1 << UIInterfaceOrientationLandscapeRight) | (1 << UIInterfaceOrientationLandscapeLeft);
+    //    return (1 << UIInterfaceOrientationPortrait) | (1 << UIInterfaceOrientationPortraitUpsideDown)
+    //    | (1 << UIInterfaceOrientationLandscapeRight) | (1 << UIInterfaceOrientationLandscapeLeft);
 }
 
 - (void)shotAction:(id)sender
@@ -359,19 +359,19 @@
     
     [UIView animateWithDuration:.1 animations:^{
         self.splashView.alpha = 1;
-//        self.view.alpha = 0;
+        //        self.view.alpha = 0;
     } completion:^(BOOL finished) {
-//        self.view.alpha = 1;
+        //        self.view.alpha = 1;
         self.splashView.alpha = 0;
     }];
-
+    
 }
 
 - (void)recorderAction:(UIButton *)sender
 {
-//    camera_cmd = CAMERA_CMD_RECORD;
-//    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self];
-//}
+    //    camera_cmd = CAMERA_CMD_RECORD;
+    //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self];
+    //}
     sender.selected = !sender.selected;
     
     __weak typeof(self) weakSelf = self;
@@ -401,21 +401,21 @@
     switch (camera_cmd) {
         case CAMERA_CMD_RECORD:
             if (result == nil || result.length == 0) {
-//                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
+                //                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
                 return;
             }
             
             if ([result containsString:@"OK"]) {
-//                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
+                //                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
                 cameraRecording = !cameraRecording;
             }
             break;
         case CAMERA_CMD_SNAPSHOT: {
             if (result == nil || result.length == 0) {
-//                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
+                //                [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0 position:CSToastPositionCenter];
                 return;
             } else {
-//                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
+                //                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
                 [self photosound];
             }
             NSLog(@"");
@@ -426,6 +426,47 @@
             break;
     }
 }
+
+- (void)mediaPlayerStateChanged:(NSNotification *)aNotification
+{
+    switch (mediaPlayer.state) {
+        case VLCMediaPlayerStatePaused:
+            NSLog(@"1111111111");
+            [[CPLoadStatusToast shareInstance] dimiss];
+            break;
+        case VLCMediaPlayerStateStopped: {
+            NSLog(@"2222222222");
+            [[CPLoadStatusToast shareInstance] dimiss];
+        }
+            break;
+        case VLCMediaPlayerStateEnded:
+        {
+            NSLog(@"3333333333");
+            [[CPLoadStatusToast shareInstance] dimiss];
+        }
+            break;
+        case VLCMediaPlayerStatePlaying: {
+            NSLog(@"4444444444");
+            [[CPLoadStatusToast shareInstance] dimiss];
+            break;
+        case VLCMediaPlayerStateError: {
+            NSLog(@"5555555555");
+            [[CPLoadStatusToast shareInstance] dimiss];
+        }
+            break;
+            
+        case VLCMediaPlayerStateBuffering: {
+            NSLog(@"6666666666");
+//            [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
+//            [[CPLoadStatusToast shareInstance] show];
+        }
+            break;
+        default:
+            break;
+        }
+    }
+}
+
 
 - (void)photosound
 {

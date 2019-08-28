@@ -11,6 +11,8 @@
 
 @interface MSAboutVC ()
 
+@property (nonatomic, strong) UILabel *rightLB;
+
 @end
 
 @implementation MSAboutVC
@@ -20,17 +22,57 @@
     // Do any additional setup after loading the view.
     
     [self initailizeBaseProperties];
+    [self setupUI];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    
+    [super viewDidAppear:animated];
+    
+    [self setupUI];
 }
 
 #pragma mark - Initialized properties
 - (void)initailizeBaseProperties {
     self.tableView.backgroundColor = UIColor.whiteColor;
+    self.title = NSLocalizedString(@"AboutUs", nil);
 }
 #pragma mark - setter && getter method
 #pragma mark - Setup UI
 - (void)setupUI {
     
+    if (nil == self.rightLB) {
+        self.rightLB = [UILabel new];
+        self.rightLB.textColor = C66;
+        self.rightLB.font = [UIFont systemFontOfSize:15.0f];
+        self.rightLB.frame = CGRectMake(0, SCREENHEIGHT - 100 - NAV_HEIGHT, SCREENWIDTH, 100);
+        self.rightLB.numberOfLines = 0;
+
+        [self.tableView addSubview:self.rightLB];
+
+        self.rightLB.attributedText = [self rightAttr];
+//        self.rightLB.backgroundColor = UIColor.redColor;
+    }
 }
+
+- (NSAttributedString *)rightAttr {
+    
+    NSMutableParagraphStyle *p = [[NSMutableParagraphStyle alloc] init];
+    p.alignment = NSTextAlignmentCenter;
+    p.lineSpacing = 5.0f;
+    
+    NSString *topStr = @"深圳市泰合唯信科技有限公司 版权所有\n";
+    NSString *tailStr = @"CopyRight 2015-2019 Togevision.All Rights Reserved";
+    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:topStr attributes:nil];
+    NSAttributedString *attr0 = [[NSAttributedString alloc] initWithString:tailStr attributes:nil];
+    
+    [attr appendAttributedString:attr0];
+    [attr addAttribute:NSParagraphStyleAttributeName value:p range:NSMakeRange(0, attr.length)];
+
+    return attr;
+
+}
+
 #pragma mark - Delegate && dataSource method implement
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -66,11 +108,10 @@
     
     switch (indexPath.row) {
         case 0:
-//            cell.textLabel.text = @"去评分";
-            cell.textLabel.text = @"Version";
+            cell.textLabel.text = NSLocalizedString(@"SoftVersion", nil);
             break;
         case 1:
-            cell.textLabel.text = @"Version";
+            cell.textLabel.text = NSLocalizedString(@"SoftVersion", nil);
             break;
         default:
             break;

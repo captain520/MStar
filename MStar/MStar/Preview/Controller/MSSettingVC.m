@@ -44,21 +44,23 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (self.isRecording == YES) {
-        [self sendRecordCommand:^{
-            self.isRecordingWhenSetting = NO;
-        }];
-    }
+//    if (self.isRecording == YES) {
+//
+//        [self sendRecordCommand:^{
+//            self.isRecordingWhenSetting = NO;
+//        }];
+//    }
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (self.isRecordingWhenSetting != self.isRecording) {
-        [self sendRecordCommand:^{
-//            self.isRecordingWhenSetting = YES;
-        }];
-    }
+//    if (self.isRecordingWhenSetting != self.isRecording) {
+//        [self sendRecordCommand:^{
+//            //            self.isRecordingWhenSetting = YES;
+//        }];
+//    }
 }
 
 #pragma mark - Initialized properties
@@ -67,6 +69,7 @@
     self.stationarySettings = @[
                                 NSLocalizedString(@"WiFiSetting", nil),
                                 NSLocalizedString(@"FormatSDCard", nil),
+                                NSLocalizedString(@"FactoryReset", nil),
                                 NSLocalizedString(@"Version", nil)
                                 ];
 }
@@ -116,7 +119,7 @@
     }
     
     __weak typeof(self) weakSelf = self;
-
+    
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQuerySettings]
                                           block:^(NSString *result) {
                                               [weakSelf handleQuerySettings:result];
@@ -146,9 +149,9 @@
     if (result.length < 20) {
         return;
     }
-
+    
     [[MSCamMenuManager manager] LoadCamMenuXMLDoc:result];
-
+    
     [self.tableView reloadData];
 }
 
@@ -171,7 +174,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
     // Configure the cell...
@@ -182,8 +185,8 @@
     
     if (0 == indexPath.section) {
         cell.textLabel.text = self.stationarySettings[indexPath.row];
-        if (self.FWversion.length > 0 && indexPath.row == 2) {
-            cell.detailTextLabel.text = self.FWversion;
+        if (self.FWversion.length > 0 && indexPath.row == 3) {
+            cell.detailTextLabel.text = [self.FWversion stringByDeletingPathExtension];
         } else {
             cell.detailTextLabel.text = @"";
         }
@@ -201,7 +204,7 @@
         }
     }
     
-
+    
     return cell;
 }
 
@@ -225,7 +228,9 @@
                 [self formatSDCard];
                 break;
             case 2:
-                
+                [self factoryReset];
+                break;
+            case 3:
                 break;
             default:
                 break;
@@ -330,13 +335,53 @@
     }];
 }
 
+//  恢复出厂设置
+- (void)factoryReset {
+    __weak typeof(self) weakSelf = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"FactoryReset", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf handleFactoryResetAction];
+    }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:confirmAction];
+    
+    [self presentViewController:alertController animated:YES completion:^{
+    }];
+}
+
 - (void)handleFormatSDCardAction {
     
     [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
     [[CPLoadStatusToast shareInstance] show];
     
-//    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SDFormat" Value:@"capture"]
-//    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SD0" Value:@"format"]
+    //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SDFormat" Value:@"capture"]
+    //  格式化
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SD0" Value:@"format"]
+           //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"FactoryReset" Value:@"Camera"]
+                                          block:^(NSString *result) {
+                                              [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
+                                              [[CPLoadStatusToast shareInstance] show];
+                                          } fail:^(NSError *error) {
+                                              [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleFail;
+                                              [[CPLoadStatusToast shareInstance] show];
+                                          }];
+    
+}
+
+- (void)handleFactoryResetAction {
+    
+    [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
+    [[CPLoadStatusToast shareInstance] show];
+    
+    //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SDFormat" Value:@"capture"]
+    //  格式化
+    //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SD0" Value:@"format"]
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"FactoryReset" Value:@"Camera"]
                                           block:^(NSString *result) {
                                               [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
