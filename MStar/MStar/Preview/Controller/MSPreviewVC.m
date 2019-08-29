@@ -1024,15 +1024,8 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
     
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl]
                                           block:^(NSString *result) {
-                                              
-                                              sleep(1);
+                                              sleep(.25);
                                               [weakSelf stopRecord:block];
-//                                              [weakSelf performSelector:@selector(stopRecord:) withObject:nil afterDelay:1];
-//                                              if ([result containsString:@"OK"]) {
-////                                                  !block ? : block(NO);
-//                                              } else {
-////                                                  !block ? : block(YES);
-//                                              }
                                           } fail:^(NSError *error) {
                                               !block ? : block(YES);
                                           }];

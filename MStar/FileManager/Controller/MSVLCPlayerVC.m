@@ -9,10 +9,15 @@
 #import "MSVLCPlayerVC.h"
 #import <MobileVLCKit/MobileVLCKit.h>
 #import "UIImage+Category.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface MSVLCPlayerVC ()<VLCMediaPlayerDelegate>
 
 @property (nonatomic, strong) VLCMediaPlayer *player;
+
+@property (nonatomic,strong)AVPlayer *avPlayer;//播放器对象
+@property (nonatomic,strong)AVPlayerItem *currentPlayerItem;
+@property (nonatomic,strong)AVPlayerLayer *avLayer;
 
 @end
 
@@ -34,6 +39,27 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 #pragma mark - setter && getter method
+
+- (AVPlayer *)avPlayer {
+    
+    if (nil == _avPlayer) {
+        NSURL *itemUrl = [NSURL fileURLWithPath:self.videoUrl];
+        self.currentPlayerItem = [[AVPlayerItem alloc] initWithURL:itemUrl];
+        
+        _avPlayer = [[AVPlayer alloc] initWithPlayerItem:self.currentPlayerItem];
+        
+        self.avLayer = [AVPlayerLayer playerLayerWithPlayer:_avPlayer];
+        self.avLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+        
+        [self.view.layer addSublayer:self.avLayer];
+        
+        [self.currentPlayerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+        //观察loadedTimeRanges，可以获取缓存进度，实现缓冲进度条
+        [self.currentPlayerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
+    }
+    
+    return _avPlayer;
+}
 
 - (VLCMediaPlayer *)player {
     if (nil == _player) {
@@ -61,6 +87,12 @@
     }
     
     return _player;
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    self.avLayer.frame = self.view.bounds;
 }
 
 #pragma mark - Setup UI
@@ -101,6 +133,66 @@
     
 }
 #pragma mark - Delegate && dataSource method implement
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
+    AVPlayerItem *playerItem = (AVPlayerItem *)object;
+    if ([keyPath isEqualToString:@"status"]) {
+        //获取playerItem的status属性最新的状态
+        AVPlayerStatus status = [[change objectForKey:@"new"] intValue];
+        switch (status) {
+            case AVPlayerStatusReadyToPlay:{
+                //获取视频长度
+                CMTime duration = playerItem.duration;
+                //更新显示:视频总时长(自定义方法显示时间的格式)
+                self.remainTimeLabel.text = [self formatTimeWithTimeInterVal:CMTimeGetSeconds(duration)];
+                //开启滑块的滑动功能
+                break;
+            }
+            case AVPlayerStatusFailed:{//视频加载失败，点击重新加载
+                
+                break;
+            }
+            case AVPlayerStatusUnknown:{
+                NSLog(@"加载遇到未知问题:AVPlayerStatusUnknown");
+                break;
+            }
+            default:
+                break;
+        }
+    } else if ([keyPath isEqualToString:@"loadedTimeRanges"]) {
+        //获取视频缓冲进度数组，这些缓冲的数组可能不是连续的
+        NSArray *loadedTimeRanges = playerItem.loadedTimeRanges;
+        //获取最新的缓冲区间
+        CMTimeRange timeRange = [loadedTimeRanges.firstObject CMTimeRangeValue];
+        //缓冲区间的开始的时间
+        NSTimeInterval loadStartSeconds = CMTimeGetSeconds(timeRange.start);
+        //缓冲区间的时长
+        NSTimeInterval loadDurationSeconds = CMTimeGetSeconds(timeRange.duration);
+        //当前视频缓冲时间总长度
+        NSTimeInterval currentLoadTotalTime = loadStartSeconds + loadDurationSeconds;
+        //NSLog(@"开始缓冲:%f,缓冲时长:%f,总时间:%f", loadStartSeconds, loadDurationSeconds, currentLoadTotalTime);
+        //更新显示：当前缓冲总时长
+//        _currentLoadTimeLabel.text = [self formatTimeWithTimeInterVal:currentLoadTotalTime];
+        //更新显示：视频的总时长
+        self.remainTimeLabel.text = [self formatTimeWithTimeInterVal:CMTimeGetSeconds(self.avPlayer.currentItem.duration)];
+//        self.currentTimeLB.text = [self formatTimeWithTimeInterVal:CMTimeGetSeconds(self.avPlayer.currentTime)];
+        //更新显示：缓冲进度条的值
+//        _progressView.progress = currentLoadTotalTime/CMTimeGetSeconds(self.player.currentItem.duration);
+    }
+}
+
+//转换时间格式的方法
+- (NSString *)formatTimeWithTimeInterVal:(NSTimeInterval)timeInterVal{
+    int minute = 0, hour = 0, secend = timeInterVal;
+    minute = (secend % 3600)/60;
+    hour = secend / 3600;
+    secend = secend % 60;
+    return [NSString stringWithFormat:@"%02d:%02d:%02d", hour, minute, secend];
+}
+
 - (void)mediaPlayerStateChanged:(NSNotification *)aNotification
 {
     switch (self.player.state) {
@@ -167,7 +259,30 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.player play];
+    if (isMovMediaType(self.videoUrl)) {
+        NSLog(@"mov类型文件");
+        [self.avPlayer play];
+        
+        __weak typeof(self) weakSelf = self;
+        
+        [self.avPlayer addPeriodicTimeObserverForInterval:CMTimeMake(1, 1) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
+            
+            //当前播放的时间
+            NSTimeInterval currentTime = CMTimeGetSeconds(time);
+            //视频的总时间
+            NSTimeInterval totalTime = CMTimeGetSeconds(weakSelf.currentPlayerItem.duration);
+            //设置滑块的当前进度
+            weakSelf.remainTimeLabel.text = [weakSelf formatTimeWithTimeInterVal:totalTime];
+            weakSelf.progressSlider.value = currentTime / totalTime;
+            //设置显示的时间：以00:00:00的格式
+            weakSelf.currentTimeLB.text = [weakSelf formatTimeWithTimeInterVal:currentTime];
+        }];
+    } else {
+        NSLog(@"%@类型文件",self.videoUrl.pathExtension);
+        [self.player play];
+    }
+
+//    [self.player play];
     
 //    [self.navigationController setNavigationBarHidden:YES animated:NO];
 //    [self.navigationController.navigationBar setBackgroundColor:UIColor.clearColor];
@@ -231,7 +346,17 @@
 }
 
 - (IBAction)sliderAction:(UISlider *)sender {
-    self.player.position = sender.value;
+    
+    if (isMovMediaType(self.videoUrl)) {
+        
+        NSTimeInterval playTime = sender.value * CMTimeGetSeconds(self.currentPlayerItem.duration);
+        CMTime seekTime = CMTimeMake(playTime, 1);
+        
+        [self.avPlayer seekToTime:seekTime];
+       
+    } else {
+        self.player.position = sender.value;
+    }
 }
 
 - (IBAction)playOrPauseAction:(id)sender {
@@ -285,6 +410,11 @@
         default:
             break;
     }
+}
+
+//  判断是不是Mov文件类型
+static BOOL isMovMediaType(NSString *videoUrl) {
+    return [videoUrl.pathExtension caseInsensitiveCompare:@"mov"] == NSOrderedSame;
 }
 
 @end
