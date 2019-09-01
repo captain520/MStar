@@ -91,6 +91,7 @@
     
     MSFIleListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSFIleListCell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.iconImageView.image = [UIImage imageNamed:@"tupian"];
 
     NSString *fileName = self.dataArray[indexPath.row];
     NSString *path = [self filePathOf:self.fileType];

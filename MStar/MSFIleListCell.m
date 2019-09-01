@@ -13,7 +13,8 @@
 #import <AVFoundation/AVAssetImageGenerator.h>
 #import <AVFoundation/AVAsset.h>
 
-@implementation MSFIleListCell
+@implementation MSFIleListCell {
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -35,7 +36,17 @@
 //        VLCMediaThumbnailer *thumber = [VLCMediaThumbnailer thumbnailerWithMedia:media andDelegate:self];
 //        [thumber fetchThumbnail];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self thumbnailImageForVideo:url atTime:0];
+
+            NSLock *lock = [[NSLock alloc] init];
+            [lock lock];
+            
+            VLCMedia *media = [VLCMedia mediaWithURL:url];
+            VLCMediaThumbnailer *thumber = [VLCMediaThumbnailer thumbnailerWithMedia:media andDelegate:self];
+            [thumber fetchThumbnail];
+//            NSLock *lock = [[NSLock alloc] init];
+//            [lock lock];
+//            [self thumbnailImageForVideo:url atTime:0];
+            [lock unlock];
         });
     } else {
         self.iconImageView.image = image;
@@ -43,7 +54,7 @@
 }
 
 - (void)mediaThumbnailerDidTimeOut:(VLCMediaThumbnailer *)mediaThumbnailer {
-    NSLog(@"");
+    NSLog(@"%@",mediaThumbnailer);
 }
 
 - (void)mediaThumbnailer:(VLCMediaThumbnailer *)mediaThumbnailer didFinishThumbnail:(CGImageRef)thumbnail {

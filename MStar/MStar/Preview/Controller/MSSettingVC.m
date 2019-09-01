@@ -97,7 +97,7 @@
 - (void)loadData {
     
     
-    if ([MSCamMenuManager manager].cammenu) {
+    if (0) {//[MSCamMenuManager manager].cammenu) {
         
         [self.tableView reloadData];
         
@@ -374,8 +374,11 @@
     
 }
 
+
 - (void)handleFactoryResetAction {
     
+    __weak typeof(self) weakSelf = self;
+
     [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
     [[CPLoadStatusToast shareInstance] show];
     
@@ -384,13 +387,25 @@
     //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SD0" Value:@"format"]
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"FactoryReset" Value:@"Camera"]
                                           block:^(NSString *result) {
-                                              [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
-                                              [[CPLoadStatusToast shareInstance] show];
+
+                                              [weakSelf.view makeToast:NSLocalizedString(@"2222 ", nil) duration:5.0f position:CSToastPositionCenter];
+//                                              [weakSelf performSelector:@selector(back2HomePageVC) withObject:nil afterDelay:5];
+                                              sleep(10);
+                                              [weakSelf back2HomePageVC];
+                                              
                                           } fail:^(NSError *error) {
                                               [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleFail;
                                               [[CPLoadStatusToast shareInstance] show];
                                           }];
     
+}
+
+- (void)back2HomePageVC {
+    
+    [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
+    [[CPLoadStatusToast shareInstance] show];
+    
+    [self.navigationController.parentViewController.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

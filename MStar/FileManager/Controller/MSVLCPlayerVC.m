@@ -19,11 +19,11 @@
 @property (nonatomic,strong)AVPlayerItem *currentPlayerItem;
 @property (nonatomic,strong)AVPlayerLayer *avLayer;
 
+@property (nonatomic, strong) id timeTarget;
+
 @end
 
 @implementation MSVLCPlayerVC
-
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -54,7 +54,7 @@
         [self.view.layer addSublayer:self.avLayer];
         
         [self.currentPlayerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
-        //观察loadedTimeRanges，可以获取缓存进度，实现缓冲进度条
+//        观察loadedTimeRanges，可以获取缓存进度，实现缓冲进度条
         [self.currentPlayerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
     }
     
@@ -254,6 +254,15 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    if (YES == isMovMediaType(self.videoUrl)) {
+        [self.currentPlayerItem removeObserver:self forKeyPath:@"status" context:nil];
+        [self.currentPlayerItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
+        [self.avPlayer  removeTimeObserver:self.timeTarget];
+    }
+    
+    
+    NSLog(@"------------------------------------------------ Delloc ----------------------------------------------------");
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -265,7 +274,7 @@
         
         __weak typeof(self) weakSelf = self;
         
-        [self.avPlayer addPeriodicTimeObserverForInterval:CMTimeMake(1, 1) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
+        self.timeTarget = [self.avPlayer addPeriodicTimeObserverForInterval:CMTimeMake(1, 1) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
             
             //当前播放的时间
             NSTimeInterval currentTime = CMTimeGetSeconds(time);
@@ -276,6 +285,13 @@
             weakSelf.progressSlider.value = currentTime / totalTime;
             //设置显示的时间：以00:00:00的格式
             weakSelf.currentTimeLB.text = [weakSelf formatTimeWithTimeInterVal:currentTime];
+            
+            NSLog(@"progress:%@",@(weakSelf.progressSlider.value));
+            
+            if (weakSelf.progressSlider.value >= 0.99) {
+                [weakSelf backAction:nil];
+            }
+
         }];
     } else {
         NSLog(@"%@类型文件",self.videoUrl.pathExtension);
@@ -360,6 +376,7 @@
 }
 
 - (IBAction)playOrPauseAction:(id)sender {
+    
     if (self.player.isPlaying) {
         [self.player pause];
     } else {
@@ -376,6 +393,14 @@
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     if (orientation == UIInterfaceOrientationPortrait) {
 //        [self.navigationController popViewControllerAnimated:YES];
+        
+//        [self.currentPlayerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+//        //        观察loadedTimeRanges，可以获取缓存进度，实现缓冲进度条
+//        [self.currentPlayerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
+        
+//        [self.currentPlayerItem removeObserver:self forKeyPath:@"status" context:nil];
+//        [self.currentPlayerItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
+
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
         
@@ -415,6 +440,11 @@
 //  判断是不是Mov文件类型
 static BOOL isMovMediaType(NSString *videoUrl) {
     return [videoUrl.pathExtension caseInsensitiveCompare:@"mov"] == NSOrderedSame;
+//    if ([videoUrl hasPrefix:@"http"]) {
+//        return NO;
+//    } else {
+//        return [videoUrl.pathExtension caseInsensitiveCompare:@"mov"] == NSOrderedSame;
+//    }
 }
 
 @end

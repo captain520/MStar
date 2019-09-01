@@ -208,7 +208,12 @@ typedef enum
     [self.tableView reloadData];
 }
 #pragma mark - load data
+
 - (void)loadData {
+    [self loadData:NO];
+}
+
+- (void)loadData:(BOOL )isAllRefresh {
     
     NSLog(@"************ %s %s******************",__FILE__,__FUNCTION__);
 
@@ -240,6 +245,8 @@ typedef enum
         return;
     }
 
+    isAllRefresh ? : [self.navigationController.view cp_showToast];
+
     (void)[[AITCameraCommand alloc] initWithUrl:requestUrl
                                           block:^(NSString *result) {
                                               if (result.length > 10) {
@@ -247,8 +254,13 @@ typedef enum
                                               } else {
                                                   [weakSelf handleErrorBlock];
                                               }
+                                              
+                                              [weakSelf.navigationController.view cp_hideToast];
+                                              
                                           } fail:^(NSError *error) {
                                               [weakSelf handleErrorBlock];
+                                              [weakSelf.navigationController.view cp_hideToast];
+                                              
                                           }];
 }
 
@@ -284,6 +296,7 @@ typedef enum
     
     MSFIleListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdenitifier];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.iconImageView.image = [UIImage imageNamed:@"tupian"];
     if (self.isLocalFileList == NO) {
         [cell.downloadBT setImage:[UIImage imageNamed:@"download"] forState:UIControlStateNormal];
         [cell.downloadBT addTarget:self action:@selector(downloadAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -307,6 +320,14 @@ typedef enum
     }
 
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -708,7 +729,7 @@ typedef enum
     [self.dataArray removeAllObjects];
     self.currentPage = 0;
     
-    [self loadData];
+    [self loadData:YES];
 }
 
 

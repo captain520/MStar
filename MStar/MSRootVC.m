@@ -64,6 +64,17 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 
 - (void)initBaseProperties {
     
+//    NSURL *url = [AITCameraCommand commandUpdateUrl:@"name" EncryptionKey:@"passwd"];
+//
+//    (void)[[AITCameraCommand alloc] initWithUrl:url
+//                                          block:^(NSString *result) {
+//                                              if ([result containsString:@"OK"]) {
+//                                              }
+//                                          } fail:^(NSError *error) {
+//
+//                                          }];
+    
+    
     UILabel *titleLB = [UILabel new];
     titleLB.text = @"iCarEyes";
     titleLB.font = [UIFont boldSystemFontOfSize:30];

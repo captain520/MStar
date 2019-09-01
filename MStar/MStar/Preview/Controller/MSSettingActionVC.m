@@ -23,7 +23,8 @@
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveAction:)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"save"] style:UIBarButtonItemStyleDone target:self action:@selector(saveAction:)];
     self.selectedIndexPath = [NSIndexPath indexPathForRow:self.selectedIndex inSection:0];
     
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"UITableViewCell"];
@@ -31,10 +32,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
-    if (self.selectedIndexPath && self.selectedIndexPath.row != self.selectedIndex) {
-        !self.selectedActionBlock ? : self.selectedActionBlock(self.dataArray[self.selectedIndexPath.row]);
-    }
 }
 
 #pragma mark - Table view data source
@@ -83,6 +80,15 @@
         self.selectedIndexPath = indexPath;
         [self.tableView reloadData];
     }
+}
+
+- (void)saveAction:(id)sender {
+    
+    if (self.selectedIndexPath && self.selectedIndexPath.row != self.selectedIndex) {
+        !self.selectedActionBlock ? : self.selectedActionBlock(self.dataArray[self.selectedIndexPath.row]);
+    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

@@ -73,6 +73,7 @@
 		9CAA92AD229554E10050E2C3 /* MSAboutUsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CAA92AC229554E10050E2C3 /* MSAboutUsHeader.m */; };
 		9CC93A4D231616B000FC32EF /* CPUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC93A4C231616B000FC32EF /* CPUtil.m */; };
 		9CC93A5123162DB900FC32EF /* DDWaterVaveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC93A5023162DB900FC32EF /* DDWaterVaveView.m */; };
+		9CD1FC3C2318E6A70006CC4A /* UIView+CPToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD1FC3B2318E6A70006CC4A /* UIView+CPToast.m */; };
 		9CDABEA22314FCF1009A60EF /* MSRootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDABEA12314FCF1009A60EF /* MSRootVC.m */; };
 		9CDCC746225F38AB00162D9A /* SCVideoMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDCC744225F38AA00162D9A /* SCVideoMainViewController.m */; };
 		9CDCC75B225F38B200162D9A /* ic_jt_bf@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CDCC748225F38B200162D9A /* ic_jt_bf@2x.png */; };
@@ -231,6 +232,8 @@
 		9CC93A4C231616B000FC32EF /* CPUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CPUtil.m; sourceTree = "<group>"; };
 		9CC93A4F23162DB900FC32EF /* DDWaterVaveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDWaterVaveView.h; sourceTree = "<group>"; };
 		9CC93A5023162DB900FC32EF /* DDWaterVaveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDWaterVaveView.m; sourceTree = "<group>"; };
+		9CD1FC3A2318E6A70006CC4A /* UIView+CPToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CPToast.h"; sourceTree = "<group>"; };
+		9CD1FC3B2318E6A70006CC4A /* UIView+CPToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CPToast.m"; sourceTree = "<group>"; };
 		9CDABEA02314FCF1009A60EF /* MSRootVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRootVC.h; sourceTree = "<group>"; };
 		9CDABEA12314FCF1009A60EF /* MSRootVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSRootVC.m; sourceTree = "<group>"; };
 		9CDCC744225F38AA00162D9A /* SCVideoMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCVideoMainViewController.m; sourceTree = "<group>"; };
@@ -708,6 +711,8 @@
 		9CC93A4E23162DA600FC32EF /* Third */ = {
 			isa = PBXGroup;
 			children = (
+				9CD1FC3A2318E6A70006CC4A /* UIView+CPToast.h */,
+				9CD1FC3B2318E6A70006CC4A /* UIView+CPToast.m */,
 				9CC93A4F23162DB900FC32EF /* DDWaterVaveView.h */,
 				9CC93A5023162DB900FC32EF /* DDWaterVaveView.m */,
 			);
@@ -1048,6 +1053,7 @@
 				9CDCC76C225F46B500162D9A /* MSLocalFileVC.m in Sources */,
 				9CDFFC7022850D93003159A3 /* MSVLCPlayerVC.m in Sources */,
 				9C99469822582BA600AD863F /* UIImage+Category.m in Sources */,
+				9CD1FC3C2318E6A70006CC4A /* UIView+CPToast.m in Sources */,
 				9CA17410225A248B008EA36F /* AITCamMenu.m in Sources */,
 				9C5B241D225B9EBF000DE8D1 /* MSProfileVC.m in Sources */,
 				9C99469922582BA600AD863F /* UIView+Toast.m in Sources */,

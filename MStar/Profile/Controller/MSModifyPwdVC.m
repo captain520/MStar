@@ -92,7 +92,52 @@
 
     [self.view endEditing:YES];
     //TODO: 发送修改命令
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandUpdateUrl:self.ssidTF.text EncryptionKey:self.pwdTF.text] View:self.view] ;
+//    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandUpdateUrl:self.ssidTF.text EncryptionKey:self.pwdTF.text] View:self.view] ;
+    
+    __weak typeof(self) weakSelf = self;
+    
+    NSURL *url = [AITCameraCommand commandUpdateUrl:self.ssidTF.text EncryptionKey:self.pwdTF.text];
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:url
+                                          block:^(NSString *result) {
+//                                              if ([result containsString:@"OK"]) {
+//                                                  [weakSelf back2HomePageVC];
+//                                              }
+                                              [weakSelf handleModifyBlcok:result];
+                                          } fail:^(NSError *error) {
+                                              [weakSelf.view makeToast:error.localizedDescription duration:2.0f position:CSToastPositionCenter];
+                                          }];
+}
+
+- (void)handleModifyBlcok:(NSString *)result {
+//    commandReactivateUrl
+    
+    __weak typeof(self) weakSelf = self;
+    
+    if ([result containsString:@"OK"]) {
+
+        (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandReactivateUrl]
+                                              block:^(NSString *result) {
+                                                  [weakSelf back2HomePageVC];
+                                              } fail:^(NSError *error) {
+                                                  [weakSelf.view makeToast:error.localizedDescription duration:2.0f position:CSToastPositionCenter];
+                                              }] ;
+
+    }
+    
+}
+
+- (void)handleSaveActionBlock:(NSString *)result {
+    
+    if ([result containsString:@"OK"]) {
+        [self back2HomePageVC];
+    } else {
+        [self.view makeToast:NSLocalizedString(@"SendCommandFail", nil) duration:2.0f position:CSToastPositionCenter];
+    }
+}
+
+- (void)back2HomePageVC {
+    [self.navigationController.parentViewController.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

@@ -134,9 +134,9 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 - (void)reloadPlayer {
     
     if (liveurl.length > 0) {
-        if (NO == mediaPlayer.isPlaying) {
+//        if (NO == mediaPlayer.isPlaying) {
             [mediaPlayer play];
-        }
+//        }
     } else {
         //  同步时间后进行直播
         [self syncDate:^{
@@ -574,9 +574,11 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
     }
 }
 
-- (void)settingAction:(id)sender
+- (void)settingAction:(UIBarButtonItem *)sender
 {
     
+    sender.enabled = NO;
+
     if (liveurl.length > 0) {
         
         [self stopRecord:^(BOOL isRecording) {
@@ -588,6 +590,8 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
                 [self.navigationController pushViewController:vc animated:YES];
             }
             
+            sender.enabled = YES;
+            
         }];
 
         
@@ -595,6 +599,12 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
         [self.view makeToast:NSLocalizedString(@"ConnectTheDeviceWIFI", nil) duration:1. position:CSToastPositionCenter];
     }
     
+    [self performSelector:@selector(setSettingButtonEnable) withObject:nil afterDelay:2.0f];
+}
+
+- (void)setSettingButtonEnable {
+    
+    self.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
 - (void)previewAction:(UIButton *)sender
@@ -940,10 +950,12 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 
 - (void)applicationDidBecomeActive:(NSNotification *)application
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self reloadPlayer];
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self reloadPlayer];
+//    });
 //    [self performSelector:@selector(reloadPlayer) withObject:nil afterDelay:1];
+    
+    [self backAction:nil];
 }
 
 - (void)applicationDidEnterBackground:(NSNotification *)application
