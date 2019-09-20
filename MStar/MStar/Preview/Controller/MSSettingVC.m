@@ -18,7 +18,6 @@
 @property (nonatomic, assign) BOOL isRecordingWhenSetting;
 
 @property (nonatomic, strong) NSArray <NSString *> *stationarySettings;
-@property (nonatomic, copy) NSString * FWversion;
 
 @end
 
@@ -95,7 +94,6 @@
 }
 #pragma mark - load data
 - (void)loadData {
-    
     
     if (0) {//[MSCamMenuManager manager].cammenu) {
         
@@ -186,7 +184,7 @@
     if (0 == indexPath.section) {
         cell.textLabel.text = self.stationarySettings[indexPath.row];
         if (self.FWversion.length > 0 && indexPath.row == 3) {
-            cell.detailTextLabel.text = [self.FWversion stringByDeletingPathExtension];
+            cell.detailTextLabel.text = self.FWversion;//[self.FWversion stringByDeletingPathExtension];
         } else {
             cell.detailTextLabel.text = @"";
         }

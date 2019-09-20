@@ -34,6 +34,8 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 @property (nonatomic, copy) NSString * ssidPasswd;
 @property (nonatomic, assign) MSConnectState connectState;
 
+@property (nonatomic, assign) NSUInteger retryTimes;
+
 @end
 
 @implementation MSRootVC
@@ -53,6 +55,8 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    [self loadData];
     
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
@@ -295,8 +299,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 
 - (void)openSettinPage {
     
-    NSURL *wifiSettingUrl = [NSURL URLWithString:@"App-prefs:root=WIFI"];
-    //    NSURL *wifiSettingUrl = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        NSURL *wifiSettingUrl = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
     
     if ([UIApplication.sharedApplication canOpenURL:wifiSettingUrl]) {
         [UIApplication.sharedApplication openURL:wifiSettingUrl];
@@ -361,6 +364,9 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 
 - (void)syncDate:(void (^)(void))familyBlock otherDeviceBlock:(void (^)(void))otherBlock {
     
+    
+    self.retryTimes++;
+    
     NSDate *date = [NSDate date];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
@@ -386,9 +392,14 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 //                                                  });
                                               }
                                           } fail:^(NSError *error) {
-                                              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                                  [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
-                                              });
+                                              
+                                              if (weakSelf.retryTimes < 4) {
+                                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                      [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
+                                                  });
+                                              } else {
+                                                  !otherBlock ? : otherBlock();
+                                              }
                                           }];
 }
 

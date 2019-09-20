@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		396B3E492D5A47B68AEC5BF0 /* libPods-MStar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36260F7EED62A9BE8FA8478D /* libPods-MStar.a */; };
+		9C0E81B72333494000FAE88A /* MSDeviceMgr.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0E81B62333494000FAE88A /* MSDeviceMgr.m */; };
 		9C23B07E227DD9E8005221FE /* MSMediaListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C23B07D227DD9E8005221FE /* MSMediaListVC.m */; };
 		9C23B081227DE977005221FE /* MSSettingActionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C23B080227DE977005221FE /* MSSettingActionVC.m */; };
 		9C3D7C0D227EC5EA00BCB077 /* CPLoadStatusToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3D7C0C227EC5EA00BCB077 /* CPLoadStatusToast.m */; };
@@ -116,6 +117,8 @@
 /* Begin PBXFileReference section */
 		36260F7EED62A9BE8FA8478D /* libPods-MStar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MStar.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D7B6EE3A4C6F76F84917D2A /* Pods-MStar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MStar.debug.xcconfig"; path = "Target Support Files/Pods-MStar/Pods-MStar.debug.xcconfig"; sourceTree = "<group>"; };
+		9C0E81B52333494000FAE88A /* MSDeviceMgr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSDeviceMgr.h; sourceTree = "<group>"; };
+		9C0E81B62333494000FAE88A /* MSDeviceMgr.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSDeviceMgr.m; sourceTree = "<group>"; };
 		9C23B07C227DD9E8005221FE /* MSMediaListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSMediaListVC.h; sourceTree = "<group>"; };
 		9C23B07D227DD9E8005221FE /* MSMediaListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSMediaListVC.m; sourceTree = "<group>"; };
 		9C23B07F227DE977005221FE /* MSSettingActionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSSettingActionVC.h; sourceTree = "<group>"; };
@@ -704,6 +707,8 @@
 			children = (
 				9CC93A4B231616B000FC32EF /* CPUtil.h */,
 				9CC93A4C231616B000FC32EF /* CPUtil.m */,
+				9C0E81B52333494000FAE88A /* MSDeviceMgr.h */,
+				9C0E81B62333494000FAE88A /* MSDeviceMgr.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1032,6 +1037,7 @@
 				9C4D7B872230A08400B6273E /* ViewController.m in Sources */,
 				9CC93A5123162DB900FC32EF /* DDWaterVaveView.m in Sources */,
 				9CA17409225A1145008EA36F /* MSFunction.m in Sources */,
+				9C0E81B72333494000FAE88A /* MSDeviceMgr.m in Sources */,
 				9C3D7C11227EE55300BCB077 /* MSModifyPwdVC.m in Sources */,
 				9C99469A22582BA600AD863F /* UIButton+FillColor.m in Sources */,
 				9CDFFC7722857AEA003159A3 /* MSPhotoBrowserVC.m in Sources */,
@@ -1227,6 +1233,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = /Users/wangzhangchuan/Documents/GitHub/MStar/MStar/Config/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
@@ -1267,6 +1274,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.togevision.mstar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRIP_INSTALLED_PRODUCT = YES;
+				STRIP_SWIFT_SYMBOLS = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1286,6 +1295,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = /Users/wangzhangchuan/Documents/GitHub/MStar/MStar/Config/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
@@ -1325,6 +1335,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.togevision.mstar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRIP_INSTALLED_PRODUCT = YES;
+				STRIP_SWIFT_SYMBOLS = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

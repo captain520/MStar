@@ -109,8 +109,9 @@
             //        VLCMediaThumbnailer *thumber = [VLCMediaThumbnailer thumbnailerWithMedia:media andDelegate:self];
             //        [thumber fetchThumbnail];
 //            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            image =  [self thumbnailImageForVideo:[NSURL fileURLWithPath:path] atTime:0];
+//            image =  [self thumbnailImageForVideo:[NSURL fileURLWithPath:path] atTime:0];
 //            });
+            cell.url = [NSURL fileURLWithPath:path];
         }
         
         cell.iconImageView.image = image;

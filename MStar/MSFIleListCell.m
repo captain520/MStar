@@ -30,7 +30,7 @@
 -(void)setUrl:(NSURL *)url {
     _url = url;
     
-    UIImage *image = [[SDImageCache sharedImageCache] imageFromCacheForKey:url.absoluteString];
+    UIImage *image = [[SDImageCache sharedImageCache] imageFromCacheForKey:url.lastPathComponent];
     if (nil == image) {
 //        VLCMedia *media = [VLCMedia mediaWithURL:url];
 //        VLCMediaThumbnailer *thumber = [VLCMediaThumbnailer thumbnailerWithMedia:media andDelegate:self];
@@ -60,7 +60,7 @@
 - (void)mediaThumbnailer:(VLCMediaThumbnailer *)mediaThumbnailer didFinishThumbnail:(CGImageRef)thumbnail {
     [self.url lastPathComponent];
     UIImage *image = [UIImage imageWithCGImage:thumbnail];
-    [[SDImageCache sharedImageCache] storeImage:image forKey:mediaThumbnailer.media.url.absoluteString completion:^{
+    [[SDImageCache sharedImageCache] storeImage:image forKey:mediaThumbnailer.media.url.lastPathComponent completion:^{
         self.iconImageView.image = [UIImage imageWithCGImage:thumbnail];
     }];
 }

@@ -54,6 +54,11 @@ static bool cam_front = YES;
 
 @property (nonatomic, copy) NSString * dateStr;
 
+@property (nonatomic, assign) BOOL queryRecordingStatusDone;
+@property (nonatomic, assign) BOOL hasViewDidLoad;
+
+@property (nonatomic, copy) NSString *FWversion;
+
 @end
 
 @implementation MSPreviewVC
@@ -79,7 +84,6 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
     
     [self initailizeBaseProperties];
     [self setupUI];
-    [self flickRecodeLight];
 
     char a = TogevisionCRC(19, 6, 26, 8, 8, 8);
     
@@ -94,9 +98,9 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc
-{
-}
+//- (void)dealloc {
+//    NSLog(@"------------------------------delloc");
+//}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -105,9 +109,6 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
     //    [self syncDate];
     //    [self sendRecordCommand];
     
-    if (cameraRecording == NO) {
-        [self recorderAction:nil];
-    }
 
     self.hasAppear = YES;
 
@@ -117,18 +118,24 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    [self addRunLoopObserver];
+    
+//    if (cameraRecording == NO) {
+//        [self recorderAction:nil];
+//    }
+    
+    [[MSDeviceMgr manager] startRecrod];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    if (cameraRecording == YES) {
-        [self recorderAction:nil];
-    }
-    
+    [[MSDeviceMgr manager] stopRecrod];
+
     self.hasAppear = NO;
-    
+
     [mediaPlayer stop];
+    [self cancelFlickRecordLight];
 }
 
 - (void)reloadPlayer {
@@ -162,6 +169,9 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 - (void)initailizeBaseProperties
 {
     //    mediaPlayer = [VLCMediaPlayer alloc];
+    
+    self.queryRecordingStatusDone = YES;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
     self.view.backgroundColor = UIColor.blackColor;
@@ -586,6 +596,7 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
                 MSSettingVC *vc = [[MSSettingVC alloc] initWithStyle:UITableViewStyleGrouped];
                 vc.hidesBottomBarWhenPushed = YES;
                 vc.isRecording = NO;
+                vc.FWversion = self.FWversion;
                 
                 [self.navigationController pushViewController:vc animated:YES];
             }
@@ -735,6 +746,18 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
     
 }
 
+//  监测录制状态
+- (void)addRunLoopObserver {
+    [self flickRecodeLight];
+    [self observeCameraRecording];
+}
+
+//  停止监测录制状态
+- (void)cancelFlickRecordLight {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(flickRecodeLight) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(observeCameraRecording) object:nil];
+}
+
 - (void)flickRecodeLight
 {
     if (cameraRecording == NO) {
@@ -746,6 +769,49 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
     }
     
     [self performSelector:@selector(flickRecodeLight) withObject:nil afterDelay:1];
+}
+
+
+//  监测录制状态
+- (void)observeCameraRecording {
+    
+//    if (self.queryRecordingStatusDone == NO) {
+//        return;
+//    }
+//
+//    self.queryRecordingStatusDone = NO;
+
+    cameraRecording = NO;
+
+    __weak typeof(self) weakSelf = self;
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQueryPreviewStatusUrl]
+                                          block:^(NSString *result) {
+                                              [weakSelf handleObserveCameraRecordingCommdBlock:result];
+                                              weakSelf.queryRecordingStatusDone = YES;
+                                          } fail:^(NSError *error) {
+                                              weakSelf.queryRecordingStatusDone = YES;
+                                          }];
+}
+
+- (void)handleObserveCameraRecordingCommdBlock:(NSString *)result {
+    if ([result containsString:@"OK\n"] == NO) {
+        return;
+    }
+    
+    NSDictionary *dict = [AITCameraCommand buildResultDictionary:result];
+    if (dict == nil) {
+    }
+    
+    NSString *recording = [dict objectForKey:[AITCameraCommand PROPERTY_QUERY_RECORD]];
+    // Check is recording or idle
+    if (![recording caseInsensitiveCompare:@"Recording"]) {
+        cameraRecording = YES;
+    } else {
+        cameraRecording = NO;
+    }
+    
+    [self performSelector:@selector(observeCameraRecording) withObject:nil afterDelay:2.0f];
 }
 
 - (void)CameraStatusArrived:(NSString *)status
@@ -817,6 +883,8 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
         cameraRecording = YES;
     } else {
         cameraRecording = NO;
+        
+        [self recorderAction:nil];
     }
     
     self.fullScreenBT.hidden = NO;
@@ -868,8 +936,6 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
                                               
                                           }];
 }
-
-
 
 /**
  同步时间
@@ -928,6 +994,7 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
             NSLog(@"---- fwversion ------%@",fwversion);
             
             NSString *encrypByte = [fwversion componentsSeparatedByString:@"-"].lastObject;
+            self.FWversion = [fwversion componentsSeparatedByString:@"-"].firstObject;
             
             NSArray *dateStrs = [self.dateStr componentsSeparatedByString:@"-"];
             
@@ -991,6 +1058,11 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 }
 
 - (void)backAction:(id)sender {
+    [mediaPlayer stop];
+    mediaPlayer.media = nil;
+    mediaPlayer.delegate = nil;
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(cancelFlickRecordLight) object:nil];
     [self.parentViewController.navigationController popToRootViewControllerAnimated:YES];
 }
 

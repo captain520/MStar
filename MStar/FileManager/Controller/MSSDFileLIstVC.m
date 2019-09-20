@@ -249,14 +249,21 @@ typedef enum
 
     (void)[[AITCameraCommand alloc] initWithUrl:requestUrl
                                           block:^(NSString *result) {
+                                              
+                                              [weakSelf.navigationController.view cp_hideToast];
+                                              
                                               if (result.length > 10) {
-                                                  [weakSelf handleLoadFileListBlock:result];
+                                                  if ([result containsString:@"Not"]) {
+                                                      [weakSelf loadData:isAllRefresh];
+                                                      NSLog(@"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                                                  } else {
+                                                      [weakSelf handleLoadFileListBlock:result];
+                                                  }
                                               } else {
                                                   [weakSelf handleErrorBlock];
                                               }
                                               
-                                              [weakSelf.navigationController.view cp_hideToast];
-                                              
+
                                           } fail:^(NSError *error) {
                                               [weakSelf handleErrorBlock];
                                               [weakSelf.navigationController.view cp_hideToast];

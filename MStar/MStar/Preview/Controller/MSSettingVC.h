@@ -12,4 +12,6 @@
 
 @property (nonatomic, assign) BOOL isRecording;
 
+@property (nonatomic, strong) NSString *FWversion;
+
 @end

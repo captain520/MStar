@@ -61,7 +61,7 @@
         self.cancelItem.backgroundColor = UIColor.whiteColor;
         self.cancelItem.titleLabel.font = [UIFont systemFontOfSize:15];
         [self.cancelItem setTitleEdgeInsets:UIEdgeInsetsMake(-UIApplication.sharedApplication.statusBarFrame.size.height + 20, 0, 0, 0)];
-        [self.cancelItem setTitle:@"取消" forState:UIControlStateNormal];
+        [self.cancelItem setTitle:NSLocalizedString(@"Cancel", nil)  forState:UIControlStateNormal];
         [self.cancelItem addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelItem setTitleColor:UIColor.redColor forState:UIControlStateNormal];
 
