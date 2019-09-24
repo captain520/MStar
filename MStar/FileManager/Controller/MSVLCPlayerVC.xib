@@ -31,7 +31,7 @@
                     <rect key="frame" x="0.0" y="802" width="414" height="60"/>
                     <subviews>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="a9i-mx-Jop">
-                            <rect key="frame" x="109" y="15" width="181" height="31"/>
+                            <rect key="frame" x="124" y="15" width="166" height="31"/>
                             <color key="minimumTrackTintColor" red="0.83137254900000002" green="0.13725490200000001" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="thumbTintColor" red="0.83137254900000002" green="0.13725490200000001" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
@@ -59,11 +59,11 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Un-sL-0Zz">
-                            <rect key="frame" x="16" y="22.5" width="15" height="15"/>
+                            <rect key="frame" x="16" y="15" width="30" height="30"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="15" id="ErG-fY-NcC"/>
-                                <constraint firstAttribute="height" constant="15" id="Sn9-aP-J4c"/>
+                                <constraint firstAttribute="width" constant="30" id="ErG-fY-NcC"/>
+                                <constraint firstAttribute="height" constant="30" id="Sn9-aP-J4c"/>
                             </constraints>
                             <state key="normal" image="暂停按钮"/>
                             <connections>
@@ -71,7 +71,7 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0YZ-2q-qBJ">
-                            <rect key="frame" x="31" y="22" width="80" height="16"/>
+                            <rect key="frame" x="46" y="22" width="80" height="16"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="80" id="oum-iY-bzs"/>
                             </constraints>
@@ -123,6 +123,6 @@
     <resources>
         <image name="back" width="21.5" height="21.5"/>
         <image name="全屏" width="67" height="67"/>
-        <image name="暂停按钮" width="22.5" height="25"/>
+        <image name="暂停按钮" width="11" height="12"/>
     </resources>
 </document>

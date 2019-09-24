@@ -246,6 +246,9 @@
 }
 
 - (void)mediaPlayerTimeChanged:(NSNotification *)aNotification {
+    
+    NSLog(@"%s",__FUNCTION__);
+    
     self.currentTimeLB.text = self.player.time.stringValue;
     self.remainTimeLabel.text = self.player.media.length.stringValue;//self.player.remainingTime.stringValue;
     self.progressSlider.value = self.player.position;
@@ -376,18 +379,29 @@
 }
 
 - (IBAction)playOrPauseAction:(id)sender {
-    
-    if (self.player.isPlaying) {
-        [self.player pause];
-    } else {
-        if (self.player.state == VLCMediaPlayerStateStopped) {
-            [self.player stop];
+
+    if (isMovMediaType(self.videoUrl)) {
+        if (self.avPlayer.rate > 0.0001) {
+            [self.avPlayer pause];
+            [self.playPauseButton setImage:[UIImage imageNamed:@"播放按钮"] forState:UIControlStateNormal];
+        } else {
+            [self.avPlayer play];
+            [self.playPauseButton setImage:[UIImage imageNamed:@"暂停按钮"] forState:UIControlStateNormal];
         }
-        
-        [self.player play];
-        
-        [self performSelector:@selector(hideTool) withObject:nil afterDelay:3];
+    } else {
+        if (self.player.isPlaying) {
+            [self.player pause];
+        } else {
+            if (self.player.state == VLCMediaPlayerStateStopped) {
+                [self.player stop];
+            } else {
+                [self.player play];
+            }
+            
+            [self performSelector:@selector(hideTool) withObject:nil afterDelay:3];
+        }
     }
+    
 }
 - (IBAction)backAction:(id)sender {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
