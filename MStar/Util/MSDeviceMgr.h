@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 //  停止录制
 - (void)stopRecrod;
 
+- (void)stopRecrod:(void (^)(void))block;
+
 @end
 
 NS_ASSUME_NONNULL_END

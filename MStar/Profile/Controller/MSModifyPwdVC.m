@@ -137,6 +137,9 @@
 }
 
 - (void)back2HomePageVC {
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MSRESET_WIFI_INFO_ACTION" object:nil];
+
     [self.navigationController.parentViewController.navigationController popToRootViewControllerAnimated:YES];
 }
 

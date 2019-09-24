@@ -61,9 +61,10 @@ static bool cam_front = YES;
 
 @end
 
+VLCMediaPlayer *mediaPlayer;
+
 @implementation MSPreviewVC
 {
-    VLCMediaPlayer *mediaPlayer;
     BOOL appRecording;
     BOOL cameraRecording;
     Camera_cmd_t camera_cmd;
@@ -108,7 +109,7 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
     
     //    [self syncDate];
     //    [self sendRecordCommand];
-    
+
 
     self.hasAppear = YES;
 
@@ -130,7 +131,8 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    [[MSDeviceMgr manager] stopRecrod];
+//    [[MSDeviceMgr manager] stopRecrod];
+    
 
     self.hasAppear = NO;
 
@@ -156,6 +158,8 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 {
     [super viewWillDisappear:animated];
     NSLog(@"viewWillDisappear");
+    [self stopRecord:^(BOOL isRecording) {
+    }];
 
 //    if (YES == cameraRecording) {
 //        [mediaPlayer stop];
@@ -575,11 +579,11 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
                            options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
                            } completion:^(BOOL finished) {
                                cam_front = !cam_front;
-                               [self->mediaPlayer play];
+                               [mediaPlayer play];
                            }];
         
     } else {
-        [self->mediaPlayer play];
+        [mediaPlayer play];
         [self.view makeToast:NSLocalizedString(@"No rear camera found", nil) duration:3.0 position:@"CSToastPositionCenter"];
     }
 }
@@ -605,7 +609,6 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
             
         }];
 
-        
     } else {
         [self.view makeToast:NSLocalizedString(@"ConnectTheDeviceWIFI", nil) duration:1. position:CSToastPositionCenter];
     }
@@ -1063,6 +1066,8 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
     mediaPlayer.delegate = nil;
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(cancelFlickRecordLight) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(observeCameraRecording) object:nil];
+    
     [self.parentViewController.navigationController popToRootViewControllerAnimated:YES];
 }
 

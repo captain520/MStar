@@ -540,6 +540,8 @@ static NSString *CAMERA_SetTIME = @"Camera.Preview.MJPEG.TimeStamp";
 
 - (id) initWithUrl: (NSURL*) url block:(void (^)(NSString *result))block fail:(void (^)(NSError *error ))failBlock {
     
+    NSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>:%@",url);
+    
     self = [super init] ;
     
     if (self) {

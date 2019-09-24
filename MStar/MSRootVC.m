@@ -17,6 +17,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     MSConnectStatesUnkownDevice,                 //  没有正确连接到设备，之前也没连接过
     MSConnectStatesConnectedTGDevice,           // 正确连接到设备
     MSConnectStatesRecordConnnectedTGDevice,    //  没有正确连接到设备，但之前连接过
+    MSConnectStatesWifiInfoReseted,    //  没有正确连接到设备，但之前连接过
 };
 
 @interface MSRootVC ()
@@ -51,13 +52,12 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [self loadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    [self loadData];
-    
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
@@ -92,7 +92,13 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     }];
     
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+    //    [[NSNotificationCenter defaultCenter] postNotificationName:@"MSRESET_WIFI_INFO_ACTION" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleWifiInfoReset:)
+                                                 name:@"MSRESET_WIFI_INFO_ACTION" object:nil];
 
 }
 
@@ -145,31 +151,60 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     if (nil == self.leftMenuButton) {
         self.leftMenuButton = [UIButton new];
         
-        [self.leftMenuButton setImage:[UIImage imageNamed:@"左边图标"] forState:UIControlStateNormal];
+//        [self.leftMenuButton setImage:[UIImage imageNamed:@"左边图标"] forState:UIControlStateNormal];
         [self.leftMenuButton addTarget:self action:@selector(leftMemuAction:) forControlEvents:64];
 
         [self.view addSubview:self.leftMenuButton];
         [self.leftMenuButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(16);
-            make.bottom.mas_equalTo(-16);
-            make.width.mas_equalTo(20);
+            make.left.mas_equalTo(0);
+            make.bottom.mas_equalTo(0);
+            make.width.mas_equalTo(100);
             make.height.mas_equalTo(self->_leftMenuButton.mas_width).multipliedBy(262./381.);;
         }];
+        
+        {
+            UIImageView *imgView = [UIImageView new];
+            imgView.image = [UIImage imageNamed:@"左边图标"];
+            imgView.contentMode = UIViewContentModeScaleAspectFit;
+
+            [self.leftMenuButton addSubview:imgView];
+            [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.mas_equalTo(16);
+                make.bottom.mas_equalTo(-16);
+                make.width.mas_equalTo(20);
+                make.height.mas_equalTo(imgView.mas_width).multipliedBy(262./381.);;
+            }];
+        }
     }
     
     if (nil == self.rightMenuButton) {
         self.rightMenuButton = [UIButton new];
-
-        [self.rightMenuButton setImage:[UIImage imageNamed:@"右侧图标"] forState:UIControlStateNormal];
+//        self.rightMenuButton.backgroundColor = UIColor.redColor;
+//
+//        [self.rightMenuButton setImage:[UIImage imageNamed:@"右侧图标"] forState:UIControlStateNormal];
         [self.rightMenuButton addTarget:self action:@selector(rightMenuAction:) forControlEvents:64];
         
         [self.view addSubview:self.rightMenuButton];
         [self.rightMenuButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-16);
-            make.bottom.mas_equalTo(-16);
-            make.width.mas_equalTo(30);
+            make.right.mas_equalTo(0);
+            make.bottom.mas_equalTo(0);
+            make.width.mas_equalTo(100);
             make.height.mas_equalTo(self->_rightMenuButton.mas_width).multipliedBy(534./620);;
         }];
+        
+        {
+            UIImageView *imgView = [UIImageView new];
+            imgView.image = [UIImage imageNamed:@"右侧图标"];
+            imgView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            [self.rightMenuButton addSubview:imgView];
+            [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.right.mas_equalTo(-16);
+                make.bottom.mas_equalTo(-16);
+                make.width.mas_equalTo(30);
+                make.height.mas_equalTo(imgView.mas_width).multipliedBy(534./620);;
+            }];
+        }
     }
 }
 
@@ -280,7 +315,9 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
         
         [self handleConnect2DeiceWifiBlock];
 
-    } else if (self.connectState == MSConnectStatesRecordConnnectedTGDevice) {
+    } else if (self.connectState == MSConnectStatesRecordConnnectedTGDevice
+               || self.connectState == MSConnectStatesWifiInfoReseted
+               ) {
         // 代码内部连接WIFI
         
         if ([UIDevice currentDevice].systemVersion.integerValue >= 11) {
@@ -293,8 +330,10 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
         //  跳到设置界面
         
         [self openSettinPage];
+    } else {
+        [self openSettinPage];
     }
-    
+
 }
 
 - (void)openSettinPage {
@@ -386,7 +425,14 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
                                                   [weakSelf getFwVersion:familyBlock];
                                               } else {
                                                   
-                                                  !otherBlock ? : otherBlock();
+                                                  //   如果同步失败，则尝试重新同步
+                                                  if (weakSelf.retryTimes < 4) {
+                                                      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                          [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
+                                                      });
+                                                  } else {
+                                                      !otherBlock ? : otherBlock();
+                                                  }
 //                                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //                                                      [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
 //                                                  });
@@ -450,6 +496,10 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 - (void)applicationDidBecomeActive:(NSNotification *)application {
     
     [self loadData];
+}
+
+- (void)handleWifiInfoReset:(NSNotification *)ntf {
+    self.connectState = MSConnectStatesWifiInfoReseted;
 }
 
 @end

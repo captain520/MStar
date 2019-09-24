@@ -99,7 +99,6 @@
     }];
 }
 
-
 //  切换录制状态
 - (void)toggleRecordState {
     
@@ -109,6 +108,38 @@
                                           block:^(NSString *result) {
                                               if ([result containsString:@"404 Not Found"]) {
                                                   [self toggleRecordState];
+                                              }
+                                              NSLog(@"切换录制状态：%@", result);
+                                          } fail:^(NSError *error) {
+                                              NSLog(@"切换录制状态：%@", error);
+                                          }];
+}
+
+- (void)stopRecrod:(void (^)(void))block {
+    
+    [self getRecordingState:^(BOOL recordState) {
+        
+        if (NO == recordState) {
+            //  如果状态是未录制
+            
+            !block ? : block();
+        } else {
+            //  如果状态正在录制，切换录制状态
+            [self toggleRecordState:block];
+        }
+    }];
+}
+
+- (void)toggleRecordState:(void (^)(void))block {
+    
+    NSLog(@"开始切换录制状态");
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl]
+                                          block:^(NSString *result) {
+                                              if ([result containsString:@"404 Not Found"]) {
+                                                  [self toggleRecordState:block];
+                                              } else {
+                                                  !block ? : block();
                                               }
                                               NSLog(@"切换录制状态：%@", result);
                                           } fail:^(NSError *error) {

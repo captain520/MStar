@@ -22,6 +22,10 @@
 
 @implementation MSTabBarVC
 
+//- (void)dealloc {
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
+//}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -63,13 +67,22 @@
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    NSLog(@"%s", __FUNCTION__);
+
     NSInteger itemIndex = [tabBar.items indexOfObject:item];
+    NSLog(@"%s -- index:%@", __FUNCTION__, @(itemIndex));
     
-    if (itemIndex > 0) {
-        
+    if (0 == itemIndex) {
+       //   预览页面在出现时会自动打开录像
+    } else if (1 == itemIndex) {
+        //  要停止录像后刷新视频列表
+        [[MSDeviceMgr manager] stopRecrod:^{
+//            NSLog(@"stop record");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ItemSelectedNotification" object:@(itemIndex)];
+        }];
     } else {
-        
+        [[MSDeviceMgr manager] stopRecrod:^{
+            NSLog(@"stop record");
+        }];
     }
 }
 
