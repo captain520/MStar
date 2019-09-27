@@ -367,6 +367,7 @@
     
 }
 
+
 - (void)recorderAction:(UIButton *)sender
 {
     //    camera_cmd = CAMERA_CMD_RECORD;
