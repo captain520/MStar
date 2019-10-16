@@ -3,12 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		396B3E492D5A47B68AEC5BF0 /* libPods-MStar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36260F7EED62A9BE8FA8478D /* libPods-MStar.a */; };
 		9C0E81B72333494000FAE88A /* MSDeviceMgr.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0E81B62333494000FAE88A /* MSDeviceMgr.m */; };
+		9C148B652354423C0045B12B /* MSBaseVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C148B642354423C0045B12B /* MSBaseVC.m */; };
+		9C148B68235442600045B12B /* MSMainVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C148B67235442600045B12B /* MSMainVC.m */; };
+		9C148B6F235454190045B12B /* MSPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C148B6E235454190045B12B /* MSPreviewView.m */; };
+		9C148B7223546DC60045B12B /* MSMainController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C148B7123546DC60045B12B /* MSMainController.m */; };
+		9C148B7F2356DE060045B12B /* MSBaesTableVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C148B7E2356DE060045B12B /* MSBaesTableVC.m */; };
+		9C148B822356DE810045B12B /* MSRemoteFileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C148B812356DE810045B12B /* MSRemoteFileVC.m */; };
+		9C148B852356E0D60045B12B /* MSRemoteFileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C148B842356E0D60045B12B /* MSRemoteFileCell.m */; };
+		9C148B882356EC7E0045B12B /* MSRemoteFileController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C148B872356EC7E0045B12B /* MSRemoteFileController.m */; };
 		9C23B07E227DD9E8005221FE /* MSMediaListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C23B07D227DD9E8005221FE /* MSMediaListVC.m */; };
 		9C23B081227DE977005221FE /* MSSettingActionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C23B080227DE977005221FE /* MSSettingActionVC.m */; };
 		9C3D7C0D227EC5EA00BCB077 /* CPLoadStatusToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3D7C0C227EC5EA00BCB077 /* CPLoadStatusToast.m */; };
@@ -119,6 +127,22 @@
 		4D7B6EE3A4C6F76F84917D2A /* Pods-MStar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MStar.debug.xcconfig"; path = "Target Support Files/Pods-MStar/Pods-MStar.debug.xcconfig"; sourceTree = "<group>"; };
 		9C0E81B52333494000FAE88A /* MSDeviceMgr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSDeviceMgr.h; sourceTree = "<group>"; };
 		9C0E81B62333494000FAE88A /* MSDeviceMgr.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSDeviceMgr.m; sourceTree = "<group>"; };
+		9C148B632354423C0045B12B /* MSBaseVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSBaseVC.h; sourceTree = "<group>"; };
+		9C148B642354423C0045B12B /* MSBaseVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSBaseVC.m; sourceTree = "<group>"; };
+		9C148B66235442600045B12B /* MSMainVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSMainVC.h; sourceTree = "<group>"; };
+		9C148B67235442600045B12B /* MSMainVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSMainVC.m; sourceTree = "<group>"; };
+		9C148B6D235454190045B12B /* MSPreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSPreviewView.h; sourceTree = "<group>"; };
+		9C148B6E235454190045B12B /* MSPreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSPreviewView.m; sourceTree = "<group>"; };
+		9C148B7023546DC50045B12B /* MSMainController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSMainController.h; sourceTree = "<group>"; };
+		9C148B7123546DC60045B12B /* MSMainController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSMainController.m; sourceTree = "<group>"; };
+		9C148B7D2356DE060045B12B /* MSBaesTableVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSBaesTableVC.h; sourceTree = "<group>"; };
+		9C148B7E2356DE060045B12B /* MSBaesTableVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSBaesTableVC.m; sourceTree = "<group>"; };
+		9C148B802356DE810045B12B /* MSRemoteFileVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRemoteFileVC.h; sourceTree = "<group>"; };
+		9C148B812356DE810045B12B /* MSRemoteFileVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSRemoteFileVC.m; sourceTree = "<group>"; };
+		9C148B832356E0D60045B12B /* MSRemoteFileCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRemoteFileCell.h; sourceTree = "<group>"; };
+		9C148B842356E0D60045B12B /* MSRemoteFileCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSRemoteFileCell.m; sourceTree = "<group>"; };
+		9C148B862356EC7E0045B12B /* MSRemoteFileController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRemoteFileController.h; sourceTree = "<group>"; };
+		9C148B872356EC7E0045B12B /* MSRemoteFileController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSRemoteFileController.m; sourceTree = "<group>"; };
 		9C23B07C227DD9E8005221FE /* MSMediaListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSMediaListVC.h; sourceTree = "<group>"; };
 		9C23B07D227DD9E8005221FE /* MSMediaListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSMediaListVC.m; sourceTree = "<group>"; };
 		9C23B07F227DE977005221FE /* MSSettingActionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSSettingActionVC.h; sourceTree = "<group>"; };
@@ -351,6 +375,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9C148B612354417A0045B12B /* 预览 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "预览";
+			sourceTree = "<group>";
+		};
+		9C148B62235442270045B12B /* 基类 */ = {
+			isa = PBXGroup;
+			children = (
+				9C148B632354423C0045B12B /* MSBaseVC.h */,
+				9C148B642354423C0045B12B /* MSBaseVC.m */,
+				9C148B7D2356DE060045B12B /* MSBaesTableVC.h */,
+				9C148B7E2356DE060045B12B /* MSBaesTableVC.m */,
+			);
+			path = "基类";
+			sourceTree = "<group>";
+		};
+		9C148B6C235454080045B12B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9C148B6D235454190045B12B /* MSPreviewView.h */,
+				9C148B6E235454190045B12B /* MSPreviewView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		9C4D7B762230A08300B6273E = {
 			isa = PBXGroup;
 			children = (
@@ -372,6 +423,8 @@
 		9C4D7B812230A08400B6273E /* MStar */ = {
 			isa = PBXGroup;
 			children = (
+				9C148B62235442270045B12B /* 基类 */,
+				9C148B612354417A0045B12B /* 预览 */,
 				9CC93A4E23162DA600FC32EF /* Third */,
 				9CC93A4A2316169600FC32EF /* Util */,
 				9CDCC743225F388600162D9A /* VLCPlayer */,
@@ -480,6 +533,10 @@
 				9C23B07D227DD9E8005221FE /* MSMediaListVC.m */,
 				9CDFFC7522857AEA003159A3 /* MSPhotoBrowserVC.h */,
 				9CDFFC7622857AEA003159A3 /* MSPhotoBrowserVC.m */,
+				9C148B802356DE810045B12B /* MSRemoteFileVC.h */,
+				9C148B812356DE810045B12B /* MSRemoteFileVC.m */,
+				9C148B862356EC7E0045B12B /* MSRemoteFileController.h */,
+				9C148B872356EC7E0045B12B /* MSRemoteFileController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -498,6 +555,8 @@
 				9C84EEE622EAD0640065F35A /* CPDownloadActionSheet.m */,
 				9C3D7C0B227EC5EA00BCB077 /* CPLoadStatusToast.h */,
 				9C3D7C0C227EC5EA00BCB077 /* CPLoadStatusToast.m */,
+				9C148B832356E0D60045B12B /* MSRemoteFileCell.h */,
+				9C148B842356E0D60045B12B /* MSRemoteFileCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -619,9 +678,9 @@
 		9CA173FF2259A5DC008EA36F /* Preview */ = {
 			isa = PBXGroup;
 			children = (
+				9C148B6C235454080045B12B /* View */,
 				9CA174002259A5DC008EA36F /* Controller */,
 				9CA174012259A5DC008EA36F /* Model */,
-				9CA174022259A5DC008EA36F /* View */,
 			);
 			name = Preview;
 			path = MStar/Preview;
@@ -636,6 +695,10 @@
 				9C4D7B9C2230B40000B6273E /* MSPreviewVC.m */,
 				9C23B07F227DE977005221FE /* MSSettingActionVC.h */,
 				9C23B080227DE977005221FE /* MSSettingActionVC.m */,
+				9C148B66235442600045B12B /* MSMainVC.h */,
+				9C148B67235442600045B12B /* MSMainVC.m */,
+				9C148B7023546DC50045B12B /* MSMainController.h */,
+				9C148B7123546DC60045B12B /* MSMainController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -647,13 +710,6 @@
 				9CA1740C225A233A008EA36F /* MSCamMenuManager.m */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		9CA174022259A5DC008EA36F /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		9CA174032259EA11008EA36F /* Common */ = {
@@ -973,19 +1029,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MStar/Pods-MStar-resources.sh",
-				"${PODS_ROOT}/IDMPhotoBrowser/Classes/IDMPhotoBrowser.bundle",
-				"${PODS_ROOT}/IDMPhotoBrowser/Classes/IDMPBLocalizations.bundle",
-				"${PODS_ROOT}/IQKeyboardManager/IQKeyboardManager/Resources/IQKeyboardManager.bundle",
-				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MStar/Pods-MStar-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IDMPhotoBrowser.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IDMPBLocalizations.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IQKeyboardManager.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MStar/Pods-MStar-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1013,6 +1062,7 @@
 				9CF5ED3822599B9D00E136A1 /* Toast+UIView.m in Sources */,
 				9C4D7B9D2230B40000B6273E /* MSPreviewVC.m in Sources */,
 				9CF5ED5322599C5A00E136A1 /* AITFileNode.m in Sources */,
+				9C148B7223546DC60045B12B /* MSMainController.m in Sources */,
 				9C51CCF9225E6C030087CCF8 /* UIButton+block.m in Sources */,
 				9C99469022582BA600AD863F /* NSString+Category.m in Sources */,
 				9C99469322582BA600AD863F /* UIImageView+Extension.m in Sources */,
@@ -1020,7 +1070,10 @@
 				9C99468F22582BA600AD863F /* UIView+UIView_LineEX.m in Sources */,
 				9CDCC77522602BEA00162D9A /* MSLocalFileContentVC.m in Sources */,
 				9C99466D22582B0900AD863F /* UIColor+ColorWithHex.m in Sources */,
+				9C148B7F2356DE060045B12B /* MSBaesTableVC.m in Sources */,
 				9C99469622582BA600AD863F /* UILabel+Extension.m in Sources */,
+				9C148B652354423C0045B12B /* MSBaseVC.m in Sources */,
+				9C148B6F235454190045B12B /* MSPreviewView.m in Sources */,
 				9CDCC746225F38AB00162D9A /* SCVideoMainViewController.m in Sources */,
 				9CDCC766225F38B200162D9A /* CustomSlider.m in Sources */,
 				9CA1740D225A233A008EA36F /* MSCamMenuManager.m in Sources */,
@@ -1031,6 +1084,7 @@
 				9CF5ED5422599C5A00E136A1 /* AITFileDownloader.m in Sources */,
 				9C99469722582BA600AD863F /* UIColor+category.m in Sources */,
 				9CF5ED5722599C8700E136A1 /* GDataXMLNode.m in Sources */,
+				9C148B68235442600045B12B /* MSMainVC.m in Sources */,
 				9C4D7BA42230B87600B6273E /* MSFIleListCell.m in Sources */,
 				9C84EEE722EAD0650065F35A /* CPDownloadActionSheet.m in Sources */,
 				9C4D7BB9223112AA00B6273E /* MSFileListContentVC.m in Sources */,
@@ -1045,7 +1099,9 @@
 				9CDCC767225F38B200162D9A /* VLCPlayerView.m in Sources */,
 				9C99466A225714EE00AD863F /* AppDelegate+Category.m in Sources */,
 				9CDCC778226036E100162D9A /* NYWaterWaveView.m in Sources */,
+				9C148B882356EC7E0045B12B /* MSRemoteFileController.m in Sources */,
 				9CF5ED4622599C0900E136A1 /* GCDAsyncSocket.m in Sources */,
+				9C148B852356E0D60045B12B /* MSRemoteFileCell.m in Sources */,
 				9CAA92AA2295517E0050E2C3 /* MSAboutVC.m in Sources */,
 				9CDCC77222602B4D00162D9A /* MSContentVC.m in Sources */,
 				9C99468E22582BA600AD863F /* UITextField+Extension.m in Sources */,
@@ -1070,6 +1126,7 @@
 				9C4D7BB02230C80700B6273E /* CPPlayerVC.m in Sources */,
 				9CDFFC74228513EE003159A3 /* UIViewController+Category.m in Sources */,
 				9C4D7BA02230B78000B6273E /* MSSDFileLIstVC.m in Sources */,
+				9C148B822356DE810045B12B /* MSRemoteFileVC.m in Sources */,
 				9C4D7BB322310D8900B6273E /* MSSettingVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1227,6 +1284,7 @@
 				CODE_SIGN_ENTITLEMENTS = MStar/MStar.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 37XF7678WV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1245,11 +1303,12 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = MStar/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1289,6 +1348,7 @@
 				CODE_SIGN_ENTITLEMENTS = MStar/MStar.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 37XF7678WV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1307,11 +1367,12 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = MStar/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

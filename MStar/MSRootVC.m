@@ -309,6 +309,16 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 
 //  增加设备
 - (void)addDeviceAction:(id)sender {
+    
+#if Test
+    
+    MSTabBarVC *vc = [[MSTabBarVC alloc] init];
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    
+    return;
+#endif
+    
 
     if (self.connectState == MSConnectStatesConnectedTGDevice) {
         //  直接跳转到预览页面

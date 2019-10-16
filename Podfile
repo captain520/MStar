@@ -20,5 +20,6 @@ target 'MStar' do
   pod 'IDMPhotoBrowser'
   pod 'IQKeyboardManager'
   pod 'MJRefresh'
+  pod 'MBProgressHUD'
   
 end

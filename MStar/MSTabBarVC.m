@@ -16,6 +16,8 @@
 #import "MSProfileVC.h"
 #import "MSLocalFileContentVC.h"
 
+#import "MSMainVC.h"
+
 @interface MSTabBarVC ()
 
 @end
@@ -40,7 +42,12 @@
 
 - (void)initControllers {
     
-    MSPreviewVC *vc0 = [[MSPreviewVC alloc] init];
+//    MSPreviewVC *vc0 = [[MSPreviewVC alloc] init];
+//    vc0.view.backgroundColor = UIColor.whiteColor;
+//    vc0.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"LivePreview",nil) image:[UIImage imageNamed:@"直播"] tag:0];
+//    UINavigationController *nav0 = [[UINavigationController alloc] initWithRootViewController:vc0];
+    
+    MSMainVC *vc0 = [[MSMainVC alloc] init];
     vc0.view.backgroundColor = UIColor.whiteColor;
     vc0.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"LivePreview",nil) image:[UIImage imageNamed:@"直播"] tag:0];
     UINavigationController *nav0 = [[UINavigationController alloc] initWithRootViewController:vc0];
@@ -71,19 +78,28 @@
     NSInteger itemIndex = [tabBar.items indexOfObject:item];
     NSLog(@"%s -- index:%@", __FUNCTION__, @(itemIndex));
     
-    if (0 == itemIndex) {
-       //   预览页面在出现时会自动打开录像
-    } else if (1 == itemIndex) {
-        //  要停止录像后刷新视频列表
+    if (1 == itemIndex) {
         [[MSDeviceMgr manager] stopRecrod:^{
-//            NSLog(@"stop record");
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ItemSelectedNotification" object:@(itemIndex)];
         }];
-    } else {
+    } else if (0 != itemIndex) {
         [[MSDeviceMgr manager] stopRecrod:^{
-            NSLog(@"stop record");
+            
         }];
     }
+//    if (0 == itemIndex) {
+//       //   预览页面在出现时会自动打开录像
+//    } else if (1 == itemIndex) {
+//        //  要停止录像后刷新视频列表
+//        [[MSDeviceMgr manager] stopRecrod:^{
+////            NSLog(@"stop record");
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"ItemSelectedNotification" object:@(itemIndex)];
+//        }];
+//    } else {
+//        [[MSDeviceMgr manager] stopRecrod:^{
+//            NSLog(@"stop record");
+//        }];
+//    }
 }
 
 @end

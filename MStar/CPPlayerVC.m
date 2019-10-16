@@ -13,11 +13,13 @@
 #import "VLCConstants.h"
 #import "AITCameraRequest.h"
 
+
 @interface CPPlayerVC () <VLCMediaDelegate,VLCMediaPlayerDelegate,AITCameraRequestDelegate>{
     VLCMediaPlayer *mediaPlayer ;
     
     Camera_cmd_t camera_cmd;
-    BOOL cameraRecording;
+
+    UIButton *recordBt;
 }
 
 //@property (nonatomic, strong) AVPlayer *player;
@@ -34,19 +36,35 @@
 @property (nonatomic,strong) UIButton *redRecrodLight;
 
 @property (nonatomic, strong) UIView * splashView;
+@property (nonatomic, assign) BOOL  cameraRecording;
+
 
 @end
 
 @implementation CPPlayerVC
 
+- (void)dealloc {
+    NSLog(@"%s",__FUNCTION__);
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+
     self.view.backgroundColor = UIColor.blackColor;
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self.controller getRecordingState4Loop];
+    self.controller.updateRecordStatesBlock = ^(BOOL isRecording) {
+        [weakSelf updateRecordStates:isRecording];
+    };
+
     //    [self setupUI];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
-    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -70,7 +88,7 @@
     
     [self autoDimiss];
     
-    [self flickRecodeLight];
+    [self flickRecodeLight2];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -197,10 +215,10 @@
             //            make.bottom.mas_equalTo(-16 * 3);
         }];
         
-        UIButton *recordBt = [UIButton new];
-        //        recordBt.backgroundColor = UIColor.purpleColor;
+        
+        recordBt = [UIButton new];
         [recordBt setImage:[UIImage imageNamed:@"录像白色"] forState:UIControlStateNormal];
-        [recordBt setImage:[UIImage imageNamed:@"已停止白色"] forState:UIControlStateSelected];
+//        [recordBt setImage:[UIImage imageNamed:@"已停止白色"] forState:UIControlStateSelected];
         [recordBt addTarget:self action:@selector(recorderAction:) forControlEvents:UIControlEventTouchUpInside];
         
         [self.actionView addSubview:recordBt];
@@ -268,8 +286,11 @@
 }
 
 - (void)backAction:(id)sender {
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(flickRecodeLight2) object:nil];
+    
     [self dismissViewControllerAnimated:YES completion:^{
-        
+        [MSDeviceMgr manager].fullScreen = NO;
     }];
 }
 
@@ -327,15 +348,15 @@
     [self performSelector:@selector(hideTool) withObject:nil afterDelay:3.0];
 }
 
-- (void)flickRecodeLight {
+- (void)flickRecodeLight2 {
     
-    if (cameraRecording == NO) {
+    if (self.cameraRecording == NO) {
         self.redRecrodLight.hidden = YES;
     } else {
         self.redRecrodLight.hidden = !self.redRecrodLight.hidden;
     }
     
-    [self performSelector:@selector(flickRecodeLight) withObject:nil afterDelay:1];
+    [self performSelector:@selector(flickRecodeLight2) withObject:nil afterDelay:1];
 }
 
 - (BOOL)shouldAutorotate {
@@ -354,6 +375,8 @@
 
 - (void)shotAction:(id)sender
 {
+    [self photosound];
+    
     camera_cmd = CAMERA_CMD_SNAPSHOT;
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraSnapshotUrl] Delegate:self];
     
@@ -370,19 +393,24 @@
 
 - (void)recorderAction:(UIButton *)sender
 {
-    //    camera_cmd = CAMERA_CMD_RECORD;
-    //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl] Delegate:self];
-    //}
-    sender.selected = !sender.selected;
     
-    __weak typeof(self) weakSelf = self;
+    [self.controller stopRecordingState4Loop];
+    [[MSDeviceMgr manager] toggleRecordState:^{
+        NSLog(@"切换成功");
+        [self.controller getRecordingState4Loop];
+    }];
     
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl]
-                                          block:^(NSString *result) {
-                                              [weakSelf handleRecordActionBlock:result];
-                                          } fail:^(NSError *error) {
-                                              
-                                          }];
+
+//    sender.selected = !sender.selected;
+//
+//    __weak typeof(self) weakSelf = self;
+//
+//    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl]
+//                                          block:^(NSString *result) {
+//                                              [weakSelf handleRecordActionBlock:result];
+//                                          } fail:^(NSError *error) {
+//
+//                                          }];
 }
 
 - (void)handleRecordActionBlock:(NSString *)result {
@@ -390,10 +418,20 @@
         return;
     }
     
-    cameraRecording = !cameraRecording;
+    self.cameraRecording = !self.cameraRecording;
 }
 
 #pragma mark - delegate method implement
+
+- (void)updateRecordStates:(BOOL)isRecording {
+    
+    UIImage *image = [UIImage imageNamed:isRecording ? @"已停止白色":@"录像白色"];
+    [recordBt setImage:image forState:UIControlStateNormal];
+
+    self.cameraRecording = isRecording;
+    
+    ;
+}
 
 - (void)requestFinished:(NSString *)result
 {
@@ -408,7 +446,7 @@
             
             if ([result containsString:@"OK"]) {
                 //                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
-                cameraRecording = !cameraRecording;
+                self.cameraRecording = !self.cameraRecording;
             }
             break;
         case CAMERA_CMD_SNAPSHOT: {
@@ -417,7 +455,7 @@
                 return;
             } else {
                 //                [self.view makeToast:NSLocalizedString(@"SendCommandSuccess", nil) duration:2.0 position:CSToastPositionCenter];
-                [self photosound];
+//                [self photosound];
             }
             NSLog(@"");
         }

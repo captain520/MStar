@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MSMainController.h"
+
 @interface CPPlayerVC : UIViewController
 
 @property (nonatomic, copy) NSString * networkcache;
 @property (nonatomic, copy) NSString * liveurl;
+
+@property (nonatomic, weak) MSMainController *controller;
 
 @end

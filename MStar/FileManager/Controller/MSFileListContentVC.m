@@ -9,6 +9,8 @@
 #import "MSFileListContentVC.h"
 #import "MSSDFileLIstVC.h"
 
+#import "MSRemoteFileVC.h"
+
 
 #define SELECTED_COLOR  [UIColor colorWithRed:18./255 green:150./255 blue:219./255 alpha:1]
 
@@ -62,6 +64,23 @@
     if (self.isLocalFileList == NO) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SwitchCameralRear"] style:UIBarButtonItemStylePlain target:self action:@selector(switchCameralAction:)];
     }
+
+    
+    MSRemoteFileVC *vc0 = [[MSRemoteFileVC alloc] init];
+    vc0.yp_tabItemTitle = NSLocalizedString(@"NormalVideo", nil);;
+    vc0.fileType = W1MFileTypeNormal;
+    
+    MSRemoteFileVC *vc1 = [[MSRemoteFileVC alloc] init];
+    vc1.yp_tabItemTitle = NSLocalizedString(@"Photo", nil);
+    vc1.fileType = W1MFileTypePhoto;
+    
+    MSRemoteFileVC *vc2 = [[MSRemoteFileVC alloc] init];
+    vc2.yp_tabItemTitle = NSLocalizedString(@"EventVideo", nil);
+    vc2.fileType = W1MFileTypeEvent;
+    
+    self.viewControllers = @[vc0, vc1, vc2];
+
+#if 0
     
     self.normalVideoVC = [[MSSDFileLIstVC alloc] initWithStyle:UITableViewStyleGrouped];;
     self.normalVideoVC.yp_tabItemTitle = NSLocalizedString(@"NormalVideo", nil);
@@ -79,6 +98,7 @@
     self.eventVideoVC.fileType = W1MFileTypeEvent;
 
     self.viewControllers = @[self.normalVideoVC, self.imageVc, self.eventVideoVC];
+#endif
 }
 
 - (void)switchCameralAction:(UIBarButtonItem *)sender {
@@ -89,15 +109,22 @@
     } else {
         sender.image = [UIImage imageNamed:@"SwitchCameralRear"];
     }
+    
 
-    self.normalVideoVC.isRear = self.isRear;
-    [self.normalVideoVC refreshAllData];
-    
-    self.imageVc.isRear = self.isRear;
-    [self.imageVc refreshAllData];
-    
-    self.eventVideoVC.isRear = self.isRear;
-    [self.eventVideoVC refreshAllData];
+    [self.viewControllers enumerateObjectsUsingBlock:^(UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        MSRemoteFileVC *vc = (MSRemoteFileVC *)obj;
+        vc.isRear = self.isRear;
+        
+        [vc refreshAllData];
+    }];
+//    self.normalVideoVC.isRear = self.isRear;
+//    [self.normalVideoVC refreshAllData];
+//
+//    self.imageVc.isRear = self.isRear;
+//    [self.imageVc refreshAllData];
+//
+//    self.eventVideoVC.isRear = self.isRear;
+//    [self.eventVideoVC refreshAllData];
 }
 
 @end

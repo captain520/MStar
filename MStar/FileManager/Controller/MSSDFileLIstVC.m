@@ -86,7 +86,7 @@ typedef enum
     if (self.hasLoaded == NO) {
         self.hasLoaded = YES;
         
-//        [self loadData];
+        //        [self loadData];
     }
 }
 
@@ -263,28 +263,28 @@ typedef enum
         
         (void)[[AITCameraCommand alloc] initWithUrl:requestUrl
                                               block:^(NSString *result) {
-                                                  
-                                                  [weakSelf.navigationController.view cp_hideToast];
-                                                  
-                                                  if (result.length > 10) {
-                                                      if ([result containsString:@"Not"]) {
-                                                          [[MSDeviceMgr manager] stopRecrod:^{
-                                                              [weakSelf loadData:isAllRefresh];
-                                                          }];
-                                                          NSLog(@"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-                                                      } else {
-                                                          [weakSelf handleLoadFileListBlock:result];
-                                                      }
-                                                  } else {
-                                                      [weakSelf handleErrorBlock];
-                                                  }
-                                                  
-                                                  
-                                              } fail:^(NSError *error) {
-                                                  [weakSelf handleErrorBlock];
-                                                  [weakSelf.navigationController.view cp_hideToast];
-                                                  
-                                              }];
+            
+            [weakSelf.navigationController.view cp_hideToast];
+            
+            if (result.length > 10) {
+                if ([result containsString:@"Not"]) {
+                    [[MSDeviceMgr manager] stopRecrod:^{
+                        [weakSelf loadData:isAllRefresh];
+                    }];
+                    NSLog(@"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                } else {
+                    [weakSelf handleLoadFileListBlock:result];
+                }
+            } else {
+                [weakSelf handleErrorBlock];
+            }
+            
+            
+        } fail:^(NSError *error) {
+            [weakSelf handleErrorBlock];
+            [weakSelf.navigationController.view cp_hideToast];
+            
+        }];
     }];
 }
 
@@ -391,46 +391,6 @@ typedef enum
     
     [self presentViewController:alertController animated:YES completion:^{
     }];
-    
-    //    SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-    //    alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-    //
-    //     __weak typeof(self) weakSelf = self;
-    //
-    //    [alert addButton:NSLocalizedString(@"Delete", nil) actionBlock:^{
-    //        [weakSelf handleDeleteActionBlock:indexPath];
-    //    }];
-    //
-    //    [alert addButton:NSLocalizedString(@"Downlaod", nil) actionBlock:^{
-    //        [weakSelf handleDownloadAction:indexPath];
-    //    }];
-    //
-    //    NSString *previewTitle = nil;
-    //
-    //    if (self.fileType == W1MFileTypePhoto) {
-    //        previewTitle = @"Preview";
-    //    } else {
-    //        previewTitle = @"Play";
-    //    }
-    //    [alert addButton:NSLocalizedString(previewTitle, nil) actionBlock:^{
-    //        [weakSelf handlePlayAction:indexPath];
-    //    }];
-    //
-    //    SCLButton *button = [alert addButton:NSLocalizedString(@"Cancel", nil) actionBlock:^{
-    //
-    //    }];
-    //
-    //    button.buttonFormatBlock = ^NSDictionary *{
-    //        return @{@"backgroundColor" : C99};
-    //    };
-    //
-    //    [alert showCustom:self image:[UIImage imageNamed:@"logo"] color:MAIN_COLOR title:nil subTitle:NSLocalizedString(@"PleaseChooseYourAction", nil) closeButtonTitle:nil duration:0.0f];
-    
-    //    if (self.isLocalFileList == NO) {
-    //        return;
-    //    } else {
-    //        [self playLocalVideoAction:nil];
-    //    }
 }
 
 - (void)handleDeleteActionBlock:(NSIndexPath *)indexPath {
@@ -471,7 +431,7 @@ typedef enum
 - (void)handlePlayAction:(NSIndexPath *)indexPath {
     
     AITFileNode *node = [self.dataArray objectAtIndex:indexPath.row];
-    //    NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [node.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]] ;
+    
     NSString *url = [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [node.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     
     if (self.fileType == W1MFileTypePhoto) {
@@ -482,10 +442,6 @@ typedef enum
         MSPhotoBrowserVC *browser = [[MSPhotoBrowserVC alloc] initWithPhotos:photos];
         
         [self presentViewController:browser animated:YES completion:nil];
-        //        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
-        //
-        //        [self presentViewController:browser animated:YES completion:nil];
-        
     } else {
         
         
@@ -494,25 +450,8 @@ typedef enum
         vc.videoUrl = url;
         
         [self presentViewController:vc animated:YES completion:nil];
-        
-        //        SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:url];
-        //        vc.hidesBottomBarWhenPushed = YES;
-        //        vc.playName = node.name.lastPathComponent;
-        
-        //        UIApplication.sharedApplication.keyWindow.rootViewController.hidesBottomBarWhenPushed = YES;
-        //
-        //        self.navigationController.navigationBarHidden=YES;
-        //
-        //        [self.navigationController pushViewController:vc animated:YES];
     }
     
-    //    CPPlayerVC *playerVC = [[CPPlayerVC alloc] init];
-    //    playerVC.hidesBottomBarWhenPushed = YES;
-    //    playerVC.liveurl = [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [node.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-    //
-    //    [self.navigationController presentViewController:playerVC animated:YES completion:^{
-    //
-    //    }];
 }
 
 - (void)handleDownloadAction:(NSIndexPath *)indexPath {
@@ -567,177 +506,25 @@ typedef enum
         [[AITFileDownloader manager] startDownloadFrom:fileNode.name
                                                     to:[directory stringByAppendingPathComponent:fileNode.name.lastPathComponent]
                                               progress:^(CGFloat downloadPer) {
-                                                  NSLog(@"************** %@ ****************",@(downloadPer));
-                                                  [CPDownloadActionSheet manager].percent = downloadPer;;
-                                              } finished:^{
-                                                  NSLog(@"finished");
-                                                  [[CPDownloadActionSheet manager] dimiss];
-                                                  [[CPLoadStatusToast shareInstance] showWithStyle:CPLoadStatusStyleLoadingSuccess];
-                                              } abort:^{
-                                                  NSLog(@"Abort");
-                                                  [[CPDownloadActionSheet manager] dimiss];
-                                                  [[CPLoadStatusToast shareInstance] showWithStyle:CPLoadStatusStyleFail];
-                                              } error:^(NSError *error) {
-                                                  NSLog(@"Error");
-                                                  [[CPDownloadActionSheet manager] dimiss];
-                                                  [[CPLoadStatusToast shareInstance] showWithStyle:CPLoadStatusStyleFail];
-                                              }];
+            NSLog(@"************** %@ ****************",@(downloadPer));
+            [CPDownloadActionSheet manager].percent = downloadPer;;
+        } finished:^{
+            NSLog(@"finished");
+            [[CPDownloadActionSheet manager] dimiss];
+            [[CPLoadStatusToast shareInstance] showWithStyle:CPLoadStatusStyleLoadingSuccess];
+        } abort:^{
+            NSLog(@"Abort");
+            [[CPDownloadActionSheet manager] dimiss];
+            [[CPLoadStatusToast shareInstance] showWithStyle:CPLoadStatusStyleFail];
+        } error:^(NSError *error) {
+            NSLog(@"Error");
+            [[CPDownloadActionSheet manager] dimiss];
+            [[CPLoadStatusToast shareInstance] showWithStyle:CPLoadStatusStyleFail];
+        }];
         
-        // Create downloader
-        //        url = [NSURL URLWithString: [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [fileNode.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]] ;
-        //        filename = [fileNode.name substringFromIndex:[fileNode.name rangeOfString:@"/" options:NSBackwardsSearch].location + 1] ;
-        //        NSLog(@"");
-        //        fileNode->downloader = [[AITFileDownloader alloc] initWithUrl:url Path:[directory stringByAppendingPathComponent:filename]];
-        //        fileNode.progress = 0.0;
-        //        [fileNode->downloader startDownload];
-        //        cancelButton.hidden = NO;
-        ////        self.hud.hidden = NO;
-        //
-        //
-        //        dlTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateUI:) userInfo:fileNode repeats:YES];
     }
 }
 
-- (void)updateUI:(NSTimer *)timer {
-    
-    AITFileNode *fileNode = timer.userInfo;
-    
-    
-    //    if (nil == self.hud) {
-    //
-    //        self.hud = [[M13ProgressHUD alloc] initWithProgressView:[[M13ProgressViewRing alloc] init]];
-    //
-    //        // Configure the progress view
-    //        self.hud.progressViewSize = CGSizeMake(60.0, 60.0);
-    //        self.hud.animationPoint = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
-    //
-    //        // Add the HUD to the window. (Or any UIView)
-    //        UIWindow *window = UIApplication.sharedApplication.keyWindow;
-    //        [window addSubview:self.hud];
-    //
-    //        // Show the HUD
-    //        [self.hud show:YES];
-    //
-    //        cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    //        cancelButton.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2 + 38);
-    //        [cancelButton setImage:[UIImage imageNamed:@"iccancel"] forState:UIControlStateNormal];
-    //
-    //        [self.hud addSubview:cancelButton];
-    //        [cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-    //            make.top.mas_equalTo(self.hud.progressView.mas_bottom).offset(80);
-    //            make.centerX.mas_equalTo(0);
-    //            make.size.mas_equalTo(CGSizeMake(60, 60));
-    //        }];
-    //    }
-    //
-    //    if (nil == self.hud.superview) {
-    //        UIWindow *window = UIApplication.sharedApplication.keyWindow;
-    //        [window addSubview:self.hud];
-    //        [self.hud show:YES];
-    //    }
-    //
-    //    [cancelButton buttonAction:^{
-    //        fileNode->downloader->abort = YES;
-    //    }];
-    
-    //Update the HUD progress
-    
-#if 0
-    if (nil == _downloadActionSheet) {
-        [self.downloadActionSheet show];
-        //        self.downloadActionSheet.cancelActionBlock = ^{
-        //            fileNode->downloader->abort = YES;
-        //        };
-    }
-    
-    if (self.downloadActionSheet.cancelActionBlock) {
-        self.downloadActionSheet.cancelActionBlock = ^{
-            fileNode->downloader->abort = YES;
-        };
-    }
-    
-    if (nil == self.downloadActionSheet.superview) {
-        [self.downloadActionSheet show];
-    }
-    
-    self.downloadActionSheet.percent = 1.* fileNode->downloader->offsetInFile/fileNode->downloader->bodyLength;
-    
-    //    [self.hud setProgress:1.* fileNode->downloader->offsetInFile/fileNode->downloader->bodyLength animated:YES];
-    
-    // Update the HUD status
-    //    self.hud.status = @"Processing";
-    
-    NSLog(@"----------:%.2f%%",100.* fileNode->downloader->offsetInFile/fileNode->downloader->bodyLength);
-    
-    if (fileNode->downloader->offsetInFile == -1 || YES == fileNode->downloader->abort) {
-        
-        
-        if (NO == fileNode->downloader->abort) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                //                SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-                //                alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-                //                [alert showError:NSLocalizedString(@"DownlaodFail", nil) subTitle:nil closeButtonTitle:nil duration:2];
-                [self.view makeToast:NSLocalizedString(@"DownlaodFail", nil) duration:1.0f position:CSToastPositionCenter];
-            });
-        }
-        
-        if (YES == fileNode->downloader->abort) {
-            cancelButton.hidden = YES;
-            [fileNode->downloader abortDownload];
-            
-        }
-        
-        [dlTimer invalidate];
-        dlTimer = nil;
-        fileNode.progress = -1;
-        fileNode->downloader = nil;
-        //        [self.hud dismiss:YES];
-        [self.downloadActionSheet dimiss];
-        
-        return;
-        
-    } else if (fileNode->downloader->offsetInFile == fileNode->downloader->bodyLength) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.view makeToast:NSLocalizedString(@"DownlaodSuccess", nil) duration:1.0f position:CSToastPositionCenter];
-            //            SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-            //            alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-            //            [alert showSuccess:NSLocalizedString(@"DownlaodSuccess", nil) subTitle:nil closeButtonTitle:nil duration:2];
-        });
-        
-        [dlTimer invalidate];
-        dlTimer = nil;
-        fileNode.progress = -1;
-        fileNode->downloader = nil;
-        // Hide the HUD
-        cancelButton.hidden = YES;
-        //        [self.hud dismiss:YES];
-        [self.downloadActionSheet dimiss];
-        
-        return;
-    }
-    
-    if (fileNode->downloader->handle == nil) {
-        
-        [dlTimer invalidate];
-        dlTimer = nil;
-        fileNode.progress = -1;
-        fileNode->downloader = nil;
-        
-        [self.view makeToast:NSLocalizedString(@"UnknowErorr", nil) duration:1.0f position:CSToastPositionCenter];
-        //        SCLAlertView *alert = [[SCLAlertView alloc] initWithNewWindow];
-        //        alert.showAnimationType = SCLAlertViewShowAnimationFadeIn;
-        //        [alert showError:NSLocalizedString(@"UnknowErorr", nil) subTitle:nil closeButtonTitle:nil duration:2];
-        
-    }
-#endif
-}
-
-//- (void)downloadAction:(id)sender {
-//
-//    MSDownloadView *downloadView = [[MSDownloadView alloc] initWithFrame:UIScreen.mainScreen.bounds];
-//
-//    [downloadView show];
-//}
 
 - (void)playLocalVideoAction:(id)sender {
     

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1100"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B9DF2D003EF903999DF910A895D1B862"
+               BlueprintIdentifier = "1525D22BD1F77FC78DA03DA8CA8FE3AE"
+               BuildableName = "libYPTabBarController.a"
                BlueprintName = "YPTabBarController"
-               ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "libYPTabBarController.a">
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

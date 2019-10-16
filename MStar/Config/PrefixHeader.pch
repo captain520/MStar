@@ -25,6 +25,9 @@
 #import "UIView+CPToast.h"
 
 #import "MSDeviceMgr.h"
+#import <MBProgressHUD.h>
+
+#define Test 0
 
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
@@ -38,6 +41,8 @@
 #define C00                   ([UIColor colorWithRed:0. / 255 green:0. / 255 blue:0. / 255 alpha:1])
 #define Cff                   ([UIColor colorWithRed:255. / 255 green:255. / 255 blue:255. / 255 alpha:1])
 
+#define TestColor             Test ? UIColor.redColor : UIColor.clearColor
+
 /******************************************* Text *********************************************************/
 #define SNAPSSHOT_PATH_STRING @"SnapsShot"
 
@@ -46,6 +51,9 @@
 #define SCREENWIDTH           [UIScreen mainScreen].bounds.size.width
 #define StatusHeight          [UIApplication sharedApplication].statusBarFrame.size.height//20
 #define NAV_HEIGHT            (44.0f + StatusHeight)
+
+//#define RPX (*(SCREENWIDTH)/(375.0f))
+#define RPX *(SCREENWIDTH)/(375.0f)
 
 typedef enum {
     CAMERA_CMD_SNAPSHOT,

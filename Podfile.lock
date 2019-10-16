@@ -25,6 +25,7 @@ PODS:
   - IQKeyboardManager (6.2.1)
   - M13ProgressSuite (1.2.9)
   - Masonry (1.1.0)
+  - MBProgressHUD (1.1.0)
   - MJRefresh (3.1.16)
   - pop (1.0.12)
   - SDWebImage (5.0.0):
@@ -41,13 +42,14 @@ DEPENDENCIES:
   - IQKeyboardManager
   - M13ProgressSuite
   - Masonry
+  - MBProgressHUD
   - MJRefresh
   - SDWebImage
   - XMLReader
   - YPTabBarController
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - BATabBarController
     - DACircularProgress
@@ -61,6 +63,8 @@ SPEC REPOS:
     - SDWebImage
     - XMLReader
     - YPTabBarController
+  trunk:
+    - MBProgressHUD
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -71,12 +75,13 @@ SPEC CHECKSUMS:
   IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
   M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   MJRefresh: 7798e16e53a5ef7f332dd05b27664db4e29530fd
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: 5de80a0302de9e377e62f47d2fa1304efff0e55f
   XMLReader: c7e54b707c368e2fa545d8313276b4de13a36ff5
   YPTabBarController: 8591a577e74dc9331929c9a0bb960ce2f1bf953f
 
-PODFILE CHECKSUM: ec3b7604ab74b4e3f77179aeac089db348f8c173
+PODFILE CHECKSUM: 471d02a85d58d552a94fbb6ae428b6b14d1de867
 
-COCOAPODS: 1.6.0.beta.1
+COCOAPODS: 1.8.0.beta.2
