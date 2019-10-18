@@ -31,6 +31,7 @@ typedef enum
 }
 
 @property (nonatomic, strong) MSRemoteFileController *controller;
+@property (nonatomic, assign) BOOL isLoading;
 
 @end
 
@@ -55,7 +56,7 @@ typedef enum
 - (void)initBaseProperties {
     self.dataArray = @[
     ].mutableCopy;
-    self.pageSize = 20;
+    self.pageSize = PageSize;
     
     self.controller = [[MSRemoteFileController alloc] init];
     
@@ -126,8 +127,11 @@ typedef enum
         cell = [[MSRemoteFileCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
     }
     
-    AITFileNode *fileNode = [self.dataArray objectAtIndex:indexPath.row];
-    cell.fileNode = fileNode;
+    if (indexPath.row < self.dataArray.count) {
+        AITFileNode *fileNode = [self.dataArray objectAtIndex:indexPath.row];
+        cell.fileNode = fileNode;
+    }
+    
 
     return cell;
 }
@@ -138,6 +142,10 @@ typedef enum
 
 - (void)loadData {
     
+    [self.view.window cp_showToast];
+    
+    self.isLoading = YES;
+
     __weak typeof(self) weakSelf = self;
     
     [[MSDeviceMgr manager] loadRemoteFile:self.fileType
@@ -146,6 +154,8 @@ typedef enum
                                     block:^(NSArray<AITFileNode *> * datas) {
         [weakSelf handleLoadDataSuccessBlock:datas];
     } fail:^(NSError * error) {
+        weakSelf.isLoading = NO;
+        [weakSelf.view.window cp_hideToast];
         [weakSelf.dataTableView.mj_header endRefreshing];
         [weakSelf.dataTableView.mj_footer endRefreshing];
     }];
@@ -153,6 +163,9 @@ typedef enum
 }
 
 - (void)handleLoadDataSuccessBlock:(NSArray <AITFileNode *> *)result {
+    
+    self.isLoading = NO;
+    [self.view.window cp_hideToast];
     
     NSLog(@"----------%@",@(result.count));
     
@@ -349,7 +362,9 @@ typedef enum
 }
 
 - (void)refreshAllData {
-    [self handleHeaderFresh];
+    if (NO == self.isLoading) {
+        [self handleHeaderFresh];
+    }
 }
 
 

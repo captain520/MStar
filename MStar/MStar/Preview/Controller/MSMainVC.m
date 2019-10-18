@@ -261,12 +261,21 @@ VLCMediaPlayer *player;
 /// 拍照
 /// @param sender 控件
 - (void)shotCamAction:(id)sender {
-    [self.controller shotAction:^{
-        [UIView animateWithDuration:.1 animations:^{
-            self.splashView.alpha = 1;
-        } completion:^(BOOL finished) {
-            self.splashView.alpha = 0;
-        }];
+    
+    [self.view cp_showToast];
+    
+    [self.controller shotAction:^(BOOL finished) {
+        
+        [self.view cp_hideToast];
+        
+        if (YES == finished) {
+            [UIView animateWithDuration:.1 animations:^{
+                self.splashView.alpha = 1;
+            } completion:^(BOOL finished) {
+                self.splashView.alpha = 0;
+            }];
+        }
+        
     }];
 }
 
@@ -293,6 +302,7 @@ VLCMediaPlayer *player;
     [player stop];
     player.drawable = nil;
     
+    sleep(1);
     [self.parentViewController.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -302,11 +312,23 @@ VLCMediaPlayer *player;
 - (void)settingAction:(UIBarButtonItem *)sender
 {
     
+    sender.enabled = NO;
+    
+    [self.navigationController.view cp_showToast];
+
     [[MSDeviceMgr manager] stopRecrod:^{
-        MSSettingVC *vc = [[MSSettingVC alloc] initWithStyle:UITableViewStyleGrouped];
         
+        [self.navigationController.view cp_hideToast];
+
+        MSSettingVC *vc = [[MSSettingVC alloc] initWithStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:vc animated:YES];
     }];
+    
+    [self performSelector:@selector(toggleSettingItemEnable) withObject:nil afterDelay:1.0];
+}
+
+- (void)toggleSettingItemEnable {
+    self.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
 
@@ -357,7 +379,7 @@ VLCMediaPlayer *player;
     if (self.liveUrl.length > 0) {
         
 
-        if ([MSDeviceMgr manager].fullScreen == NO) {
+        if ([MSDeviceMgr manager].fullScreen == NO && self.hasAppear == YES) {
             [MSDeviceMgr manager].fullScreen = YES;
             CPPlayerVC *playerVC = [[CPPlayerVC alloc] init];
             //        playerVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;

@@ -69,30 +69,30 @@ static NSString *NETWORK_CACHE_MJPG = @"400";
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"yyyy$MM$dd$HH$mm$ss"];
     
-
+    
     //  App显示时间格式
     NSDateFormatter *formatter1 = [[NSDateFormatter alloc]init];
     [formatter1 setDateFormat:@"yy-MM-dd-HH-mm-ss"];
     self.dateStr = [formatter1 stringFromDate:date];
-
+    
     //  时间同步命令
-     __weak typeof(self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     NSString *dateStr = [formatter stringFromDate:date];
     
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetDateTime:dateStr]
                                           block:^(NSString *result) {
-                                              if ([result containsString:@"OK"]) {
-                                                  [weakSelf getFwVersion:block];
-                                              } else {
-                                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                                      [weakSelf isDevice4Togevision:block];
-                                                  });
-                                              }
-                                          } fail:^(NSError *error) {
-                                              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                                  [weakSelf isDevice4Togevision:block];
-                                              });
-                                          }];
+        if ([result containsString:@"OK"]) {
+            [weakSelf getFwVersion:block];
+        } else {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf isDevice4Togevision:block];
+            });
+        }
+    } fail:^(NSError *error) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf isDevice4Togevision:block];
+        });
+    }];
 }
 
 
@@ -104,9 +104,9 @@ static NSString *NETWORK_CACHE_MJPG = @"400";
     
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQuerySettings]
                                           block:^(NSString *result) {
-                                              [weakSelf handleQuerySettings:result block:block];
-                                          } fail:^(NSError *error) {
-                                          }];
+        [weakSelf handleQuerySettings:result block:block];
+    } fail:^(NSError *error) {
+    }];
 }
 
 - (void)handleQuerySettings:(NSString *)result block:(void (^)(NSString *fwVersion))block {
@@ -126,7 +126,7 @@ static NSString *NETWORK_CACHE_MJPG = @"400";
             NSArray *dateStrs = [self.dateStr componentsSeparatedByString:@"-"];
             
             int ret = TogevisionCRC([dateStrs[0] intValue], [dateStrs[1] intValue], [dateStrs[2] intValue], [dateStrs[3] intValue], [dateStrs[4] intValue], [dateStrs[5] intValue]);
-
+            
             if (ret == encrypByte.intValue) {
                 NSLog(@"是自己的设备%d",ret);
                 !block ? : block(ver);
@@ -158,14 +158,14 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 /// @param block 回调
 - (void)queryPreStreamCommd:(void (^)(NSString *url))block
 {
-     __weak typeof(self) weakSelf = self;
-
+    __weak typeof(self) weakSelf = self;
+    
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQueryPreviewStatusUrl]
                                           block:^(NSString *result) {
-                                              [weakSelf handleQueryStreamCommdBlock:result block:block];
-                                          } fail:^(NSError *error) {
-                                              
-                                          }];
+        [weakSelf handleQueryStreamCommdBlock:result block:block];
+    } fail:^(NSError *error) {
+        
+    }];
 }
 
 - (void)handleQueryStreamCommdBlock:(NSString *)result block:(void (^)(NSString *))block {
@@ -180,7 +180,7 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
     int rtsp = [[dict objectForKey:[AITCameraCommand PROPERTY_CAMERA_RTSP]] intValue];
     NSString *networkcache = nil;
     NSString *liveurl = nil;
-
+    
     //networkcache =[dict objectForKey:@"Camera.Preview.MJPEG.w"];
     // Check Support rtsp v1, av1 ? or MJPEG
     //NSLog(@"STREAMING = %@", rtsp) ;
@@ -207,31 +207,34 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 
 /// 拍照
 /// @param block 回调
-- (void)shotAction:(void (^)(void))block
+- (void)shotAction:(void (^)(BOOL finished))block
 {
     //  直接先调用效果
-    [self handleShotActionBlock];
     
-    !block ? : block();
-
+    __weak typeof(self) weakSelf = self;
+    
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraSnapshotUrl]
                                           block:^(NSString *result) {
-        
-                                          } fail:^(NSError *error) {
-                                              
-                                          }];
-
+        if (!result || [result containsString:@"404"]) {
+            !block ? : block(NO);
+        } else {
+            [weakSelf photosound];
+            !block ? : block(YES);
+        }
+    } fail:^(NSError *error) {
+        !block ? : block(NO);
+    }];
 }
 
 - (void)handleShotActionBlock {
-
+    
     [self photosound];
-
-//    [UIView animateWithDuration:.1 animations:^{
-//        self.splashView.alpha = 1;
-//    } completion:^(BOOL finished) {
-//        self.splashView.alpha = 0;
-//    }];
+    
+    //    [UIView animateWithDuration:.1 animations:^{
+    //        self.splashView.alpha = 1;
+    //    } completion:^(BOOL finished) {
+    //        self.splashView.alpha = 0;
+    //    }];
     
 }
 

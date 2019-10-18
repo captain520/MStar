@@ -211,16 +211,16 @@ static NSString *TAG_amount = @"amount" ;
     switch (fileType) {
         case W1MFileTypeNormal:
         {
-            requestUrl = [AITCameraCommand commandListFileUrl:20 From:(int)(page * 20) isRear:isRear fileType:W1MFileTypeNormal];
+            requestUrl = [AITCameraCommand commandListFileUrl:PageSize From:(int)(page * PageSize) isRear:isRear fileType:W1MFileTypeNormal];
         }
             break;
         case W1MFileTypePhoto:
         {
-            requestUrl = [AITCameraCommand commandListFileUrl:20 From:(int)(page * 20) isRear:isRear fileType:W1MFileTypePhoto];
+            requestUrl = [AITCameraCommand commandListFileUrl:PageSize From:(int)(page * PageSize) isRear:isRear fileType:W1MFileTypePhoto];
         }
             break;
         case W1MFileTypeEvent:
-            requestUrl = [AITCameraCommand commandListFileUrl:20 From:(int)(page * 20) isRear:isRear fileType:W1MFileTypeEvent];
+            requestUrl = [AITCameraCommand commandListFileUrl:PageSize From:(int)(page * PageSize) isRear:isRear fileType:W1MFileTypeEvent];
             break;
         default:
             break;

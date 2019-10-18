@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 拍照
 /// @param block 回调
-- (void)shotAction:(void (^)(void))block;
+- (void)shotAction:(void (^)(BOOL finished))block;
 
 @end
 

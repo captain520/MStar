@@ -62,6 +62,8 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
+    
+
     [super viewDidDisappear:animated];
 }
 
@@ -95,7 +97,6 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidBecomeActive:)
                                                  name:UIApplicationDidBecomeActiveNotification object:nil];
-    //    [[NSNotificationCenter defaultCenter] postNotificationName:@"MSRESET_WIFI_INFO_ACTION" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleWifiInfoReset:)
                                                  name:@"MSRESET_WIFI_INFO_ACTION" object:nil];
@@ -220,16 +221,21 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 
     __weak typeof(self) weakSelf = self;
     
-    [self syncDate:^{
-        NSLog(@"---- 是本公司设备 ------");
+    if (self.connectState == MSConnectStatesWifiInfoReseted) {
         
-        self.connectState = MSConnectStatesConnectedTGDevice;
-        [weakSelf handleValidDeviceBlock];
-        
-    } otherDeviceBlock:^{
-        NSLog(@"---- 其他 ------");
-        [weakSelf handleInvalidDeviceBlock];
-    }];
+    } else {
+        [self syncDate:^{
+            NSLog(@"---- 是本公司设备 ------");
+            
+            self.connectState = MSConnectStatesConnectedTGDevice;
+            [weakSelf handleValidDeviceBlock];
+            
+        } otherDeviceBlock:^{
+            NSLog(@"---- 其他 ------");
+            [weakSelf handleInvalidDeviceBlock];
+        }];
+    }
+    
 }
 
 - (void)handleValidDeviceBlock {
@@ -286,16 +292,23 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 
 - (void)handleInvalidDeviceBlock {
     
-    self.ssid = [[NSUserDefaults standardUserDefaults] valueForKey:MSDEVICE_WIFI_NAME_KEY_STRING];
-    self.ssidPasswd = [[NSUserDefaults standardUserDefaults] valueForKey:MSDEVICE_WIFI_PASSWD_KEY_STRING];
-    
-    if (self.ssid.length > 0 && self.ssidPasswd.length > 0) {
-        self.connectState = MSConnectStatesRecordConnnectedTGDevice;
-        self.hintLB.text = self.ssid;
-        [self.addButton setImage:[UIImage imageNamed:@"摄像头"] forState:UIControlStateNormal];
+    if (self.connectState == MSConnectStatesWifiInfoReseted) {
+        
     } else {
-        [self.addButton setImage:[UIImage imageNamed:@"添加按钮"] forState:UIControlStateNormal];
+        
+        self.ssid = [[NSUserDefaults standardUserDefaults] valueForKey:MSDEVICE_WIFI_NAME_KEY_STRING];
+        self.ssidPasswd = [[NSUserDefaults standardUserDefaults] valueForKey:MSDEVICE_WIFI_PASSWD_KEY_STRING];
+        
+        if (self.ssid.length > 0 && self.ssidPasswd.length > 0) {
+            self.connectState = MSConnectStatesRecordConnnectedTGDevice;
+            self.hintLB.text = self.ssid;
+            [self.addButton setImage:[UIImage imageNamed:@"摄像头"] forState:UIControlStateNormal];
+        } else {
+            [self.addButton setImage:[UIImage imageNamed:@"添加按钮"] forState:UIControlStateNormal];
+        }
+        
     }
+
 }
 
 - (void)handleLoadDataSuccessBlock:(id)result {
@@ -506,6 +519,8 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 
 
 - (void)applicationDidBecomeActive:(NSNotification *)application {
+    
+    self.connectState = MSConnectStatesUnkownDevice;
     
     [self loadData];
 }
