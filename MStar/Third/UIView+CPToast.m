@@ -13,34 +13,38 @@
 
 - (void)cp_showToast {
     
-    self.userInteractionEnabled = NO;
+//    self.userInteractionEnabled = NO;
+//
+//    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 100, 100) cornerRadius:10];
+//
+//    CAShapeLayer *shape = [CAShapeLayer layer];
+//    shape.path = path.CGPath;
+//
+//    self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//    self.activityIndicatorView.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.8];
+//    self.activityIndicatorView.layer.mask = shape;
+//
+//    [self.activityIndicatorView startAnimating];
+//    [self addSubview:self.activityIndicatorView];
+//    [self.activityIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.mas_equalTo(0);
+//        make.centerY.mas_equalTo(0);
+//        make.size.mas_equalTo(CGSizeMake(100, 100));
+//    }];
     
-    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 100, 100) cornerRadius:10];
-    
-    CAShapeLayer *shape = [CAShapeLayer layer];
-    shape.path = path.CGPath;
-    
-    self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    self.activityIndicatorView.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:0 alpha:.8];
-    self.activityIndicatorView.layer.mask = shape;
-
-    [self.activityIndicatorView startAnimating];
-    [self addSubview:self.activityIndicatorView];
-    [self.activityIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(0);
-        make.centerY.mas_equalTo(0);
-        make.size.mas_equalTo(CGSizeMake(100, 100));
-    }];
-    
+    [MBProgressHUD showHUDAddedTo:UIApplication.sharedApplication.keyWindow animated:YES];
 }
 
 - (void)cp_hideToast {
     
-    self.userInteractionEnabled = YES;
-
-    if (self.activityIndicatorView.superview != nil) {
-        [self.activityIndicatorView removeFromSuperview];
-    }
+//
+//    self.userInteractionEnabled = YES;
+//
+//    if (self.activityIndicatorView.superview != nil) {
+//        [self.activityIndicatorView removeFromSuperview];
+//    }
+    
+    [MBProgressHUD hideHUDForView:UIApplication.sharedApplication.keyWindow animated:YES];
 }
 
 #pragma mark - setter && getter metehod

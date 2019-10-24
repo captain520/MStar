@@ -142,9 +142,11 @@ typedef enum
 
 - (void)loadData {
     
-    [self.view.window cp_showToast];
+//    [self.parentViewController.view cp_showToast];
     
-    self.isLoading = YES;
+    [MBProgressHUD showHUDAddedTo:UIApplication.sharedApplication.keyWindow animated:YES];
+
+    NSLog(@"------------显示------------------");
 
     __weak typeof(self) weakSelf = self;
     
@@ -154,18 +156,32 @@ typedef enum
                                     block:^(NSArray<AITFileNode *> * datas) {
         [weakSelf handleLoadDataSuccessBlock:datas];
     } fail:^(NSError * error) {
-        weakSelf.isLoading = NO;
-        [weakSelf.view.window cp_hideToast];
+        [weakSelf hideToast];
         [weakSelf.dataTableView.mj_header endRefreshing];
         [weakSelf.dataTableView.mj_footer endRefreshing];
     }];
+}
+
+- (void)loadDataWithReloadAll:(BOOL )isRefreshAll {
     
+    __weak typeof(self) weakSelf = self;
+    
+    [[MSDeviceMgr manager] loadRemoteFile:self.fileType
+                                     page:self.currentIndex
+                                   isRear:self.isRear
+                                    block:^(NSArray<AITFileNode *> * datas) {
+        [weakSelf handleLoadDataSuccessBlock:datas];
+    } fail:^(NSError * error) {
+        [weakSelf hideToast];
+        [weakSelf.dataTableView.mj_header endRefreshing];
+        [weakSelf.dataTableView.mj_footer endRefreshing];
+    }];
 }
 
 - (void)handleLoadDataSuccessBlock:(NSArray <AITFileNode *> *)result {
     
-    self.isLoading = NO;
-    [self.view.window cp_hideToast];
+//    [self.parentViewController.view cp_hideToast];
+    [self hideToast];
     
     NSLog(@"----------%@",@(result.count));
     
@@ -178,6 +194,14 @@ typedef enum
     if (result.count < self.pageSize) {
         [self.dataTableView.mj_footer setHidden:YES];
     }
+}
+
+- (void)hideToast {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"------------移除------------------");
+//        [self.parentViewController.view cp_hideToast];
+        [MBProgressHUD hideHUDForView:UIApplication.sharedApplication.keyWindow animated:YES];
+    });
 }
 
 //  点击操作相关
@@ -362,9 +386,19 @@ typedef enum
 }
 
 - (void)refreshAllData {
-    if (NO == self.isLoading) {
+    
+    NSLog(@"%s",__FUNCTION__);
+
+    if (self.isLoading == YES) {
+        
         [self handleHeaderFresh];
+//        self.currentIndex = 0;
+//        [self.dataArray removeAllObjects];
+//
+//        [self loadDataWithReloadAll:YES];
     }
+    
+    self.isLoading = YES;
 }
 
 

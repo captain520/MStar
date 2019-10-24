@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 切换前后摄像头
 /// @param block 回调
-- (void)toggleCameId:(void (^)(void))block;
+- (void)toggleCameId:(void (^)(BOOL done))block;
 
 
 - (void)loadRemoteFile:(W1MFileType )fileType

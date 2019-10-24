@@ -37,6 +37,8 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 
 @property (nonatomic, assign) NSUInteger retryTimes;
 
+@property (nonatomic, strong) MSTabBarVC *tabBarVC;
+
 @end
 
 @implementation MSRootVC
@@ -381,13 +383,14 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     [[NEHotspotConfigurationManager sharedManager] applyConfiguration:hotspotConfig
                                                     completionHandler:^(NSError * _Nullable error) {
 
-                                                        [[CPLoadStatusToast shareInstance] dimiss];
-                                                        
+
                                                         if (nil == error && [cp_getWifiName() isEqualToString:weakSelf.ssid]) {
                                                             self->_connectState = MSConnectStatesConnectedTGDevice;
                                                             [weakSelf handleConnect2DeiceWifiBlock];
+                                                            [[CPLoadStatusToast shareInstance] dimiss];
                                                         } else {
                                                             [weakSelf openSettinPage];
+                                                            [[CPLoadStatusToast shareInstance] dimiss];
                                                         }
                                                     }];
 }
@@ -396,8 +399,13 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    MSTabBarVC *vc = [MSTabBarVC new];
+//    if (self.tabBarVC == nil) {
+//        self.tabBarVC = [MSTabBarVC new];
+//    }
+//
+//    [self.navigationController pushViewController:self.tabBarVC animated:YES];
     
+    MSTabBarVC *vc = [MSTabBarVC new];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

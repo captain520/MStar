@@ -168,10 +168,11 @@ static NSString *TAG_amount = @"amount" ;
         NSLog(@"切换录制状态：%@", result);
     } fail:^(NSError *error) {
         NSLog(@"切换录制状态：%@", error);
+        !block ? : block();
     }];
 }
 
-- (void)toggleCameId:(void (^)(void))block {
+- (void)toggleCameId:(void (^)(BOOL done))block {
     
     NSString *destCamId = nil;
     
@@ -185,18 +186,20 @@ static NSString *TAG_amount = @"amount" ;
                                           block:^(NSString *result) {
         [self handleSwitchBlock:result block:block];
     } fail:^(NSError *error) {
-        
+        !block ? : block(NO);
     }];
     
 }
 
-- (void)handleSwitchBlock:(NSString *)result block:(void (^)(void))block {
+- (void)handleSwitchBlock:(NSString *)result block:(void (^)(BOOL done))block {
     
     if (result && [result containsString:@"OK\n"]) {
-        !block ? : block();
+    !block ? : block(YES);
     } else {
         [UIApplication.sharedApplication.keyWindow makeToast:NSLocalizedString(@"No rear camera found", nil) duration:3.0 position:@"CSToastPositionCenter"];
+    !block ? : block(NO);
     }
+    
 }
 
 

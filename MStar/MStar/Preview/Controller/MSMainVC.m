@@ -32,12 +32,16 @@ static NSString *CAMERAID_CMD_REAR = @"rear";
 
 @property (nonatomic, assign) BOOL hasAppear;
 
+@property (nonatomic, assign) BOOL isFullSceen;
+
 @end
 
 //  放到其它地方容易导致崩溃
-VLCMediaPlayer *player;
 
-@implementation MSMainVC
+static VLCMediaPlayer *player;
+
+@implementation MSMainVC {
+}
 
 - (void)dealloc {
     NSLog(@"_____________%s_________________",__FUNCTION__);
@@ -62,14 +66,14 @@ VLCMediaPlayer *player;
     [self startPlay];
     [[MSDeviceMgr manager] startRecrod];
     
-    [self.controller getRecordingState4Loop];
+//    [self.controller getRecordingState4Loop];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     
     [super viewWillDisappear:animated];
     
-    [self.controller stopRecordingState4Loop];
+    //    [self.controller stopRecordingState4Loop];
     [self stopPlayer];
     //    [[MSDeviceMgr manager] stopRecrod];
 }
@@ -83,6 +87,8 @@ VLCMediaPlayer *player;
     
     self.controller = [[MSMainController alloc] init];
     self.controller.delegate = self;
+    
+    [self.controller getRecordingState4Loop];
     
     [self addNoticationObserver];
 }
@@ -108,7 +114,8 @@ VLCMediaPlayer *player;
     [self.toggleCamBt addTarget:self action:@selector(toggleCamAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.toggleCamBt setImage:[UIImage imageNamed:@"切换前后镜头"] forState:UIControlStateNormal];
     [self.toggleCamBt mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self->_preview.mas_bottom).offset(30 RPX);
+        //        make.top.mas_equalTo(self->_preview.mas_bottom).offset(30 RPX);
+        make.top.mas_equalTo(NAV_HEIGHT + SCREENWIDTH * 480. / 720);
         make.left.mas_equalTo(30 RPX);
         make.size.mas_equalTo(CGSizeMake(100 RPX, 100 RPX));
     }];
@@ -122,7 +129,8 @@ VLCMediaPlayer *player;
     [self.shotCameBT setImage:[UIImage imageNamed:@"拍照"] forState:UIControlStateNormal];
     [self.shotCameBT addTarget:self action:@selector(shotCamAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.shotCameBT mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self->_preview.mas_bottom).offset(30 RPX);
+        //        make.top.mas_equalTo(self->_preview.mas_bottom).offset(30 RPX);
+        make.centerY.mas_equalTo(self->_toggleCamBt.mas_centerY);
         make.right.mas_equalTo(-30 RPX);
         make.size.mas_equalTo(CGSizeMake(100 RPX, 100 RPX));
     }];
@@ -173,15 +181,15 @@ VLCMediaPlayer *player;
 - (MSPreviewView *)preview {
     
     if (nil == _preview) {
-        _preview = [[MSPreviewView alloc] init];
+        _preview = [[MSPreviewView alloc] initWithFrame:CGRectMake(0, NAV_HEIGHT, SCREENWIDTH, SCREENWIDTH * 480. / 720)];
         
         [self.view addSubview:_preview];
-        [_preview mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(NAV_HEIGHT);
-            make.left.mas_equalTo(0);
-            make.right.mas_equalTo(0);
-            make.height.mas_equalTo(SCREENWIDTH * 480. / 720);
-        }];
+        //        [_preview mas_makeConstraints:^(MASConstraintMaker *make) {
+        //            make.top.mas_equalTo(NAV_HEIGHT);
+        //            make.left.mas_equalTo(0);
+        //            make.right.mas_equalTo(0);
+        //            make.height.mas_equalTo(SCREENWIDTH * 480. / 720);
+        //        }];
     }
     
     return _preview;
@@ -203,11 +211,16 @@ VLCMediaPlayer *player;
 
 - (void)loadData {
     
-    __weak typeof(self) weakSelf = self;
+    //    __weak typeof(self) weakSelf = self;
+    //
+    //    [self.controller queryPreStreamCommd:^(NSString * _Nonnull url) {
+    //        [weakSelf handleLoadDataSuccessBlock:url];
+    //    }];
     
-    [self.controller queryPreStreamCommd:^(NSString * _Nonnull url) {
-        [weakSelf handleLoadDataSuccessBlock:url];
-    }];
+    //    sleep(3);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self handleLoadDataSuccessBlock:@"rtsp://192.72.1.1/liveRTSP/v1"];
+    });
 }
 
 - (void)handleLoadDataSuccessBlock:(NSString *)liveurl {
@@ -217,21 +230,23 @@ VLCMediaPlayer *player;
     self.liveUrl = liveurl;
     self.preview.fullScreenBT.hidden = NO;
     
-    VLCMedia *media = [VLCMedia mediaWithURL:[NSURL URLWithString:liveurl]];
     
     if (nil == player) {
+        
+        VLCMedia *media = [VLCMedia mediaWithURL:[NSURL URLWithString:liveurl]];
+        
         player = [[VLCMediaPlayer alloc] initWithOptions:@[
             [NSString stringWithFormat:@"--%@=%@",
              kVLCSettingNetworkCaching, @"400"],
             [NSString stringWithFormat:@"--%@=%@",
              kVLCSettingClockJitter, @(1000)],
         ]];
+        player.videoAspectRatio = "3:2";
+        [player setMedia:media];
     }
     
-    player.videoAspectRatio = "3:2";
     [player setDrawable:weakPreView];
     
-    [player setMedia:media];
     [self startPlay];
     
 }
@@ -245,15 +260,19 @@ VLCMediaPlayer *player;
     
     [self.view cp_showToast];
     
-    [[MSDeviceMgr manager] toggleCameId:^{
-        [self stopPlayer];
-        [player play];
+    [[MSDeviceMgr manager] toggleCameId:^(BOOL done) {
+        
+        if (done) {
+            [self stopPlayer];
+            [player play];
+            [UIView transitionWithView:self.preview
+                              duration:1.0f
+                               options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+            } completion:^(BOOL finished) {
+            }];
+        }
+        
         [self.view cp_hideToast];
-        [UIView transitionWithView:self.preview
-                          duration:1.0f
-                           options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-        } completion:^(BOOL finished) {
-        }];
         
     }];
 }
@@ -286,11 +305,13 @@ VLCMediaPlayer *player;
     [self.view cp_showToast];
     
     [self.controller stopRecordingState4Loop];
-    [[MSDeviceMgr manager] toggleRecordState:^{
+    
+    [[MSDeviceMgr manager] toggleRecordState:^(void) {
         NSLog(@"切换成功");
         [self.view cp_hideToast];
         [self.controller getRecordingState4Loop];
     }];
+    
 }
 
 /// 返回
@@ -302,7 +323,7 @@ VLCMediaPlayer *player;
     [player stop];
     player.drawable = nil;
     
-    sleep(1);
+    //    sleep(1);
     [self.parentViewController.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -315,12 +336,13 @@ VLCMediaPlayer *player;
     sender.enabled = NO;
     
     [self.navigationController.view cp_showToast];
-
+    
     [[MSDeviceMgr manager] stopRecrod:^{
         
         [self.navigationController.view cp_hideToast];
-
+        
         MSSettingVC *vc = [[MSSettingVC alloc] initWithStyle:UITableViewStyleGrouped];
+        vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }];
     
@@ -344,17 +366,20 @@ VLCMediaPlayer *player;
     UIDeviceOrientation  orient = [UIDevice currentDevice].orientation;
     switch (orient) {
         case UIDeviceOrientationPortrait:
+            [self minScreen];
             break;
         case UIDeviceOrientationLandscapeLeft:
         {
             NSLog(@"%s",__FUNCTION__);
-//            !self.hasAppear ? : [self fullAction:nil];
-            [self fullAction:nil];
+            //            !self.hasAppear ? : [self fullAction:nil];
+            //            [self fullAction:nil];
+            [self maxScreen];
         }
             break;
         case UIDeviceOrientationPortraitUpsideDown:
             break;
         case UIDeviceOrientationLandscapeRight:
+            [self maxScreen];
             break;
         default:
             break;
@@ -374,28 +399,95 @@ VLCMediaPlayer *player;
 
 - (void)fullAction:(id)sender {
     
-    [self stopPlayer];
+    if (self.hasAppear == NO) {
+        return;
+    }
     
-    if (self.liveUrl.length > 0) {
+    if (self.liveUrl.length > 0){
         
-
-        if ([MSDeviceMgr manager].fullScreen == NO && self.hasAppear == YES) {
-            [MSDeviceMgr manager].fullScreen = YES;
-            CPPlayerVC *playerVC = [[CPPlayerVC alloc] init];
-            //        playerVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-            playerVC.hidesBottomBarWhenPushed = YES;
-            playerVC.liveurl = self.liveUrl;
-            playerVC.networkcache = @"400";
-            playerVC.controller = self.controller;
-            
-            [self presentViewController:playerVC animated:YES  completion:^{
-            }];
+        if (self.isFullSceen == NO) {
+            [self maxScreen];
         } else {
-            
+            [self minScreen];
         }
-        
+    }
+    
+    
+    //    [self stopPlayer];
+    //
+    //    if (self.liveUrl.length > 0) {
+    //
+    //
+    //        if ([MSDeviceMgr manager].fullScreen == NO && self.hasAppear == YES) {
+    //            [MSDeviceMgr manager].fullScreen = YES;
+    //            CPPlayerVC *playerVC = [[CPPlayerVC alloc] init];
+    //            //        playerVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    //            playerVC.hidesBottomBarWhenPushed = YES;
+    //            playerVC.liveurl = self.liveUrl;
+    //            playerVC.networkcache = @"400";
+    //            playerVC.controller = self.controller;
+    //
+    //            [self presentViewController:playerVC animated:YES  completion:^{
+    //            }];
+    //        } else {
+    //
+    //        }
+    //
+    //
+    //    }
+}
 
+- (void)maxScreen {
+    
+    if (self.hasAppear == NO) {
+        return;
+    }
+    
+    if (self.isFullSceen == NO) {
+        
+        
+        UIApplication.sharedApplication.statusBarHidden = YES;
+        self.isFullSceen = YES;
+        
+        [self.preview removeFromSuperview];
+        [UIApplication.sharedApplication.keyWindow addSubview:self.preview];
+        
+        [UIView animateWithDuration:.25f animations:^{
+            self.preview.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.height, UIScreen.mainScreen.bounds.size.width);
+            self.preview.center = CGPointMake(CGRectGetMidX(UIApplication.sharedApplication.keyWindow.bounds), CGRectGetMidY(UIApplication.sharedApplication.keyWindow.bounds));
+            
+            self.preview.transform = CGAffineTransformMakeRotation(M_PI_2);
+        }];
     }
 }
+
+- (void)minScreen {
+    
+    if (self.hasAppear == NO) {
+        return;
+    }
+    
+    if (self.isFullSceen == YES) {
+        
+        UIApplication.sharedApplication.statusBarHidden = NO;
+        self.isFullSceen = NO;
+        
+        [self.preview removeFromSuperview];
+        [self.view addSubview:self.preview];
+        
+        [UIView animateWithDuration:.25f animations:^{
+            self.preview.transform = CGAffineTransformIdentity;
+            self.preview.frame = CGRectMake(0, NAV_HEIGHT, SCREENWIDTH, SCREENWIDTH * 480. / 720);
+            [self.preview setNeedsDisplay];
+        }];
+        
+    }
+}
+
+- (void)viewWillLayoutSubviews {
+    NSLog(@"------------------------------");
+}
+
+
 
 @end

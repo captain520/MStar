@@ -13,10 +13,10 @@
 #import "VLCConstants.h"
 #import "AITCameraRequest.h"
 
+static VLCMediaPlayer *mediaPlayerFull ;
 
 @interface CPPlayerVC () <VLCMediaDelegate,VLCMediaPlayerDelegate,AITCameraRequestDelegate>{
-    VLCMediaPlayer *mediaPlayer ;
-    
+
     Camera_cmd_t camera_cmd;
 
     UIButton *recordBt;
@@ -93,7 +93,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [mediaPlayer stop];
+    [mediaPlayerFull stop];
     
     if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
         SEL selector = NSSelectorFromString(@"setOrientation:");
@@ -141,16 +141,16 @@
     
     VLCMedia *media = [VLCMedia mediaWithURL:[NSURL URLWithString:self.liveurl]];
     
-    mediaPlayer = [[VLCMediaPlayer alloc] initWithOptions:@[
+    mediaPlayerFull = [[VLCMediaPlayer alloc] initWithOptions:@[
                                                             [NSString stringWithFormat:@"--%@=%@", kVLCSettingNetworkCaching,self.networkcache == nil ? kVLCSettingNetworkCachingDefaultValue : self.networkcache],
                                                             [NSString stringWithFormat:@"--%@=%@", kVLCSettingClockJitter, kVLCSettingClockJitterDefaultValue],
                                                             ]];
-    mediaPlayer.videoAspectRatio = "16:9";
-    [mediaPlayer setDelegate:self];
-    [mediaPlayer setDrawable:self.playImageView];
+    mediaPlayerFull.videoAspectRatio = "16:9";
+    [mediaPlayerFull setDelegate:self];
+    [mediaPlayerFull setDrawable:self.playImageView];
     
-    [mediaPlayer setMedia:media];
-    [mediaPlayer play];
+    [mediaPlayerFull setMedia:media];
+    [mediaPlayerFull play];
     
     //    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
     //    self.playerLayer.frame = self.playerView.bounds;
@@ -254,10 +254,10 @@
 #pragma mark - private method imeplement
 
 - (void)playAction:(id)sender {
-    if ([mediaPlayer isPlaying]) {
-        [mediaPlayer pause];
+    if ([mediaPlayerFull isPlaying]) {
+        [mediaPlayerFull pause];
     } else {
-        [mediaPlayer play];
+        [mediaPlayerFull play];
     }
 }
 
@@ -468,7 +468,7 @@
 
 - (void)mediaPlayerStateChanged:(NSNotification *)aNotification
 {
-    switch (mediaPlayer.state) {
+    switch (mediaPlayerFull.state) {
         case VLCMediaPlayerStatePaused:
             NSLog(@"1111111111");
             [[CPLoadStatusToast shareInstance] dimiss];
