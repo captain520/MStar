@@ -220,7 +220,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 #pragma mark - Private method
 
 - (void)loadData {
-
+    
     __weak typeof(self) weakSelf = self;
     
     if (self.connectState == MSConnectStatesWifiInfoReseted) {
@@ -322,17 +322,55 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     
 }
 
+// 2 处理时间同步失败流程
+- (void)syncDateFail {
+    
+    NSString *ssid = [[NSUserDefaults standardUserDefaults] valueForKey:MSDEVICE_WIFI_NAME_KEY_STRING];
+    NSString *ssidPasswd = [[NSUserDefaults standardUserDefaults] valueForKey:MSDEVICE_WIFI_PASSWD_KEY_STRING];
+    
+    if (ssid && ssidPasswd) {
+        //  上次连接过设备
+        
+        if ([UIDevice currentDevice].systemVersion.integerValue >= 11) {
+            //  iOS11版本以上: 代码连接
+            [self connect2DeviceWifi];
+        } else {
+            //  iOS11版本以下: 设置页面连接
+            [self openSettinPage];
+        }
+        
+    } else {
+        //  上次没连接过设备
+        [self openSettinPage];
+    }
+}
+
+//  2.1 未连接过直接调设置
+//  2.2 连接过尝试连接，连接成功进入预览，连接失败调设置
+
+
+
 //  增加设备
 - (void)addDeviceAction:(id)sender {
     
-#if Test
     
-    MSTabBarVC *vc = [[MSTabBarVC alloc] init];
+    [self.view cp_showToast];
     
-    [self.navigationController pushViewController:vc animated:YES];
+    __weak typeof(self) weakSelf = self;
+    
+    [self syncDate:^{
+        NSLog(@"---- 是本公司设备 ------");
+        [self.view cp_hideToast];
+        [self handleConnect2DeiceWifiBlock];
+    } otherDeviceBlock:^{
+        NSLog(@"---- 其他 ------");
+//        [weakSelf handleInvalidDeviceBlock];
+        [weakSelf syncDateFail];
+        [weakSelf.view cp_hideToast];
+    }];
+    
     
     return;
-#endif
     
 
     if (self.connectState == MSConnectStatesConnectedTGDevice) {

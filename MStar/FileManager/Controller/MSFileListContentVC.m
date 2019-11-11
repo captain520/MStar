@@ -79,6 +79,7 @@
     vc2.fileType = W1MFileTypeEvent;
     
     self.viewControllers = @[vc0, vc1, vc2];
+//    self.viewControllers = @[vc0,];
 
 #if 0
     
@@ -115,7 +116,8 @@
         MSRemoteFileVC *vc = (MSRemoteFileVC *)obj;
         vc.isRear = self.isRear;
         
-        [vc refreshAllData];
+        [vc switchCamAction];
+//        [vc refreshAllData];
     }];
 //    self.normalVideoVC.isRear = self.isRear;
 //    [self.normalVideoVC refreshAllData];

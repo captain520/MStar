@@ -94,11 +94,12 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gu9-GR-cUF">
-                    <rect key="frame" x="16" y="0.0" width="40" height="40"/>
+                    <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="40" id="e3b-lA-fAU"/>
-                        <constraint firstAttribute="width" constant="40" id="wFJ-mu-QJy"/>
+                        <constraint firstAttribute="height" constant="80" id="e3b-lA-fAU"/>
+                        <constraint firstAttribute="width" constant="80" id="wFJ-mu-QJy"/>
                     </constraints>
+                    <inset key="imageEdgeInsets" minX="-24" minY="0.0" maxX="0.0" maxY="0.0"/>
                     <state key="normal" image="back"/>
                     <connections>
                         <action selector="backAction:" destination="-1" eventType="touchUpInside" id="7RY-ca-v0V"/>
@@ -108,7 +109,7 @@
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="9x2-pc-ZnW" secondAttribute="bottom" id="20J-Me-7HU"/>
-                <constraint firstItem="gu9-GR-cUF" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="3Ee-Ud-R4z"/>
+                <constraint firstItem="gu9-GR-cUF" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="3Ee-Ud-R4z"/>
                 <constraint firstItem="gu9-GR-cUF" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="E2n-7S-MQz"/>
                 <constraint firstAttribute="trailing" secondItem="9x2-pc-ZnW" secondAttribute="trailing" id="MOP-u3-aet"/>
                 <constraint firstItem="9x2-pc-ZnW" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lg8-KG-WlZ"/>

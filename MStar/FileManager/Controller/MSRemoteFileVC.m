@@ -33,6 +33,8 @@ typedef enum
 @property (nonatomic, strong) MSRemoteFileController *controller;
 @property (nonatomic, assign) BOOL isLoading;
 
+@property (nonatomic, strong) dispatch_semaphore_t  semSignal;
+
 @end
 
 @implementation MSRemoteFileVC
@@ -56,10 +58,12 @@ typedef enum
 - (void)initBaseProperties {
     self.dataArray = @[
     ].mutableCopy;
+    
     self.pageSize = PageSize;
+    self.semSignal = dispatch_semaphore_create(0);
     
     self.controller = [[MSRemoteFileController alloc] init];
-    
+
     [self.dataTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
@@ -87,6 +91,10 @@ typedef enum
 
 - (void)handleHeaderFresh {
     
+    if (self.semSignal) {
+        dispatch_semaphore_wait(self.semSignal, DISPATCH_TIME_FOREVER);
+    }
+    
     [self.dataTableView.mj_footer setHidden:NO];
     self.currentIndex = 0;
     [self.dataArray removeAllObjects];
@@ -96,8 +104,13 @@ typedef enum
 
 - (void)handleFooterFresh {
     
-    self.currentIndex++;
+    if (self.semSignal) {
+        dispatch_semaphore_wait(self.semSignal, DISPATCH_TIME_FOREVER);
+    }
     
+    self.currentIndex++;
+    [self.dataTableView.mj_footer setHidden:NO];
+
     [self loadData];
 }
 
@@ -143,7 +156,7 @@ typedef enum
 - (void)loadData {
     
 //    [self.parentViewController.view cp_showToast];
-    
+
     [MBProgressHUD showHUDAddedTo:UIApplication.sharedApplication.keyWindow animated:YES];
 
     NSLog(@"------------显示------------------");
@@ -155,23 +168,9 @@ typedef enum
                                    isRear:self.isRear
                                     block:^(NSArray<AITFileNode *> * datas) {
         [weakSelf handleLoadDataSuccessBlock:datas];
+        dispatch_semaphore_signal(self->_semSignal);
     } fail:^(NSError * error) {
-        [weakSelf hideToast];
-        [weakSelf.dataTableView.mj_header endRefreshing];
-        [weakSelf.dataTableView.mj_footer endRefreshing];
-    }];
-}
-
-- (void)loadDataWithReloadAll:(BOOL )isRefreshAll {
-    
-    __weak typeof(self) weakSelf = self;
-    
-    [[MSDeviceMgr manager] loadRemoteFile:self.fileType
-                                     page:self.currentIndex
-                                   isRear:self.isRear
-                                    block:^(NSArray<AITFileNode *> * datas) {
-        [weakSelf handleLoadDataSuccessBlock:datas];
-    } fail:^(NSError * error) {
+        dispatch_semaphore_signal(self->_semSignal);
         [weakSelf hideToast];
         [weakSelf.dataTableView.mj_header endRefreshing];
         [weakSelf.dataTableView.mj_footer endRefreshing];
@@ -390,15 +389,19 @@ typedef enum
     NSLog(@"%s",__FUNCTION__);
 
     if (self.isLoading == YES) {
-        
         [self handleHeaderFresh];
-//        self.currentIndex = 0;
-//        [self.dataArray removeAllObjects];
-//
-//        [self loadDataWithReloadAll:YES];
     }
     
     self.isLoading = YES;
+}
+
+- (void)switchCamAction {
+    
+    if (self.semSignal) {
+        dispatch_semaphore_signal(self->_semSignal);
+    }
+    
+    [self refreshAllData];
 }
 
 

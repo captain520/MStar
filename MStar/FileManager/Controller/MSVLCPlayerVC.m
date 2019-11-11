@@ -61,6 +61,7 @@
     return _avPlayer;
 }
 
+
 - (VLCMediaPlayer *)player {
     if (nil == _player) {
         

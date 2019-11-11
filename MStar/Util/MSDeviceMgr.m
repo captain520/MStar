@@ -253,14 +253,15 @@ static NSString *TAG_amount = @"amount" ;
         }
     }fail:^(NSError *error) {
         NSLog(@"111");
-        if (self->retryTimmes < 10) {
-            self->retryTimmes++;
-            [self loadRemoteFile:fileType page:page isRear:isRear block:success fail:fail];
-        } else {
-            self->retryTimmes = 0;
-            NSLog(@"retryTimmes: %@",@(self->retryTimmes));
-            !fail ? : fail(error);
-        }
+        !fail ? : fail(error);
+//        if (self->retryTimmes < 10) {
+//            self->retryTimmes++;
+//            [self loadRemoteFile:fileType page:page isRear:isRear block:success fail:fail];
+//        } else {
+//            self->retryTimmes = 0;
+//            NSLog(@"retryTimmes: %@",@(self->retryTimmes));
+//            !fail ? : fail(error);
+//        }
     }];
 }
 

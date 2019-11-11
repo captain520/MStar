@@ -50,6 +50,12 @@
     return [UIImage imageNamed:@"noData"];
 }
 
+- (void)emptyDataSet:(UIScrollView *)scrollView didTapView:(UIView *)view {
+    NSLog(@"------------------------------");
+    
+    [self loadData];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.dataArray.count;
 }

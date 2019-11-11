@@ -23,6 +23,10 @@
 
 @implementation MSSettingVC
 
+- (void)dealloc {
+    NSLog(@"--------------- %s ---------------", __FUNCTION__);
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -134,9 +138,11 @@
     NSArray <NSString *> *cameraMenu = [result componentsSeparatedByString:@"\n"];
     [cameraMenu enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj containsString:@"Camera.Menu.FWversion="]) {
-            self.FWversion = [obj componentsSeparatedByString:@"="].lastObject;
-            
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            NSString *ver = [obj componentsSeparatedByString:@"="].lastObject;
+            self.FWversion = [ver componentsSeparatedByString:@"-"].firstObject;
+
+            [self.tableView reloadData];
+//            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
             
             *stop = YES;
         }
@@ -275,8 +281,12 @@
 
 - (void)pickAction:(AITCamMenu *)sender {
     NSLog(@"%@",sender.title);
-    self.currentMenu = sender;
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:sender.parent.menuid Value:sender.menuid] Delegate:self];
+    
+    [[MSDeviceMgr manager] stopRecrod:^{
+        self.currentMenu = sender;
+        (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:sender.parent.menuid Value:sender.menuid] Delegate:self];
+    }];
+
 }
 
 -(void) setDateTime
@@ -355,20 +365,24 @@
 
 - (void)handleFormatSDCardAction {
     
-    [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
-    [[CPLoadStatusToast shareInstance] show];
-    
+
+    [[MSDeviceMgr manager] stopRecrod:^{
+        
+        [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoading;
+        [[CPLoadStatusToast shareInstance] show];
+        
+        (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SD0" Value:@"format"]
+               //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"FactoryReset" Value:@"Camera"]
+                                              block:^(NSString *result) {
+            [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
+            [[CPLoadStatusToast shareInstance] show];
+        } fail:^(NSError *error) {
+            [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleFail;
+            [[CPLoadStatusToast shareInstance] show];
+        }];
+    }];
     //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SDFormat" Value:@"capture"]
     //  格式化
-    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"SD0" Value:@"format"]
-           //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand setProperty:@"FactoryReset" Value:@"Camera"]
-                                          block:^(NSString *result) {
-                                              [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleLoadingSuccess;
-                                              [[CPLoadStatusToast shareInstance] show];
-                                          } fail:^(NSError *error) {
-                                              [CPLoadStatusToast shareInstance].style = CPLoadStatusStyleFail;
-                                              [[CPLoadStatusToast shareInstance] show];
-                                          }];
     
 }
 
