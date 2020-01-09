@@ -117,7 +117,9 @@
             break;
     }
     
-    cell.detailTextLabel.text = @"V1.0.0";
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *app_Version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    cell.detailTextLabel.text = app_Version;
 
     return cell;
 }

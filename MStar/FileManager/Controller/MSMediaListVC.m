@@ -45,8 +45,9 @@
 }
 
 
-
 - (void)setupUI {
+    
+    self.tableView.backgroundColor =  [UIColor colorWithRed:238./255 green:238./255 blue:238./255 alpha:1];
     self.tableView.emptyDataSetSource = self;
     self.tableView.emptyDataSetDelegate = self;
     [self.tableView registerNib:[UINib nibWithNibName:@"MSFIleListCell" bundle:nil] forCellReuseIdentifier:@"MSFIleListCell"];

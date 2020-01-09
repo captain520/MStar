@@ -160,10 +160,11 @@ static NSString *TAG_amount = @"amount" ;
     
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl]
                                           block:^(NSString *result) {
-        if ([result containsString:@"404 Not Found"]) {
-            [self toggleRecordState:block];
-        } else {
+        if ([result containsString:@"OK"]) {
             !block ? : block();
+        } else {
+            sleep(1);
+            [self toggleRecordState:block];
         }
         NSLog(@"切换录制状态：%@", result);
     } fail:^(NSError *error) {
@@ -236,8 +237,12 @@ static NSString *TAG_amount = @"amount" ;
         NSLog(@"----------result:%@",result);
         if (nil == result || [result containsString:@"404 Not Found"]) {
             if (self->retryTimmes < 10) {
+//                sleep(10);
                 self->retryTimmes++;
-                [self loadRemoteFile:fileType page:page isRear:isRear block:success fail:fail];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    NSLog(@"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&:%@",@(self->retryTimmes));
+                    [self loadRemoteFile:fileType page:page isRear:isRear block:success fail:fail];
+                });
             } else {
                 NSLog(@"retryTimmes: %@",@(self->retryTimmes));
                 self->retryTimmes = 0;

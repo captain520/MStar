@@ -65,28 +65,31 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 
 - (void)viewDidDisappear:(BOOL)animated {
     
-
+    
     [super viewDidDisappear:animated];
 }
 
 
 - (void)initBaseProperties {
     
-//    NSURL *url = [AITCameraCommand commandUpdateUrl:@"name" EncryptionKey:@"passwd"];
-//
-//    (void)[[AITCameraCommand alloc] initWithUrl:url
-//                                          block:^(NSString *result) {
-//                                              if ([result containsString:@"OK"]) {
-//                                              }
-//                                          } fail:^(NSError *error) {
-//
-//                                          }];
+    //    NSURL *url = [AITCameraCommand commandUpdateUrl:@"name" EncryptionKey:@"passwd"];
+    //
+    //    (void)[[AITCameraCommand alloc] initWithUrl:url
+    //                                          block:^(NSString *result) {
+    //                                              if ([result containsString:@"OK"]) {
+    //                                              }
+    //                                          } fail:^(NSError *error) {
+    //
+    //                                          }];
     
     
     UILabel *titleLB = [UILabel new];
-    titleLB.text = @"iCarEyes";
+    //    titleLB.text = @"iCarEyes";
+    titleLB.numberOfLines = 0;
+    titleLB.text = @"機車法官\nMOTO J";
     titleLB.font = [UIFont boldSystemFontOfSize:30];
     titleLB.textAlignment = NSTextAlignmentCenter;
+    titleLB.attributedText = [self getTittleAttrStr];
     
     [self.view addSubview:titleLB];
     [titleLB mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -102,7 +105,28 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleWifiInfoReset:)
                                                  name:@"MSRESET_WIFI_INFO_ACTION" object:nil];
+    
+}
 
+- (NSAttributedString *)getTittleAttrStr {
+    
+    NSMutableParagraphStyle *p = [[NSMutableParagraphStyle alloc] init];
+    p.lineSpacing = 10;
+    p.alignment = NSTextAlignmentCenter;
+    
+    NSMutableAttributedString *attr0 = [[NSMutableAttributedString alloc] initWithString:@"機車法官\n"
+                                                                              attributes:@{
+                                                                                  NSFontAttributeName : [UIFont boldSystemFontOfSize:30]
+                                                                              }];
+    NSAttributedString *attr1 = [[NSAttributedString alloc] initWithString:@"MOTO J"
+                                                                attributes:@{
+                                                                    NSFontAttributeName : [UIFont boldSystemFontOfSize:20],
+                                                                    NSForegroundColorAttributeName:UIColor.whiteColor
+                                                                }];
+    [attr0 appendAttributedString:attr1];
+    [attr0 addAttribute:NSParagraphStyleAttributeName value:p range:NSMakeRange(0, attr0.length)];
+    
+    return attr0;
 }
 
 - (void)setupUI {
@@ -110,7 +134,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     if (nil == self.cameraImageView) {
         self.cameraImageView = [UIImageView new];
         self.cameraImageView.image = [UIImage imageNamed:@"首页相机"];
-
+        
         [self.view addSubview:self.cameraImageView];
         [self.cameraImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(220);
@@ -123,7 +147,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     if (nil == self.hintLB) {
         self.hintLB = [UILabel new];
         self.hintLB.textColor = C99;
-        self.hintLB.text = @"点击添加记录仪";
+        self.hintLB.text = NSLocalizedString(@"ClickToAddDev", nil);//@"点击添加记录仪";
         self.hintLB.textAlignment = NSTextAlignmentCenter;
         self.hintLB.font = [UIFont systemFontOfSize:15];
         
@@ -137,16 +161,16 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     
     if (nil == self.addButton) {
         self.addButton = [UIButton new];
-
+        
         [self.addButton setImage:[UIImage imageNamed:@"添加按钮"] forState:UIControlStateNormal];
-//        [self.addButton setBackgroundImage:[UIImage imageNamed:@"wifi"] forState:UIControlStateNormal];
+        //        [self.addButton setBackgroundImage:[UIImage imageNamed:@"wifi"] forState:UIControlStateNormal];
         [self.addButton addTarget:self action:@selector(addDeviceAction:) forControlEvents:UIControlEventTouchUpInside];
         
         [self.view addSubview:self.addButton];
         [self.addButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self->_hintLB.mas_bottom).offset(20);
             make.centerX.mas_equalTo(0);
-//            make.width.mas_equalTo(80);
+            //            make.width.mas_equalTo(80);
             make.size.mas_equalTo(CGSizeMake(80, 80));
         }];
     }
@@ -154,9 +178,9 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     if (nil == self.leftMenuButton) {
         self.leftMenuButton = [UIButton new];
         
-//        [self.leftMenuButton setImage:[UIImage imageNamed:@"左边图标"] forState:UIControlStateNormal];
+        //        [self.leftMenuButton setImage:[UIImage imageNamed:@"左边图标"] forState:UIControlStateNormal];
         [self.leftMenuButton addTarget:self action:@selector(leftMemuAction:) forControlEvents:64];
-
+        
         [self.view addSubview:self.leftMenuButton];
         [self.leftMenuButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(0);
@@ -169,7 +193,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
             UIImageView *imgView = [UIImageView new];
             imgView.image = [UIImage imageNamed:@"左边图标"];
             imgView.contentMode = UIViewContentModeScaleAspectFit;
-
+            
             [self.leftMenuButton addSubview:imgView];
             [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.mas_equalTo(16);
@@ -182,9 +206,9 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     
     if (nil == self.rightMenuButton) {
         self.rightMenuButton = [UIButton new];
-//        self.rightMenuButton.backgroundColor = UIColor.redColor;
-//
-//        [self.rightMenuButton setImage:[UIImage imageNamed:@"右侧图标"] forState:UIControlStateNormal];
+        //        self.rightMenuButton.backgroundColor = UIColor.redColor;
+        //
+        //        [self.rightMenuButton setImage:[UIImage imageNamed:@"右侧图标"] forState:UIControlStateNormal];
         [self.rightMenuButton addTarget:self action:@selector(rightMenuAction:) forControlEvents:64];
         
         [self.view addSubview:self.rightMenuButton];
@@ -241,15 +265,15 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 }
 
 - (void)handleValidDeviceBlock {
-
+    
     __weak typeof(self) weakSelf = self;
-
+    
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandWifiInfoUrl]
                                           block:^(NSString *result) {
-                                              [weakSelf saveWifiInfo:result];
-                                          } fail:^(NSError *error) {
-                                              ;
-                                          }];
+        [weakSelf saveWifiInfo:result];
+    } fail:^(NSError *error) {
+        ;
+    }];
 }
 
 - (void)saveWifiInfo:(NSString *)result {
@@ -310,7 +334,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
         }
         
     }
-
+    
 }
 
 - (void)handleLoadDataSuccessBlock:(id)result {
@@ -353,31 +377,42 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
 //  增加设备
 - (void)addDeviceAction:(id)sender {
     
+    //    [self handleConnect2DeiceWifiBlock];
+    //
+    //    return;
     
-    [self.view cp_showToast];
+    NSString *ssid = [[NSUserDefaults standardUserDefaults] valueForKey:MSDEVICE_WIFI_NAME_KEY_STRING];
+    NSString *ssidPasswd = [[NSUserDefaults standardUserDefaults] valueForKey:MSDEVICE_WIFI_PASSWD_KEY_STRING];
     
-    __weak typeof(self) weakSelf = self;
-    
-    [self syncDate:^{
-        NSLog(@"---- 是本公司设备 ------");
-        [self.view cp_hideToast];
-        [self handleConnect2DeiceWifiBlock];
-    } otherDeviceBlock:^{
-        NSLog(@"---- 其他 ------");
-//        [weakSelf handleInvalidDeviceBlock];
-        [weakSelf syncDateFail];
-        [weakSelf.view cp_hideToast];
-    }];
+    if (ssid.length > 0 && ssidPasswd.length > 0) {
+        
+        [self.view cp_showToast];
+        
+        __weak typeof(self) weakSelf = self;
+        
+        [self syncDate:^{
+            NSLog(@"---- 是本公司设备 ------");
+            [self.view cp_hideToast];
+            [self handleConnect2DeiceWifiBlock];
+        } otherDeviceBlock:^{
+            NSLog(@"---- 其他 ------");
+            //        [weakSelf handleInvalidDeviceBlock];
+            [weakSelf syncDateFail];
+            [weakSelf.view cp_hideToast];
+        }];
+        
+    } else {
+        [self openSettinPage];
+    }
     
     
     return;
     
-
     if (self.connectState == MSConnectStatesConnectedTGDevice) {
         //  直接跳转到预览页面
         
         [self handleConnect2DeiceWifiBlock];
-
+        
     } else if (self.connectState == MSConnectStatesRecordConnnectedTGDevice
                || self.connectState == MSConnectStatesWifiInfoReseted
                ) {
@@ -388,7 +423,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
         } else {
             [self openSettinPage];
         }
-
+        
     } else if (self.connectState == MSConnectStatesUnkownDevice) {
         //  跳到设置界面
         
@@ -396,12 +431,12 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     } else {
         [self openSettinPage];
     }
-
+    
 }
 
 - (void)openSettinPage {
     
-        NSURL *wifiSettingUrl = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    NSURL *wifiSettingUrl = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
     
     if ([UIApplication.sharedApplication canOpenURL:wifiSettingUrl]) {
         [UIApplication.sharedApplication openURL:wifiSettingUrl];
@@ -420,28 +455,28 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     //    // 开始连接 (调用此方法后系统会自动弹窗确认)
     [[NEHotspotConfigurationManager sharedManager] applyConfiguration:hotspotConfig
                                                     completionHandler:^(NSError * _Nullable error) {
-
-
-                                                        if (nil == error && [cp_getWifiName() isEqualToString:weakSelf.ssid]) {
-                                                            self->_connectState = MSConnectStatesConnectedTGDevice;
-                                                            [weakSelf handleConnect2DeiceWifiBlock];
-                                                            [[CPLoadStatusToast shareInstance] dimiss];
-                                                        } else {
-                                                            [weakSelf openSettinPage];
-                                                            [[CPLoadStatusToast shareInstance] dimiss];
-                                                        }
-                                                    }];
+        
+        
+        if (nil == error && [cp_getWifiName() isEqualToString:weakSelf.ssid]) {
+            self->_connectState = MSConnectStatesConnectedTGDevice;
+            [weakSelf handleConnect2DeiceWifiBlock];
+            [[CPLoadStatusToast shareInstance] dimiss];
+        } else {
+            [weakSelf openSettinPage];
+            [[CPLoadStatusToast shareInstance] dimiss];
+        }
+    }];
 }
 
 - (void)handleConnect2DeiceWifiBlock {
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-//    if (self.tabBarVC == nil) {
-//        self.tabBarVC = [MSTabBarVC new];
-//    }
-//
-//    [self.navigationController pushViewController:self.tabBarVC animated:YES];
+    //    if (self.tabBarVC == nil) {
+    //        self.tabBarVC = [MSTabBarVC new];
+    //    }
+    //
+    //    [self.navigationController pushViewController:self.tabBarVC animated:YES];
     
     MSTabBarVC *vc = [MSTabBarVC new];
     [self.navigationController pushViewController:vc animated:YES];
@@ -454,7 +489,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
     MSProfileVC *vc = [[MSProfileVC alloc] initWithStyle:UITableViewStyleGrouped];
-
+    
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -490,34 +525,34 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetDateTime:dateStr] Delegate:nil];
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandSetDateTime:dateStr]
                                           block:^(NSString *result) {
-                                              if ([result containsString:@"OK"]) {
-                                                  weakSelf.retryTimes = 0;
-                                                  [weakSelf getFwVersion:familyBlock];
-                                              } else {
-                                                  
-                                                  //   如果同步失败，则尝试重新同步
-                                                  if (weakSelf.retryTimes < 4) {
-                                                      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                                          [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
-                                                      });
-                                                  } else {
-                                                      weakSelf.retryTimes = 0;
-                                                      !otherBlock ? : otherBlock();
-                                                  }
-//                                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                                                      [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
-//                                                  });
-                                              }
-                                          } fail:^(NSError *error) {
-                                              
-                                              if (weakSelf.retryTimes < 4) {
-                                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                                      [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
-                                                  });
-                                              } else {
-                                                  !otherBlock ? : otherBlock();
-                                              }
-                                          }];
+        if ([result containsString:@"OK"]) {
+            weakSelf.retryTimes = 0;
+            [weakSelf getFwVersion:familyBlock];
+        } else {
+            
+            //   如果同步失败，则尝试重新同步
+            if (weakSelf.retryTimes < 4) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
+                });
+            } else {
+                weakSelf.retryTimes = 0;
+                !otherBlock ? : otherBlock();
+            }
+            //                                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            //                                                      [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
+            //                                                  });
+        }
+    } fail:^(NSError *error) {
+        
+        if (weakSelf.retryTimes < 4) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
+            });
+        } else {
+            !otherBlock ? : otherBlock();
+        }
+    }];
 }
 
 - (void)getFwVersion:(void (^)(void))block {
@@ -526,9 +561,9 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQuerySettings]
                                           block:^(NSString *result) {
-                                              [weakSelf handleQuerySettings:result block:block];
-                                          } fail:^(NSError *error) {
-                                          }];
+        [weakSelf handleQuerySettings:result block:block];
+    } fail:^(NSError *error) {
+    }];
 }
 
 - (void)handleQuerySettings:(NSString *)result block:(void (^)(void))block {
@@ -574,5 +609,6 @@ static unsigned char TogevisionCRC(unsigned char year,unsigned char month,unsign
 - (void)handleWifiInfoReset:(NSNotification *)ntf {
     self.connectState = MSConnectStatesWifiInfoReseted;
 }
+
 
 @end

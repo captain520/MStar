@@ -99,17 +99,17 @@
 
     UIImage *image = [[SDImageCache sharedImageCache] imageFromCacheForKey:fileNode.name.lastPathComponent];
     if (nil == image) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            [self->cellLock lock];
-
-            NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [fileNode.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]] ;
-            VLCMedia *media = [VLCMedia mediaWithURL:url];
-            VLCMediaThumbnailer *thumber = [VLCMediaThumbnailer thumbnailerWithMedia:media andDelegate:self];
-            [thumber fetchThumbnail];
-        });
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//
+//            [self->cellLock lock];
+//
+//            NSURL *url = [NSURL URLWithString: [NSString stringWithFormat:@"http://%@%@", [AITUtil getCameraAddress], [fileNode.name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]] ;
+//            VLCMedia *media = [VLCMedia mediaWithURL:url];
+//            VLCMediaThumbnailer *thumber = [VLCMediaThumbnailer thumbnailerWithMedia:media andDelegate:self];
+//            [thumber fetchThumbnail];
+//        });
     } else {
-        self.iconImageView.image = image;
+//        self.iconImageView.image = image;
     }
 }
 

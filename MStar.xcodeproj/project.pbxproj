@@ -62,7 +62,6 @@
 		9C99469922582BA600AD863F /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C99468922582BA500AD863F /* UIView+Toast.m */; };
 		9C99469A22582BA600AD863F /* UIButton+FillColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C99468B22582BA500AD863F /* UIButton+FillColor.m */; };
 		9C9F779D2267712300853423 /* CPActionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9F779C2267712200853423 /* CPActionButton.m */; };
-		9C9F77A02267813400853423 /* CPWebVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9F779F2267813400853423 /* CPWebVC.m */; };
 		9CA17409225A1145008EA36F /* MSFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA17408225A1145008EA36F /* MSFunction.m */; };
 		9CA1740D225A233A008EA36F /* MSCamMenuManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA1740C225A233A008EA36F /* MSCamMenuManager.m */; };
 		9CA17410225A248B008EA36F /* AITCamMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA1740E225A248B008EA36F /* AITCamMenu.m */; };
@@ -229,8 +228,6 @@
 		9C99468B22582BA500AD863F /* UIButton+FillColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+FillColor.m"; sourceTree = "<group>"; };
 		9C9F779B2267712200853423 /* CPActionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPActionButton.h; sourceTree = "<group>"; };
 		9C9F779C2267712200853423 /* CPActionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPActionButton.m; sourceTree = "<group>"; };
-		9C9F779E2267813400853423 /* CPWebVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPWebVC.h; sourceTree = "<group>"; };
-		9C9F779F2267813400853423 /* CPWebVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPWebVC.m; sourceTree = "<group>"; };
 		9CA17407225A1145008EA36F /* MSFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSFunction.h; sourceTree = "<group>"; };
 		9CA17408225A1145008EA36F /* MSFunction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSFunction.m; sourceTree = "<group>"; };
 		9CA1740A225A12CD008EA36F /* MStar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MStar.entitlements; sourceTree = "<group>"; };
@@ -715,8 +712,6 @@
 		9CA174032259EA11008EA36F /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				9C9F779E2267813400853423 /* CPWebVC.h */,
-				9C9F779F2267813400853423 /* CPWebVC.m */,
 				9CA174042259EA11008EA36F /* Controller */,
 				9CA174052259EA11008EA36F /* Model */,
 				9CA174062259EA11008EA36F /* View */,
@@ -1080,7 +1075,6 @@
 				9CDCC76F225F4EE600162D9A /* JYEqualCellSpaceFlowLayout.m in Sources */,
 				9C4D7BAB2230C63300B6273E /* MSPlayerVC.m in Sources */,
 				9CF5ED3722599B9D00E136A1 /* AITUtil.m in Sources */,
-				9C9F77A02267813400853423 /* CPWebVC.m in Sources */,
 				9CF5ED5422599C5A00E136A1 /* AITFileDownloader.m in Sources */,
 				9C99469722582BA600AD863F /* UIColor+category.m in Sources */,
 				9CF5ED5722599C8700E136A1 /* GDataXMLNode.m in Sources */,
@@ -1308,7 +1302,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1372,7 +1366,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

@@ -10,7 +10,6 @@
 #import "MSLocalFileVC.h"
 #import "JYEqualCellSpaceFlowLayout.h"
 #import "NYWaterWaveView.h"
-#import "CPWebVC.h"
 #import "AITCameraRequest.h"
 #import "CPLoadStatusToast.h"
 #import "MSModifyPwdVC.h"
@@ -56,6 +55,8 @@
 //    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandWifiInfoUrl] Delegate:self] ;
     
     self.title = NSLocalizedString(@"Profile", nil);
+    
+    self.tableView.backgroundColor = [UIColor colorWithRed:238./255 green:238./255 blue:238./255 alpha:1];
 }
 
 - (void)dealloc {
@@ -155,6 +156,7 @@
     if (nil == cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.backgroundColor = UIColor.whiteColor;
     }
 
     cell.textLabel.text = self.titles[indexPath.section][indexPath.row];
@@ -365,5 +367,6 @@
         [[CPLoadStatusToast shareInstance] show];
     });
 }
+
 
 @end

@@ -41,6 +41,7 @@
 #define Ccc                   ([UIColor colorWithRed:204. / 255 green:204. / 255 blue:204. / 255 alpha:1])
 #define C00                   ([UIColor colorWithRed:0. / 255 green:0. / 255 blue:0. / 255 alpha:1])
 #define Cff                   ([UIColor colorWithRed:255. / 255 green:255. / 255 blue:255. / 255 alpha:1])
+#define Cee                   ([UIColor colorWithRed:138.0/255 green:138.0f/255 blue:138./255 alpha:1];)
 
 #define TestColor             Test ? UIColor.redColor : UIColor.clearColor
 

@@ -123,14 +123,14 @@
 
 - (void)hideTool {
     
-    if (self.player.isPlaying) {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideTool) object:nil];
-        
-        [UIView animateWithDuration:1.0f animations:^{
-            self.toolView.alpha = 0;
-            self.backButton.alpha = 0;
-        }];
-    }
+//    if (self.player.isPlaying) {
+//        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideTool) object:nil];
+//
+//        [UIView animateWithDuration:1.0f animations:^{
+//            self.toolView.alpha = 0;
+//            self.backButton.alpha = 0;
+//        }];
+//    }
     
 }
 #pragma mark - Delegate && dataSource method implement
@@ -416,7 +416,10 @@
 //        [self.currentPlayerItem removeObserver:self forKeyPath:@"status" context:nil];
 //        [self.currentPlayerItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
 
-        [self dismissViewControllerAnimated:YES completion:nil];
+//        [self dismissViewControllerAnimated:YES completion:nil];
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self.player stop];
+        }];
     } else {
         
         if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
@@ -454,6 +457,11 @@
 
 //  判断是不是Mov文件类型
 static BOOL isMovMediaType(NSString *videoUrl) {
+    
+//    return YES;
+//
+//    return NO;
+    
     return [videoUrl.pathExtension caseInsensitiveCompare:@"mov"] == NSOrderedSame;
 //    if ([videoUrl hasPrefix:@"http"]) {
 //        return NO;

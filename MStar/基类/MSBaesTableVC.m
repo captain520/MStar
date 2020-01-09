@@ -31,11 +31,12 @@
         _dataTableView.dataSource = self;
         _dataTableView.emptyDataSetSource = self;
         _dataTableView.emptyDataSetDelegate = self;
-        if (@available(iOS 13, *)) {
-            _dataTableView.backgroundColor = UIColor.systemGroupedBackgroundColor;
-        } else {
-            _dataTableView.backgroundColor = UIColor.groupTableViewBackgroundColor;
-        }
+        _dataTableView.backgroundColor = [UIColor colorWithRed:238.0/255 green:238.0f/255 blue:238./255 alpha:1];
+//        if (@available(iOS 13, *)) {
+//            _dataTableView.backgroundColor = UIColor.systemGroupedBackgroundColor;
+//        } else {
+//            _dataTableView.backgroundColor = UIColor.groupTableViewBackgroundColor;
+//        }
 
         [self.view addSubview:_dataTableView];
     }

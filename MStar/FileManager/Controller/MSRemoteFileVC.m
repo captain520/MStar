@@ -138,6 +138,7 @@ typedef enum
     MSRemoteFileCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[MSRemoteFileCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+        cell.backgroundColor = UIColor.whiteColor;
     }
     
     if (indexPath.row < self.dataArray.count) {

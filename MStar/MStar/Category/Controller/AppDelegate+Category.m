@@ -15,9 +15,17 @@
  */
 - (void)setUINavigatinoBarProperities {
     
+
     [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
     [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.blackColor} forState:UIControlStateSelected];
     [[UITabBar appearance] setTintColor:UIColor.blackColor];
+    [[UITabBar appearance] setBarTintColor:UIColor.whiteColor];
+
+    if (@available(iOS 13.0, *)) {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDarkContent;
+    } else {
+        
+    }
 //
 //    [[UINavigationBar appearance] setBackIndicatorImage:[[UIImage imageNamed:@"back"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 //    [[UINavigationBar appearance] setBackIndicatorTransitionMaskImage:[[UIImage imageNamed:@"left"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
