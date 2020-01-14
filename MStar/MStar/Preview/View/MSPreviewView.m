@@ -65,6 +65,8 @@
 /// 开始闪烁
 - (void)flick {
     
+    isRecordStates = [MSDeviceMgr manager].isRecording;
+    
     [self bringSubviewToFront:self.redRecrodLight];
     [self bringSubviewToFront:self.fullScreenBT];
 

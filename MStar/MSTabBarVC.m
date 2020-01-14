@@ -79,12 +79,16 @@
     NSLog(@"%s -- index:%@", __FUNCTION__, @(itemIndex));
     
     if (1 == itemIndex) {
+
+        [MBProgressHUD showHUDAddedTo:UIApplication.sharedApplication.keyWindow animated:YES];
+
         [[MSDeviceMgr manager] stopRecrod:^{
+            [MBProgressHUD hideHUDForView:UIApplication.sharedApplication.keyWindow animated:YES];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ItemSelectedNotification" object:@(itemIndex)];
         }];
     } else if (0 != itemIndex) {
         [[MSDeviceMgr manager] stopRecrod:^{
-            
+
         }];
     }
 //    if (0 == itemIndex) {

@@ -93,7 +93,7 @@
     MSFIleListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MSFIleListCell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.iconImageView.image = [UIImage imageNamed:@"tupian"];
-
+    
     NSString *fileName = self.dataArray[indexPath.row];
     NSString *path = [self filePathOf:self.fileType];
     path = [path stringByAppendingPathComponent:fileName];
@@ -102,16 +102,16 @@
         [cell.iconImageView sd_setImageWithURL:[NSURL fileURLWithPath:path] placeholderImage:[UIImage imageNamed:@"tupian"]];
         
     } else {
-//        UIImage *image = [[SDImageCache sharedImageCache] imageFromCacheForKey:fileName];
-//        cell.iconImageView.image = image;
+        //        UIImage *image = [[SDImageCache sharedImageCache] imageFromCacheForKey:fileName];
+        //        cell.iconImageView.image = image;
         UIImage *image = [[SDImageCache sharedImageCache] imageFromCacheForKey:fileName];
         if (nil == image) {
             //        VLCMedia *media = [VLCMedia mediaWithURL:url];
             //        VLCMediaThumbnailer *thumber = [VLCMediaThumbnailer thumbnailerWithMedia:media andDelegate:self];
             //        [thumber fetchThumbnail];
-//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//            image =  [self thumbnailImageForVideo:[NSURL fileURLWithPath:path] atTime:0];
-//            });
+            //            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            //            image =  [self thumbnailImageForVideo:[NSURL fileURLWithPath:path] atTime:0];
+            //            });
             cell.url = [NSURL fileURLWithPath:path];
         }
         
@@ -123,7 +123,7 @@
     unsigned long long fileBytes = [[self.fileManager attributesOfItemAtPath:path error:nil] fileSize];
     
     cell.sizeLabel.text = [NSByteCountFormatter stringFromByteCount:fileBytes countStyle:NSByteCountFormatterCountStyleFile];
-
+    
     return cell;
 }
 
@@ -147,9 +147,15 @@
         [weakSelf deleteMeida:indexPath];
     }];
     
+    
+    UIAlertAction *shareAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"ShareAction", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf shareAction:indexPath];
+    }];
+    
     [alertController addAction:cancelAction];
     [alertController addAction:deleteAction];
     [alertController addAction:previewlAction];
+//    [alertController addAction:shareAction];
     
     [self presentViewController:alertController animated:YES completion:^{
     }];
@@ -180,11 +186,11 @@
     NSString *property = nil;
     switch (self.fileType) {
         case W1MFileTypeEvent:
-//            property = @"Event";
-//            break;
+            //            property = @"Event";
+            //            break;
         case W1MFileTypeDcim:
-//            property = @"DCIM";
-//            break;
+            //            property = @"DCIM";
+            //            break;
         case W1MFileTypeNormal:
             property = @"Normal";
             break;
@@ -221,7 +227,7 @@
     
     MSPhotoBrowserVC *browser = [[MSPhotoBrowserVC alloc] initWithPhotos:photos];
     [browser setInitialPageIndex:indexPath.row];
-
+    
     [self presentViewController:browser animated:YES completion:nil];
 }
 
@@ -236,17 +242,17 @@
     vc.videoUrl = path;
     
     [self presentViewController:vc animated:YES completion:nil];
-//    [self.navigationController presentViewController:vc animated:YES completion:nil];
-//    [self.navigationController pushViewController:vc animated:YES];
+    //    [self.navigationController presentViewController:vc animated:YES completion:nil];
+    //    [self.navigationController pushViewController:vc animated:YES];
     
-//    SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:path];
-//    vc.hidesBottomBarWhenPushed = YES;
-//
-//    UIApplication.sharedApplication.keyWindow.rootViewController.hidesBottomBarWhenPushed = YES;
-//
-//    self.navigationController.navigationBarHidden=YES;
-//
-//    [self.navigationController pushViewController:vc animated:YES];
+    //    SCVideoMainViewController *vc = [[SCVideoMainViewController alloc] initWithURL:path];
+    //    vc.hidesBottomBarWhenPushed = YES;
+    //
+    //    UIApplication.sharedApplication.keyWindow.rootViewController.hidesBottomBarWhenPushed = YES;
+    //
+    //    self.navigationController.navigationBarHidden=YES;
+    //
+    //    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)deleteMeida:(NSIndexPath *)indexPath {
@@ -275,9 +281,9 @@
     NSString *fileName = [self.dataArray objectAtIndex:indexPath.row];
     NSString *directory = [self filePathOf:self.fileType];
     NSString *filePath = [directory stringByAppendingPathComponent:fileName];
-
+    
     [self.fileManager removeItemAtPath:filePath error:nil];
-
+    
     [self.dataArray removeObjectAtIndex:indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
     
@@ -312,6 +318,42 @@
     }
     
     return thumbnailImage;
+}
+
+- (void)shareAction:(NSIndexPath *)indexPath {
+    
+    __weak typeof(self) weakSelf = self;
+    
+    NSString *fileName = [self.dataArray objectAtIndex:indexPath.row];
+    NSString *directory = [self filePathOf:self.fileType];
+    NSString *filePath = [directory stringByAppendingPathComponent:fileName];
+    NSURL *localFileUrl = [NSURL fileURLWithPath:filePath];
+    
+    NSString *shareTitle = @"分享的标题";
+    NSArray *activityItems = @[
+        shareTitle,
+        localFileUrl,
+    ]; // 必须要提供url 才会显示分享标签否则只显示图片
+    
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc]
+                                            initWithActivityItems:activityItems
+                                            applicationActivities:nil];
+    
+    activityVC.completionWithItemsHandler = ^(UIActivityType  _Nullable   activityType,
+                                              BOOL completed,
+                                              NSArray * _Nullable returnedItems,
+                                              NSError * _Nullable activityError) {
+        
+        NSLog(@"activityType: %@,\n completed: %d,\n returnedItems:%@,\n activityError:%@",activityType,completed,returnedItems,activityError);
+        if (YES == completed) {
+            [weakSelf.view makeToast:NSLocalizedString(@"Done", nil)  duration:3.0f position:CSToastPositionCenter];
+        } else {
+            [weakSelf.view makeToast:NSLocalizedString(@"Cancel", nil) duration:3.0f position:CSToastPositionCenter];
+        }
+    };
+    
+    
+    [self presentViewController:activityVC animated:YES completion:nil];
 }
 
 @end

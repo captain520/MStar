@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL fullScreen;
 
+@property (nonatomic, assign) BOOL isRecording;
+
 + (instancetype)manager;
 
 //  获取录制状态
@@ -46,6 +48,20 @@ NS_ASSUME_NONNULL_BEGIN
                 isRear:(BOOL)isRear
                  block:(void (^)(NSArray <AITFileNode *> *datas))success
                   fail:(void (^)(NSError *error))fail;
+
+
+- (void)beginRecord:(void (^)(BOOL res))block;
+
+- (void)endRecord:(void (^)(BOOL res))block;
+
+- (void)toggleRecord:(void (^)(void))block;
+
+
+
+/// 开始录制
+/// @param block 开始成功回调
+- (void)startRecordWithBlock:(void (^)(void))block;
+
 
 @end
 

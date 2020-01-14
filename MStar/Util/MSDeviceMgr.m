@@ -67,7 +67,7 @@ static NSString *TAG_amount = @"amount" ;
     
     BOOL cameraRecording = NO;
     
-    if ([result containsString:@"OK\n"] == NO) {
+    if ([result containsString:@"OK"] == NO) {
         
         !block ? : block(cameraRecording);
         
@@ -89,6 +89,8 @@ static NSString *TAG_amount = @"amount" ;
     }
     
     !block ? : block(cameraRecording);
+    
+    self.isRecording = cameraRecording;
 }
 
 
@@ -103,6 +105,24 @@ static NSString *TAG_amount = @"amount" ;
         } else {
             //  如果状态正在录制，什么都不做
             
+            self.isRecording = YES;
+        }
+        
+    }];
+}
+
+- (void)startRecordWithBlock:(void (^)(void))block {
+    [self getRecordingState:^(BOOL recordState) {
+        
+        if (NO == recordState) {
+            //  如果状态是未录制
+            [self toggleRecordState:block];
+        } else {
+            //  如果状态正在录制，什么都不做
+            
+            self.isRecording = YES;
+            
+            !block ? : block();
         }
         
     }];
@@ -130,7 +150,8 @@ static NSString *TAG_amount = @"amount" ;
     
     (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl]
                                           block:^(NSString *result) {
-        if ([result containsString:@"404 Not Found"]) {
+        if (NO == [result containsString:@"OK"]) {
+            sleep(1);
             [self toggleRecordState];
         }
         NSLog(@"切换录制状态：%@", result);
@@ -322,5 +343,50 @@ static NSString *TAG_amount = @"amount" ;
     return nil ;
 }
 
+- (void)beginRecord:(void (^)(BOOL res))block  {
+    
+    if (self.isRecording) {
+        !block ? : block(YES);
+    } else {
+        [self toggleRecord:^{
+            self.isRecording = YES;
+            !block ? : block(YES);
+        }];
+    }
+    
+}
+
+- (void)endRecord:(void (^)(BOOL res))block  {
+    
+    if (self.isRecording) {
+        [self toggleRecord:^{
+            self.isRecording = NO;
+            !block ? : block(YES);
+        }];
+    } else {
+        !block ? : block(YES);
+    }
+    
+}
+
+- (void)toggleRecord:(void (^)(void))block {
+    
+    NSLog(@"开始切换录制状态");
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandCameraRecordUrl]
+                                          block:^(NSString *result) {
+        if ([result containsString:@"OK"]) {
+            self.isRecording = !self.isRecording;
+            !block ? : block();
+        } else {
+            sleep(1);
+            [self toggleRecord:block];
+        }
+        NSLog(@"切换录制状态：%@", result);
+    } fail:^(NSError *error) {
+        NSLog(@"切换录制状态：%@", error);
+//        !block ? : block();
+    }];
+}
 
 @end

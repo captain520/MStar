@@ -34,6 +34,8 @@ static NSString *CAMERAID_CMD_REAR = @"rear";
 
 @property (nonatomic, assign) BOOL isFullSceen;
 
+@property (nonatomic, strong) NSTimer *timer;
+
 @end
 
 //  放到其它地方容易导致崩溃
@@ -66,15 +68,14 @@ static VLCMediaPlayer *player;
     [self startPlay];
 //    [[MSDeviceMgr manager] startRecrod];
     
-
-    [MBProgressHUD showHUDAddedTo:UIApplication.sharedApplication.keyWindow animated:YES];
+//    [self.controller getRecordingState4Loop];
     
-    [[MSDeviceMgr manager] startRecordWithBlock:^{
-        NSLog(@"startRecordWithBlock");
-        [MBProgressHUD hideHUDForView:UIApplication.sharedApplication.keyWindow animated:YES];
+    /*****************************************************/
+    
+    [[MSDeviceMgr manager] beginRecord:^(BOOL res) {
+        NSLog(@"************* 开始录制 *****************");
     }];
     
-//    [self.controller getRecordingState4Loop];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -84,6 +85,11 @@ static VLCMediaPlayer *player;
     //    [self.controller stopRecordingState4Loop];
     [self stopPlayer];
     //    [[MSDeviceMgr manager] stopRecrod];
+    
+    /*****************************************************/
+//    [[MSDeviceMgr manager] endRecord:^(BOOL res) {
+//        NSLog(@"************* 结束录制 *****************");
+//    }];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -96,9 +102,26 @@ static VLCMediaPlayer *player;
     self.controller = [[MSMainController alloc] init];
     self.controller.delegate = self;
     
-    [self.controller getRecordingState4Loop];
+//    [self.controller getRecordingState4Loop];
     
     [self addNoticationObserver];
+    
+//    self.timer = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(update:) userInfo:nil repeats:YES];
+    
+    
+    __weak typeof(self) weakSelf = self;
+
+    [[MSDeviceMgr manager] getRecordingState:^(BOOL recordState) {
+        if (NO == recordState) {
+            [[MSDeviceMgr manager] beginRecord:^(BOOL res) {
+                NSLog(@"************* 开始录制 *****************");
+            }];
+        } else {
+
+        }
+
+        [weakSelf updateRecordStates:YES];
+    }];
 }
 
 - (void)addNoticationObserver {
@@ -211,7 +234,7 @@ static VLCMediaPlayer *player;
     UIImage *image = [UIImage imageNamed:!isRecording ? @"录像":@"已停止"];
     
     [self.recordCameBT setImage:image forState:UIControlStateNormal];
-    [self.preview updateRecordStates:isRecording];
+//    [self.preview updateRecordStates:isRecording];
 }
 
 
@@ -226,9 +249,10 @@ static VLCMediaPlayer *player;
     //    }];
     
     //    sleep(3);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self handleLoadDataSuccessBlock:@"rtsp://192.72.1.1/liveRTSP/v1"];
-    });
+    [self handleLoadDataSuccessBlock:@"rtsp://192.72.1.1/liveRTSP/v1"];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self handleLoadDataSuccessBlock:@"rtsp://192.72.1.1/liveRTSP/v1"];
+//    });
 }
 
 - (void)handleLoadDataSuccessBlock:(NSString *)liveurl {
@@ -312,14 +336,23 @@ static VLCMediaPlayer *player;
     
     [self.view cp_showToast];
     
-    [self.controller stopRecordingState4Loop];
+//    [self.controller stopRecordingState4Loop];
     
-    [[MSDeviceMgr manager] toggleRecordState:^(void) {
-        NSLog(@"切换成功");
-        [self.view cp_hideToast];
-        [self.controller getRecordingState4Loop];
+//    [[MSDeviceMgr manager] toggleRecordState:^(void) {
+//        NSLog(@"切换成功");
+//        [self.view cp_hideToast];
+//        [self.controller getRecordingState4Loop];
+//    }];
+    
+    __weak typeof(self) weakSelf =  self;
+    
+    [[MSDeviceMgr manager] toggleRecord:^{
+        NSLog(@"&&&&&&&&&&&&&& 切换成功 &&&&&&&&&&&&&&&&");
+        
+        [weakSelf updateRecordStates:[MSDeviceMgr manager].isRecording];
+        [weakSelf.view cp_hideToast];
     }];
-    
+
 }
 
 /// 返回

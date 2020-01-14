@@ -86,7 +86,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     UILabel *titleLB = [UILabel new];
     //    titleLB.text = @"iCarEyes";
     titleLB.numberOfLines = 0;
-    titleLB.text = @"機車法官\nMOTO J";
+    titleLB.text = @"iCarEyes";
     titleLB.font = [UIFont boldSystemFontOfSize:30];
     titleLB.textAlignment = NSTextAlignmentCenter;
     titleLB.attributedText = [self getTittleAttrStr];
@@ -114,7 +114,7 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
     p.lineSpacing = 10;
     p.alignment = NSTextAlignmentCenter;
     
-    NSMutableAttributedString *attr0 = [[NSMutableAttributedString alloc] initWithString:@"機車法官\n"
+    NSMutableAttributedString *attr0 = [[NSMutableAttributedString alloc] initWithString:@"iCarEyes\n"
                                                                               attributes:@{
                                                                                   NSFontAttributeName : [UIFont boldSystemFontOfSize:30]
                                                                               }];
@@ -532,9 +532,10 @@ typedef NS_ENUM(NSUInteger, MSConnectState) {
             
             //   如果同步失败，则尝试重新同步
             if (weakSelf.retryTimes < 4) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                sleep(2);
                     [weakSelf syncDate:familyBlock otherDeviceBlock:otherBlock];
-                });
+//                });
             } else {
                 weakSelf.retryTimes = 0;
                 !otherBlock ? : otherBlock();
