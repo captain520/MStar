@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  MStar
+
+  Created by 王璋传 on 2020/1/21.
+  Copyright © 2020 王璋传. All rights reserved.
+*/
+"NSPhotoLibraryAddUsageDescription"="App需要您的同意，才能在使用期間訪問相册，用於保存圖片等功能";

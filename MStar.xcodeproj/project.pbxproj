@@ -82,6 +82,8 @@
 		9CC93A4D231616B000FC32EF /* CPUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC93A4C231616B000FC32EF /* CPUtil.m */; };
 		9CC93A5123162DB900FC32EF /* DDWaterVaveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC93A5023162DB900FC32EF /* DDWaterVaveView.m */; };
 		9CD1FC3C2318E6A70006CC4A /* UIView+CPToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD1FC3B2318E6A70006CC4A /* UIView+CPToast.m */; };
+		9CDA82A523D6F0010095F215 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CDA82A423D6F0010095F215 /* ExternalAccessory.framework */; };
+		9CDA82A823D6F8030095F215 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9CDA82AA23D6F8030095F215 /* InfoPlist.strings */; };
 		9CDABEA22314FCF1009A60EF /* MSRootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDABEA12314FCF1009A60EF /* MSRootVC.m */; };
 		9CDCC746225F38AB00162D9A /* SCVideoMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDCC744225F38AA00162D9A /* SCVideoMainViewController.m */; };
 		9CDCC75B225F38B200162D9A /* ic_jt_bf@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CDCC748225F38B200162D9A /* ic_jt_bf@2x.png */; };
@@ -258,6 +260,10 @@
 		9CC93A5023162DB900FC32EF /* DDWaterVaveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDWaterVaveView.m; sourceTree = "<group>"; };
 		9CD1FC3A2318E6A70006CC4A /* UIView+CPToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CPToast.h"; sourceTree = "<group>"; };
 		9CD1FC3B2318E6A70006CC4A /* UIView+CPToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CPToast.m"; sourceTree = "<group>"; };
+		9CDA82A423D6F0010095F215 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		9CDA82A923D6F8030095F215 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9CDA82AB23D6F8080095F215 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		9CDA82AC23D6F80A0095F215 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		9CDABEA02314FCF1009A60EF /* MSRootVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRootVC.h; sourceTree = "<group>"; };
 		9CDABEA12314FCF1009A60EF /* MSRootVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSRootVC.m; sourceTree = "<group>"; };
 		9CDCC744225F38AA00162D9A /* SCVideoMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCVideoMainViewController.m; sourceTree = "<group>"; };
@@ -336,6 +342,7 @@
 				9CA656A922599A4700AB124F /* libz.1.1.3.tbd in Frameworks */,
 				9CA656A722599A3700AB124F /* libc++.1.tbd in Frameworks */,
 				9CA656A522599A2F00AB124F /* libiconv.2.4.0.tbd in Frameworks */,
+				9CDA82A523D6F0010095F215 /* ExternalAccessory.framework in Frameworks */,
 				9CA656A122599A1F00AB124F /* MediaPlayer.framework in Frameworks */,
 				9CA6569F22599A1800AB124F /* AVFoundation.framework in Frameworks */,
 				9CA6569D22599A0B00AB124F /* CoreAudio.framework in Frameworks */,
@@ -353,6 +360,7 @@
 		329AE7E07975106E59B178B5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9CDA82A423D6F0010095F215 /* ExternalAccessory.framework */,
 				9C84EEE322EACFEC0065F35A /* MobileVLCKit.framework */,
 				9C8B29A12259A0B3002992B9 /* libxml2.tbd */,
 				9CA656AA22599A4F00AB124F /* libbz2.1.0.5.tbd */,
@@ -565,6 +573,7 @@
 				9CA6569022598A4E00AB124F /* Localizable.strings */,
 				9CA17407225A1145008EA36F /* MSFunction.h */,
 				9CA17408225A1145008EA36F /* MSFunction.m */,
+				9CDA82AA23D6F8030095F215 /* InfoPlist.strings */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -985,6 +994,7 @@
 				9CDCC75D225F38B200162D9A /* ic_bf_zt.png in Resources */,
 				9C4D7B8C2230A08500B6273E /* Assets.xcassets in Resources */,
 				9C4D7B8A2230A08400B6273E /* Main.storyboard in Resources */,
+				9CDA82A823D6F8030095F215 /* InfoPlist.strings in Resources */,
 				9CDCC75B225F38B200162D9A /* ic_jt_bf@2x.png in Resources */,
 				9CDCC75C225F38B200162D9A /* ic_sp_xz@2x.png in Resources */,
 				9CDCC75E225F38B200162D9A /* ic_kt_bf@2x.png in Resources */,
@@ -1152,6 +1162,16 @@
 				9C3D7C162280286500BCB077 /* zh-Hant */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		9CDA82AA23D6F8030095F215 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9CDA82A923D6F8030095F215 /* en */,
+				9CDA82AB23D6F8080095F215 /* zh-Hans */,
+				9CDA82AC23D6F80A0095F215 /* zh-Hant */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

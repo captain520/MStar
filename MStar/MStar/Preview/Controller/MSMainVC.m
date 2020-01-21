@@ -64,9 +64,9 @@ static VLCMediaPlayer *player;
     self.hasAppear = YES;
     
     [self startPlay];
-//    [[MSDeviceMgr manager] startRecrod];
+    //    [[MSDeviceMgr manager] startRecrod];
     
-
+    
     [MBProgressHUD showHUDAddedTo:UIApplication.sharedApplication.keyWindow animated:YES];
     
     [[MSDeviceMgr manager] startRecordWithBlock:^{
@@ -74,7 +74,7 @@ static VLCMediaPlayer *player;
         [MBProgressHUD hideHUDForView:UIApplication.sharedApplication.keyWindow animated:YES];
     }];
     
-//    [self.controller getRecordingState4Loop];
+    //    [self.controller getRecordingState4Loop];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -364,7 +364,18 @@ static VLCMediaPlayer *player;
 
 - (void)applicationDidBecomeActive:(NSNotification *)application
 {
-    [self backAction:nil];
+    __weak typeof(self) weakSelf = self;
+    
+    (void)[[AITCameraCommand alloc] initWithUrl:[AITCameraCommand commandQueryPreviewStatusUrl]
+                                          block:^(NSString *result) {
+        if (result.length == 0) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf backAction:nil];
+            });
+        }
+    } fail:^(NSError *error) {
+        [weakSelf backAction:nil];
+    }];
 }
 
 - (void)orientChange:(NSNotification *)noti {

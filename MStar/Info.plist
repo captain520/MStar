@@ -32,7 +32,7 @@
 		<true/>
 	</dict>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>App需要您的同意，才能在使用期间访问相册，用于分享图片等功能</string>
+	<string>App需要您的同意，才能在使用期间访问相册，用于保存图片等功能</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
